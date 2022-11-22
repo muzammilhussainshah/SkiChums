@@ -1,64 +1,92 @@
 import React, { Component, useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, Touchable ,Alert} from 'react-native';
+import { StyleSheet, Text, View, Image, Touchable, Alert } from 'react-native';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
 import auth from '@react-native-firebase/auth'
- import { GoogleSignin } from '@react-native-google-signin/google-signin';
- import firestore from '@react-native-firebase/firestore';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import firestore from '@react-native-firebase/firestore';
 
-        
-        
+import messaging from '@react-native-firebase/messaging';
+
+
 
 GoogleSignin.configure({
-    // scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
     webClientId: '1018017946183-2427j2vjprc6m7kgo40b22s72l1vvogi.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-    // offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-    // hostedDomain: '', // specifies a hosted domain restriction
-    // forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-    // accountName: '', // [Android] specifies an account name on the device that should be used
-    // iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-    // googleServicePlistPath: '', // [iOS] if you renamed your GoogleService-Info file, new name here, e.g. GoogleService-Info-Staging
-    // openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
-    // profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
-  });
+});
+
+
+export async function handleGoogleLogin (){
+    const { idToken } = await GoogleSignin.signIn()
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken)
+    try {
+        let logInUser = await auth().signInWithCredential(googleCredential)
+        if (Object.keys(logInUser).length > 0) {
+            const { additionalUserInfo } = logInUser
+            let fcmToken = await messaging().getToken()
+            if (additionalUserInfo.isNewUser === true) {
+                let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
+                firestore()
+                    .collection('chums')
+                    .doc(userDatClone.uid)
+                    .set(userDatClone)
+                    .then(() => {
+                        firestore()
+                            .collection('chums')
+                            .doc(logInUser.user._user.uid)
+                            .update({
+                                fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                            });
+                    });
+            } else {
+                firestore()
+                    .collection('chums')
+                    .doc(logInUser.user._user.uid)
+                    .update({
+                        fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                    });
+
+            }
+        }
+    } catch (error) {
+        console.log(error, 'error')
+    }
+}
 export default class LoginScreen extends Component {
-   
+
     constructor(props) {
         super(props);
-    
+
         this.state = {
-          email: '',
-          password: '',
-          passwordSecure: true,
-          isLoading: false,
-          errorMessage: ''
+            email: '',
+            password: '',
+            passwordSecure: true,
+            isLoading: false,
+            errorMessage: ''
         }
-      }
-      componentDidMount(){
-      }
+    } 
 
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.backgroundContainer}>
-                    <Image source={require("../../assets/Auth/auth-bg.png")} style={styles.backgroundImage}/>
+                    <Image source={require("../../assets/Auth/auth-bg.png")} style={styles.backgroundImage} />
                 </View>
-                
+
                 <View style={styles.logo}>
-                <Image source={require("../../assets/icons/white-logo.png")}/>
+                    <Image source={require("../../assets/icons/white-logo.png")} />
                 </View>
-                
+
                 <Text style={styles.registerTxt}>
                     Login
                 </Text>
 
-                <SocialLoginBox style={styles.socialBox} 
-                handleGoogleLogin={this.handleGoogleLogin}
-                handleAppleLogin={this.handleAppleLogin}
+                <SocialLoginBox style={styles.socialBox}
+                    handleGoogleLogin={handleGoogleLogin}
+                    handleAppleLogin={this.handleAppleLogin}
                 />
-                <OrLineView style={styles.orline}/>
+                <OrLineView style={styles.orline} />
 
                 <View style={styles.floatingTxt}>
                     <AuthFloatingInput
@@ -70,21 +98,21 @@ export default class LoginScreen extends Component {
                         onBlur={this.onBlur}
                     />
                 </View>
-                
+
                 <View style={styles.floatingTxt}>
                     <AuthFloatingInput
                         placeholder={"Password"}
                         placeholderTextColor={'#ffffff88'}
-                        secureTextEntry={this.state.passwordSecure} 
+                        secureTextEntry={this.state.passwordSecure}
                         defaultValue={this.state.password}
                         onChangeText={this.handlePasswordChange}
                         onFocus={this.onFocus}
                         onBlur={this.onBlur}
                     />
                     <TouchableOpacity style={styles.eye}>
-                        <Image source={require("../../assets/Auth/ic_eye_slashed.png")}/>
+                        <Image source={require("../../assets/Auth/ic_eye_slashed.png")} />
                     </TouchableOpacity>
-                    
+
                 </View>
 
                 <View style={styles.button}>
@@ -111,11 +139,11 @@ export default class LoginScreen extends Component {
                         </Text>
                     </TouchableOpacity>
                 </View>
-                
-         </View>
-          );  
+
+            </View>
+        );
     }
-    
+
     handleEmailChange = (text) => {
         console.log('email change: ', text)
         this.state.email = text
@@ -140,7 +168,7 @@ export default class LoginScreen extends Component {
     onRegister = () => {
         console.log('onclose')
         this.props.navigation.pop()
-        
+
     }
 
     onLogin = () => { // email login
@@ -157,66 +185,40 @@ export default class LoginScreen extends Component {
             })
 
             auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then(() => {
-                console.log('User sign in successfully!')
-                this.setState({
-                    isLoading: false,
-                    email: '', 
-                    password: '',
-                    confirmPassword: ''
+                .then(() => {
+                    console.log('User sign in successfully!')
+                    this.setState({
+                        isLoading: false,
+                        email: '',
+                        password: '',
+                        confirmPassword: ''
+                    })
                 })
-            })
-            .catch(error => {
-                Alert.alert(error.message);
-            });
+                .catch(error => {
+                    Alert.alert(error.message);
+                });
         }
     }
 
     // apple
-    handleAppleLogin = async() => {
-        console.log('apple login') 
+    handleAppleLogin = async () => {
+        console.log('apple login')
     }
-    handleGoogleLogin = async() => {
-        
-        const {idToken}    =await GoogleSignin.signIn()
-        const googleCredential=auth.GoogleAuthProvider.credential(idToken)
 
-        console.log(googleCredential,'logInUser')
-        try {
-        let logInUser=await auth().signInWithCredential(googleCredential)
-    if(Object.keys(logInUser).length>0){
-     const {additionalUserInfo}=logInUser
-     if(additionalUserInfo.isNewUser===true){
-     firestore()
-     .collection('chums')
-     .doc(logInUser.user._user.uid)
-     .set(logInUser.user._user)
-     .then(() => {
-       console.log('User added!');
-     });
+    checkToken = async () => {
+        const fcmToken = await messaging().getToken();
+        if (fcmToken) {
+            console.log(fcmToken);
         }
-        }
-} catch (error) {
-                console.log(error,'logInUserlogInUser')
-                // console.log(error,'errorerror')
-            //   if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-            //     // user cancelled the login flow
-            //   } else if (error.code === statusCodes.IN_PROGRESS) {
-            //     // operation (e.g. sign in) is in progress already
-            //   } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-            //     // play services not available or outdated
-            //   } else {
-            //     // some other error happened
-            //   }
-            }
-        //   };
-    }
+    }  
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      flexDirection: 'column',
+        flex: 1,
+        flexDirection: 'column',
     },
     logo: {
         width: 59,
@@ -224,7 +226,7 @@ const styles = StyleSheet.create({
         // position: 'absolute',
         left: 28,
         top: 44
-    }, 
+    },
     terms: {
         marginTop: 15,
         marginHorizontal: 42,
@@ -245,7 +247,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
-    },  
+    },
     already: {
         color: '#B9B9B9',
         fontSize: 13
@@ -264,20 +266,20 @@ const styles = StyleSheet.create({
         borderRadius: 18,
         marginHorizontal: 42,
         justifyContent: 'center'
-    },  
+    },
     forgot: {
         color: 'white',
         fontSize: 13,
         marginTop: 17,
         textAlign: 'center'
-    },   
+    },
     eye: {
         position: 'absolute',
         right: 44,
         width: 18,
         height: 18,
         bottom: 7,
-    },  
+    },
     floatingTxt: {
         // height: 73,
         justifyContent: 'center'
@@ -289,7 +291,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         textAlign: 'center',
         marginTop: 123
-    }, 
+    },
     socialBox: {
         width: '100%',
         height: 40,
@@ -307,7 +309,7 @@ const styles = StyleSheet.create({
         top: 0,
         flexDirection: "row",
         alignItems: "stretch"
-    },  
+    },
     backgroundImage: {
         flex: 1,
         width: null,

@@ -633,6 +633,9 @@ PODS:
   - Firebase/Firestore (10.2.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 10.2.0)
+  - Firebase/Messaging (10.2.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 10.2.0)
   - FirebaseAnalytics (10.2.0):
     - FirebaseAnalytics/AdIdSupport (= 10.2.0)
     - FirebaseCore (~> 10.0)
@@ -660,6 +663,8 @@ PODS:
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
+  - FirebaseCoreExtension (10.2.0):
+    - FirebaseCore (~> 10.0)
   - FirebaseCoreInternal (10.2.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
   - FirebaseFirestore (10.2.0):
@@ -680,6 +685,15 @@ PODS:
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (10.2.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Reachability (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
   - fmt (6.2.1)
   - glog (0.3.5)
   - Google-Maps-iOS-Utils (4.1.0):
@@ -721,6 +735,10 @@ PODS:
     - GoogleUtilities/Network (~> 7.8)
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleDataTransport (9.2.0):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
   - GoogleMaps (7.0.0):
     - GoogleMaps/Maps (= 7.0.0)
   - GoogleMaps/Base (7.0.0)
@@ -1114,6 +1132,11 @@ PODS:
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - React-Core
     - RNFBApp
+  - RNFBMessaging (16.4.6):
+    - Firebase/Messaging (= 10.2.0)
+    - FirebaseCoreExtension (= 10.2.0)
+    - React-Core
+    - RNFBApp
   - RNGestureHandler (1.10.3):
     - React-Core
   - RNGoogleSignin (8.2.1):
@@ -1170,6 +1193,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
+  - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -1187,12 +1211,15 @@ SPEC REPOS:
     - FirebaseAnalytics
     - FirebaseAuth
     - FirebaseCore
+    - FirebaseCoreExtension
     - FirebaseCoreInternal
     - FirebaseFirestore
     - FirebaseInstallations
+    - FirebaseMessaging
     - fmt
     - Google-Maps-iOS-Utils
     - GoogleAppMeasurement
+    - GoogleDataTransport
     - GoogleMaps
     - GoogleSignIn
     - GoogleUtilities
@@ -1274,6 +1301,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/auth"
   RNFBFirestore:
     :path: "../node_modules/@react-native-firebase/firestore"
+  RNFBMessaging:
+    :path: "../node_modules/@react-native-firebase/messaging"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
@@ -1300,13 +1329,16 @@ SPEC CHECKSUMS:
   FirebaseAnalytics: 24a15e58e505abcedc3017b6f7c206fbfa964580
   FirebaseAuth: 08e7739244eeae5216d0a3f8d9f16a76be9c252e
   FirebaseCore: 813838072b797b64f529f3c2ee35e696e5641dd1
+  FirebaseCoreExtension: d08b424832917cf13612021574399afbbedffeef
   FirebaseCoreInternal: 091bde13e47bb1c5e9fe397634f3593dc390430f
   FirebaseFirestore: bda7a1ca8c19319a2acd2761cd4b962022c1d5ea
   FirebaseInstallations: 004915af170935e3a583faefd5f8bc851afc220f
+  FirebaseMessaging: cc9f40f5b7494680f3844d08e517e92aa4e8d9f7
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
   Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
   GoogleAppMeasurement: 3bc3a6484b7bb20dd8489242c4dd3c92a3e5107b
+  GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleMaps: 6e9c923ca035989709fcb5771544fda4cc5fa2a4
   GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
   GoogleUtilities: bad72cb363809015b1f7f19beb1f1cd23c589f95
@@ -1347,6 +1379,7 @@ SPEC CHECKSUMS:
   RNFBApp: a6a92a67882cde38e6b466a446312de6c6c9b384
   RNFBAuth: 9cf4349614d52cbfc123ab4516d0618419422040
   RNFBFirestore: 28b9fbe1cef44e8cba8299cd5ce7bfd68a3a928e
+  RNFBMessaging: 4a184e1af5bff970cbf70eab2263c85f612683eb
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: 3db2d849581299f425f5b61b90cb482a9e68c7af
   RNScreens: f3230dd008a7d0ce5c0a8bc78ff12cf2315bda24

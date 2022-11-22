@@ -4,6 +4,7 @@ import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
 import auth from '@react-native-firebase/auth'
+import  {handleGoogleLogin} from './LoginScreen'
 
 export default class RegisterScreen extends Component {
     constructor(props) {
@@ -19,9 +20,8 @@ export default class RegisterScreen extends Component {
           errorMessage: ''
         }
       }
-
-    render() {
-        return (
+      render() {
+          return (
             <View style={styles.container}>
                 <View style={styles.backgroundContainer}>
                     <Image source={require("../../assets/Auth/auth-bg.png")} style={styles.backgroundImage}/>
@@ -35,7 +35,9 @@ export default class RegisterScreen extends Component {
                     Register
                 </Text>
 
-                <SocialLoginBox style={styles.socialBox}/>
+                <SocialLoginBox style={styles.socialBox}
+                handleGoogleLogin={handleGoogleLogin}
+                />
                 <OrLineView style={styles.orline}/>
 
                 <View style={styles.floatingTxt}>

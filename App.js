@@ -7,7 +7,7 @@
  */
 
  import React, { useState, useEffect } from 'react';
- import {Text } from 'react-native';
+ import {Text, View } from 'react-native';
  import { SafeAreaProvider } from 'react-native-safe-area-context';
 // //  import auth from   '@react-native-firebase/auth'
 

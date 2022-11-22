@@ -1,6 +1,0 @@
-module Pods_SkiChums_SkiChumsTests {
-  umbrella header "Pods-SkiChums-SkiChumsTests-umbrella.h"
-
-  export *
-  module * { export * }
-}

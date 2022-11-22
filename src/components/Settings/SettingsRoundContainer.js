@@ -40,10 +40,10 @@ export default class SettingsRoundContainer extends Component {
         this.setState({ viewMode: 'session' })
     }
 
-    onLogout =async () => {
+    onLogout = async () => {
         const user = firebase.auth().currentUser
         let fcmToken = await messaging().getToken()
-        firestore()
+        await firestore()
             .collection('chums')
             .doc(user.uid)
             .update({

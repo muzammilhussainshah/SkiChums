@@ -17,7 +17,7 @@ GoogleSignin.configure({
 });
 
 
-export async function handleGoogleLogin (){
+export async function handleGoogleLogin() {
     const { idToken } = await GoogleSignin.signIn()
     const googleCredential = auth.GoogleAuthProvider.credential(idToken)
     try {
@@ -46,11 +46,11 @@ export async function handleGoogleLogin (){
                     .update({
                         fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
                     });
-
             }
         }
     } catch (error) {
-        console.log(error, 'error')
+        Alert.alert(error.message);
+
     }
 }
 export default class LoginScreen extends Component {
@@ -65,7 +65,7 @@ export default class LoginScreen extends Component {
             isLoading: false,
             errorMessage: ''
         }
-    } 
+    }
 
     render() {
         return (
@@ -185,14 +185,30 @@ export default class LoginScreen extends Component {
             })
 
             auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-                .then(() => {
-                    console.log('User sign in successfully!')
+                .then(async (logInUser) => {
+                    if (Object.keys(logInUser).length > 0) {
+                        let fcmToken = await messaging().getToken()
+                        let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
+                        firestore()
+                            .collection('chums')
+                            .doc(userDatClone.uid)
+                            .set(userDatClone)
+                            .then(() => {
+                                firestore()
+                                    .collection('chums')
+                                    .doc(logInUser.user._user.uid)
+                                    .update({
+                                        fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                    });
+                            });
+                    }
                     this.setState({
                         isLoading: false,
                         email: '',
                         password: '',
                         confirmPassword: ''
                     })
+                    console.log('User sign in successfully!',)
                 })
                 .catch(error => {
                     Alert.alert(error.message);
@@ -210,7 +226,7 @@ export default class LoginScreen extends Component {
         if (fcmToken) {
             console.log(fcmToken);
         }
-    }  
+    }
 }
 
 

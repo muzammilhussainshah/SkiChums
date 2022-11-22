@@ -9,7 +9,7 @@
  import React, { useState, useEffect } from 'react';
  import { SafeAreaProvider } from 'react-native-safe-area-context';
  import auth from '@react-native-firebase/auth'
- import auth from '@react-native-firebase/auth'
+//  import auth from '@react-native-firebase/auth'
  import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
  import Navigation from './src/router/Tab';

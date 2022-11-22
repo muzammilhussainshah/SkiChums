@@ -17,7 +17,9 @@ export default class SocialLoginBox extends Component {
                         <TouchableOpacity style={styles.apple} onPress={this.props.handleAppleLogin}>
                             <Image source={require('../../assets/Auth/ic_apple.png')}/>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.google}>
+                        <TouchableOpacity style={styles.google}
+                        onPress={this.props.handleGoogleLogin}
+                        >
                             <Image source={require('../../assets/Auth/ic_google.png')}/>
                         </TouchableOpacity>
                     </View>

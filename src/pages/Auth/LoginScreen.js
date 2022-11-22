@@ -5,8 +5,11 @@ import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
 import auth from '@react-native-firebase/auth'
-// import appleAuth from "@invertase/react-native-apple-authentication";
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+ import { GoogleSignin } from '@react-native-google-signin/google-signin';
+ import firestore from '@react-native-firebase/firestore';
+
+        
+        
 
 GoogleSignin.configure({
     // scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
@@ -171,31 +174,31 @@ export default class LoginScreen extends Component {
 
     // apple
     handleAppleLogin = async() => {
-        console.log('apple login')
-        // const appleAuthRequestResponse = await appleAuth.performRequest({
-        //     requestedOperation: appleAuth.Operationn.LOGIN,
-        //     requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-        // });
-
-        // if (!appleAuthRequestResponse.identityToken) {
-        //     throw new Error('Apple Sign-In failed - no identify token returned');
-        // }
-
-        // const { identityToken, nonce } = appleAuthRequestResponse;
-        // const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
-
-        // return auth().signInWithCredential(appleCredential);
+        console.log('apple login') 
     }
     handleGoogleLogin = async() => {
-        console.log('apple login')
-        // signIn = async () => {
-            try {
-              await GoogleSignin.hasPlayServices();
-              const userInfo = await GoogleSignin.signIn();
-              console.log(userInfo,'userInfouserInfouserInfouserInfo')
-            //   this.setState({ userInfo });
-            } catch (error) {
-                console.log(error,'errorerror')
+        
+        const {idToken}    =await GoogleSignin.signIn()
+        const googleCredential=auth.GoogleAuthProvider.credential(idToken)
+
+        console.log(googleCredential,'logInUser')
+        try {
+        let logInUser=await auth().signInWithCredential(googleCredential)
+    if(Object.keys(logInUser).length>0){
+     const {additionalUserInfo}=logInUser
+     if(additionalUserInfo.isNewUser===true){
+     firestore()
+     .collection('chums')
+     .doc(logInUser.user._user.uid)
+     .set(logInUser.user._user)
+     .then(() => {
+       console.log('User added!');
+     });
+        }
+        }
+} catch (error) {
+                console.log(error,'logInUserlogInUser')
+                // console.log(error,'errorerror')
             //   if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             //     // user cancelled the login flow
             //   } else if (error.code === statusCodes.IN_PROGRESS) {
@@ -325,3 +328,14 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     }
 });
+
+
+
+
+// if(uid1 > uid2){
+//     return uid1+uid2
+
+// }
+// else{
+//     return uid2 + uid1 
+// }

@@ -5,12 +5,17 @@ platform :ios, '13.0'
 use_react_native!
 
 target 'SkiChums' do
-  # rn_maps_path = '../node_modules/react-native-maps'
-  # pod 'react-native-google-maps', :path => rn_maps_path
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
   # pod 'Google-Maps-iOS-Utils'
-  # pod 'GoogleMaps'
+  pod 'GoogleMaps'
   # pod 'GoogleSignIn', '~> 5.0.0'
   # pod 'FirebaseAuth'
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+  pod 'Firebase', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
 
   config = use_native_modules!
 

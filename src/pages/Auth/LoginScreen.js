@@ -5,7 +5,7 @@ import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
 import auth from '@react-native-firebase/auth'
-import appleAuth from "@invertase/react-native-apple-authentication";
+// import appleAuth from "@invertase/react-native-apple-authentication";
 
 export default class LoginScreen extends Component {
    
@@ -154,19 +154,19 @@ export default class LoginScreen extends Component {
     // apple
     handleAppleLogin = async() => {
         console.log('apple login')
-        const appleAuthRequestResponse = await appleAuth.performRequest({
-            requestedOperation: appleAuth.Operationn.LOGIN,
-            requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-        });
+        // const appleAuthRequestResponse = await appleAuth.performRequest({
+        //     requestedOperation: appleAuth.Operationn.LOGIN,
+        //     requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+        // });
 
-        if (!appleAuthRequestResponse.identityToken) {
-            throw new Error('Apple Sign-In failed - no identify token returned');
-        }
+        // if (!appleAuthRequestResponse.identityToken) {
+        //     throw new Error('Apple Sign-In failed - no identify token returned');
+        // }
 
-        const { identityToken, nonce } = appleAuthRequestResponse;
-        const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
+        // const { identityToken, nonce } = appleAuthRequestResponse;
+        // const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
 
-        return auth().signInWithCredential(appleCredential);
+        // return auth().signInWithCredential(appleCredential);
     }
 }
 

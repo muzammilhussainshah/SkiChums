@@ -4,7 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
-// #import <GoogleMaps/GoogleMaps.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -25,7 +25,7 @@ static void InitializeFlipper(UIApplication *application) {
 }
 #endif
 
-// #import <Firebase.h>
+#import <Firebase.h>
 
 @implementation AppDelegate
 
@@ -46,9 +46,9 @@ static void InitializeFlipper(UIApplication *application) {
       rootView.backgroundColor = [UIColor whiteColor];
   }
   
-  // [FIRApp configure];
+  [FIRApp configure];
 
-  // [GMSServices provideAPIKey:@"AIzaSyDXmtUnJq1mRM3IglN3jHoHSk4QpYWFNQo"];
+  [GMSServices provideAPIKey:@"AIzaSyDXmtUnJq1mRM3IglN3jHoHSk4QpYWFNQo"];
   
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];

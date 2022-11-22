@@ -7,7 +7,6 @@ import SocialLoginBox from "../../components/Auth/SocialLoginBox";
 import auth from '@react-native-firebase/auth'
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import firestore from '@react-native-firebase/firestore';
-
 import messaging from '@react-native-firebase/messaging';
 
 

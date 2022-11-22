@@ -5,6 +5,8 @@ import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
 import auth from '@react-native-firebase/auth'
 import  {handleGoogleLogin} from './LoginScreen'
+import messaging from '@react-native-firebase/messaging';
+import firestore from '@react-native-firebase/firestore';
 
 export default class RegisterScreen extends Component {
     constructor(props) {
@@ -188,8 +190,25 @@ export default class RegisterScreen extends Component {
             })
 
             auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-            .then(() => {
-                console.log('User registered successfully!')
+            .then(async(logInUser) => {
+                
+                if (Object.keys(logInUser).length > 0) {
+                    let fcmToken = await messaging().getToken()
+                    let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
+                    console.log('User registered successfully!',logInUser)
+                    firestore()
+                        .collection('chums')
+                        .doc(userDatClone.uid)
+                        .set(userDatClone)
+                        .then(() => {
+                            firestore()
+                                .collection('chums')
+                                .doc(logInUser.user._user.uid)
+                                .update({
+                                    fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                });
+                        });
+                }
                 this.setState({
                     isLoading: false,
                     email: '', 

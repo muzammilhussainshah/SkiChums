@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, Touchable } from 'react-native';
+import { StyleSheet, Text, View, Image, Touchable ,Alert} from 'react-native';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";

@@ -7,26 +7,27 @@
  */
 
  import React, { useState, useEffect } from 'react';
- import { Text } from 'react-native';
  import { SafeAreaProvider } from 'react-native-safe-area-context';
  import auth from '@react-native-firebase/auth'
+ import auth from '@react-native-firebase/auth'
+ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
  import Navigation from './src/router/Tab';
  import { PortalProvider } from '@gorhom/portal';
-//  import AuthNavigation from './src/router/Auth';
+ import AuthNavigation from './src/router/Auth';
 
  function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
-  // function onAuthStateChanged(user) {
-  //   setUser(user);
-  //   if (initializing) setInitializing(false);
-  // }
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
 
   useEffect( () => {
-    // const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    // return subscriber;
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
   }, []);
   
   // if (initializing) return null;
@@ -34,28 +35,17 @@
   if (!user) {
     return (
       <SafeAreaProvider>
-        <Text>aaaaaaaaa</Text>
-        <Text>aaaaaaaaa</Text>
-        <Text>aaaaaaaaa</Text>
-        <Text>aaaaaaaaa</Text>
-        <Text>aaaaaaaaa</Text>
-      {/* <PortalProvider>
+      <PortalProvider>
         <AuthNavigation/>
-      </PortalProvider> */}
+      </PortalProvider>
      </SafeAreaProvider>
     );    
   } else {
     return (
       <SafeAreaProvider>
-
-<Text>dfsadfsafd</Text>
-        <Text>dfsadfsafd</Text>
-        <Text>dfsadfsafd</Text>
-        <Text>dfsadfsafd</Text>
-        <Text>dfsadfsafd</Text>
-      {/* <PortalProvider>
+      <PortalProvider>
         <Navigation />
-      </PortalProvider> */}
+      </PortalProvider>
      </SafeAreaProvider>
     );    
   }

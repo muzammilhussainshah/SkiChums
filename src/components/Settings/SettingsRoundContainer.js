@@ -43,7 +43,8 @@ export default class SettingsRoundContainer extends Component {
     onLogout = async () => {
         const user = firebase.auth().currentUser
         let fcmToken = await messaging().getToken()
-        await firestore()
+        // await
+         firestore()
             .collection('chums')
             .doc(user.uid)
             .update({

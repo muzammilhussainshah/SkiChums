@@ -6,14 +6,46 @@ import InviteChumButton from '../components/InviteChumButton';
 import MyChumFlatList from "../components/MyChumsFlatList";
 import SCSearchBar from '../components/SCSearchBar';
 import TabButton from '../components/TabButton';
+import firestore from '@react-native-firebase/firestore';
+
 
 export default class Chums extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      listType: 'all'
+      listType: 'all',
+      allChums:[]
     }
+  }
+  componentDidMount(){
+
+firestore()
+.collection('chums')
+.get()
+.then(querySnapshot => {
+  console.log('Total users: ', querySnapshot.size);
+let chums=[]
+  querySnapshot.forEach(documentSnapshot => {
+    chums.push(documentSnapshot.data())
+    console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
+  });
+  this.setState({allChums:chums})
+
+
+});
+  //   firestore()
+  // .collection('chums')
+  // // .doc('ABC')
+  // .get()
+  // .then(documentSnapshot => {
+  //   console.log('User exists: ', documentSnapshot.exists);
+
+  //   if (documentSnapshot.exists) {
+  //     console.log('User data: ', documentSnapshot.data());
+  //   }
+  // });
+
   }
   
   render() {
@@ -36,7 +68,12 @@ export default class Chums extends Component {
           onTabBtnClick={() => this.setState({listType: 'mine'})}/>
         </View>
 
-        {this.state.listType == 'all' ? (<AllChumFlatList style={styles.list} clickChum={this.onClickChum}></AllChumFlatList>) : (<MyChumFlatList style={styles.list}></MyChumFlatList>)}
+        {this.state.listType == 'all' ? (
+        
+        <AllChumFlatList style={styles.list} clickChum={this.onClickChum}
+        data={this.state.allChums}
+        />)
+         : (<MyChumFlatList style={styles.list}></MyChumFlatList>)}
 
 
         <InviteChumButton style={styles.inviteButton}/>

@@ -5,21 +5,24 @@ export default class ChumInfoView extends Component {
     render() {
         let name = this.props.name;
         let distance = this.props.distance;
-        let id = this.props.id;
+        let profilePic = this.props.profilePic;
         return (
             <>
             {
                 <View style={styles.container}>
                     <View style={styles.profileImage}>
-                        {id == 1 ? (<Image source={require('../assets/icons/sample-chum-profile.png')} style={styles.profileImage}/>) : id == 2 ? (<Image source={require('../assets/icons/sample-chum-profile1.png')} style={styles.profileImage}/>) : (<Image source={require('../assets/icons/sample-chum-profile2.png')} style={styles.profileImage}/>) }
-                        
+                        {profilePic?
+                        <Image source={{uri:profilePic}} style={styles.profileImage}/>
+                        :
+                        <Image source={require('../assets/icons/sample-chum-profile.png')} style={styles.profileImage}/>
+                        }
                     </View>
                     <View style={styles.infoContainer}>
                         <Text style={styles.chumName}>
                             {name}
                         </Text>
                         <Text style={styles.distance}>
-                            {distance} away
+                            {distance?distance:'37Km'} away
                         </Text>
                     </View>
                 </View>

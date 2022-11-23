@@ -186,20 +186,32 @@ export default class LoginScreen extends Component {
             auth().signInWithEmailAndPassword(this.state.email, this.state.password)
                 .then(async (logInUser) => {
                     if (Object.keys(logInUser).length > 0) {
+                        const { additionalUserInfo } = logInUser
+
                         let fcmToken = await messaging().getToken()
                         let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
-                        firestore()
-                            .collection('chums')
-                            .doc(userDatClone.uid)
-                            .set(userDatClone)
-                            .then(() => {
-                                firestore()
-                                    .collection('chums')
-                                    .doc(logInUser.user._user.uid)
-                                    .update({
-                                        fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                                    });
-                            });
+                        if (additionalUserInfo.isNewUser === true) {
+                            firestore()
+                                .collection('chums')
+                                .doc(userDatClone.uid)
+                                .set(userDatClone)
+                                .then(() => {
+                                    firestore()
+                                        .collection('chums')
+                                        .doc(logInUser.user._user.uid)
+                                        .update({
+                                            fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                        });
+                                });
+                        } else {
+                            firestore()
+                                .collection('chums')
+                                .doc(userDatClone.uid)
+                                .update({
+                                    fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                });
+
+                        }
                     }
                     this.setState({
                         isLoading: false,

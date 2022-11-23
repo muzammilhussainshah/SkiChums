@@ -196,18 +196,28 @@ export default class RegisterScreen extends Component {
                     let fcmToken = await messaging().getToken()
                     let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
                     console.log('User registered successfully!',logInUser)
-                    firestore()
+                    if (additionalUserInfo.isNewUser === true) {
+                        firestore()
                         .collection('chums')
                         .doc(userDatClone.uid)
                         .set(userDatClone)
                         .then(() => {
                             firestore()
-                                .collection('chums')
-                                .doc(logInUser.user._user.uid)
-                                .update({
-                                    fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                                });
+                            .collection('chums')
+                            .doc(logInUser.user._user.uid)
+                            .update({
+                                fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                            });
                         });
+                    }else{
+                        firestore()
+                        .collection('chums')
+                        .doc(userDatClone.uid)
+                        .update({
+                            fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                        });
+
+                    }
                 }
                 this.setState({
                     isLoading: false,

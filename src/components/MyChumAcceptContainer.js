@@ -7,7 +7,9 @@ export default class MyChumAcceptContainer extends Component {
             <>
             {
                 <View style={styles.container}>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity 
+                    onPress={this.props.accept}
+                    style={styles.button}>
                         
                         <View style={styles.shadowButton}>
                             <Text style={styles.requestedButton}>

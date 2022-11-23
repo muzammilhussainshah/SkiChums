@@ -7,40 +7,37 @@ import ChumInviteButton from './ChumInviteButton';
 import auth, { firebase } from '@react-native-firebase/auth'
 import MyChumAcceptContainer from './MyChumAcceptContainer';
 
-const Item = ({ item ,user}) => {
-  let ardeadyChams=user[0]?.myChams?.filter((val)=>val.id==item.uid)
-      console.log(ardeadyChams,'userDocuserDocuserDocuserDoc',item)
-      
-  let isRequested= user[0]?.chumpsRequest?.filter((val )=>val.id==  item.uid)
-if(isRequested?.length>0){
-  isRequested=true
-}else{
-  isRequested=false
-}
-  return(
-  <View style={styles.item}>
-    <ChumInfoView name={item.displayName} profilePic={item.photoURL} distance={item.distance}   ></ChumInfoView>
-    {ardeadyChams.length>0?
+const Item = ({ item, user }) => {
+  let ardeadyChams = user[0]?.myChams?.filter((val) => val.id == item.uid)
+  let isRequested = user[0]?.chumpsRequest?.filter((val) => val.id == item.uid)
+  if (isRequested?.length > 0) isRequested = true
+  else isRequested = false
+
+  return (
+    <View style={styles.item}>
+      <ChumInfoView name={item.displayName} profilePic={item.photoURL} distance={item.distance}   ></ChumInfoView>
+      {ardeadyChams?.length > 0 ?
         <MyChumAcceptContainer />
         :
-    <ChumInviteButton user={user[0]} item={item} buttonType={isRequested?'REQUESTED':'ADD'}></ChumInviteButton>
-    }
-  </View>
-)};
+        <ChumInviteButton user={user[0]} item={item} buttonType={isRequested ? 'REQUESTED' : 'ADD'}></ChumInviteButton>
+      }
+    </View>
+  )
+};
 
 export default class AllChumFlatList extends Component {
 
   render() {
     const renderItem = ({ item }) => {
       const user = firebase.auth().currentUser
-      let userDoc=this.props.data.filter((val)=>val.uid==user.uid)
+      let userDoc = this.props.data.filter((val) => val.uid == user.uid)
       if (user.uid !== item.uid) {
         return (
           <TouchableOpacity
             onPress={this.props.clickChum}
             activeOpacity={.8}
           >
-            <Item item={item} user={userDoc}/>
+            <Item item={item} user={userDoc} />
           </TouchableOpacity>
         )
       }

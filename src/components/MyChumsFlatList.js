@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
 import ChumInfoView from './ChumInfoView';
 import auth, { firebase } from '@react-native-firebase/auth'
+import firestore from '@react-native-firebase/firestore';
 import MyChumAcceptContainer from './MyChumAcceptContainer';
 
 const DATA = [
@@ -78,7 +79,6 @@ const DATA = [
     status: 'CHUM'
   }
 ];
-
 const Item = ({ item, status }) => {
   console.log(item, 'adlassakjlsadj', status)
 
@@ -87,7 +87,7 @@ const Item = ({ item, status }) => {
       <ChumInfoView name={item.displayName} profilePic={item.photoURL} distance={item.distance}   ></ChumInfoView>
 
       {status == 'REQUESTED' ? (
-        <MyChumAcceptContainer />
+        <MyChumAcceptContainer accept={handleAccept} />
       ) : (null)}
 
     </View>
@@ -95,18 +95,46 @@ const Item = ({ item, status }) => {
 };
 
 export default class MyChumFlatList extends Component {
+
   render() {
+
+    const handleAccept = (id) => {
+      // alert('handle accept')
+      // console.log(this.props.data,)
+      const user = firebase.auth().currentUser
+      let userDoc = this.props.data.filter((val) => val.uid == user.uid)
+      let selectedChams = userDoc[0].myChams.filter((val) => val.id == id)
+      if (selectedChams.length > 0) { selectedChams[0].status = 'CHUMS' }
+
+      let reciepentDoc = this.props.data.filter((val) => val.uid == id)
+      let selectedReciepentRequestObj = reciepentDoc[0]?.chumpsRequest?.filter((val) => val.id === userDoc[0].uid)
+      if (selectedReciepentRequestObj.length > 0) { selectedReciepentRequestObj[0].status = 'CHUMS' }
+
+      // console.log(this.props.data, 'selectedReciepentRequestObj', reciepentDoc)
+      // let reciepentDoc = userDoc[0].myChams.filter((val) => val.id == id)
+      // if (selectedChams.length > 0) { selectedChams[0].status = 'CHUMS' }
+      // console.log(reciepentDoc,'reciepentDocreciepentDoc')
+      // console.log(userDoc, 'userDocuserDoc', this.props.data, id, selectedChams)
+      firestore().collection('chums').doc(user.uid).update({ myChams: userDoc[0].myChams });
+      firestore().collection('chums').doc(id).update({ chumpsRequest: reciepentDoc[0].chumpsRequest });
+      // firestore().collection('chums').doc(user.uid).update({ chumpsRequest: user.chumpsRequest });
+    }
     const renderItem = ({ item }) => {
-      // const user = firebase.auth().currentUser
-      // let userDoc=this.props.data.filter((val)=>val.uid==user.uid)
       let data = this.props.data.filter((val) => val.uid == item.id)
-      // console.log(item,'adlassakjlsadj')
       return (
         <TouchableOpacity
           onPress={this.props.clickChum}
           activeOpacity={.8}
         >
-          <Item item={data[0]} status={item.status} />
+          {/* <Item item={data[0]} status={item.status} /> */}
+          <View style={styles.item}>
+            <ChumInfoView name={data[0].displayName} profilePic={data[0].photoURL} distance={data[0].distance}   ></ChumInfoView>
+            {console.log(item, 'itemitemitem')}
+            {item.status == 'REQUESTED' ? (
+              <MyChumAcceptContainer accept={() => handleAccept(item.id)} />
+            ) : (null)}
+
+          </View>
         </TouchableOpacity>
       )
 

@@ -99,25 +99,20 @@ export default class MyChumFlatList extends Component {
   render() {
 
     const handleAccept = (id) => {
-      // alert('handle accept')
-      // console.log(this.props.data,)
       const user = firebase.auth().currentUser
       let userDoc = this.props.data.filter((val) => val.uid == user.uid)
       let selectedChams = userDoc[0].myChams.filter((val) => val.id == id)
       if (selectedChams.length > 0) { selectedChams[0].status = 'CHUMS' }
-
       let reciepentDoc = this.props.data.filter((val) => val.uid == id)
       let selectedReciepentRequestObj = reciepentDoc[0]?.chumpsRequest?.filter((val) => val.id === userDoc[0].uid)
-      if (selectedReciepentRequestObj.length > 0) { selectedReciepentRequestObj[0].status = 'CHUMS' }
-
-      // console.log(this.props.data, 'selectedReciepentRequestObj', reciepentDoc)
-      // let reciepentDoc = userDoc[0].myChams.filter((val) => val.id == id)
-      // if (selectedChams.length > 0) { selectedChams[0].status = 'CHUMS' }
-      // console.log(reciepentDoc,'reciepentDocreciepentDoc')
-      // console.log(userDoc, 'userDocuserDoc', this.props.data, id, selectedChams)
+      if (selectedReciepentRequestObj&&selectedReciepentRequestObj.length > 0) { selectedReciepentRequestObj[0].status = 'CHUMS' }
+      if (!reciepentDoc[0]?.myChams) {
+        reciepentDoc[0].myChams = []
+      }
+      reciepentDoc[0].myChams.push(selectedReciepentRequestObj[0])
       firestore().collection('chums').doc(user.uid).update({ myChams: userDoc[0].myChams });
       firestore().collection('chums').doc(id).update({ chumpsRequest: reciepentDoc[0].chumpsRequest });
-      // firestore().collection('chums').doc(user.uid).update({ chumpsRequest: user.chumpsRequest });
+      firestore().collection('chums').doc(id).update({ myChams: reciepentDoc[0].myChams });
     }
     const renderItem = ({ item }) => {
       let data = this.props.data.filter((val) => val.uid == item.id)

@@ -10,16 +10,17 @@ import MyChumAcceptContainer from './MyChumAcceptContainer';
 const Item = ({ item, user }) => {
   let ardeadyChams = user[0]?.myChams?.filter((val) => val.id == item.uid)
   let isRequested = user[0]?.chumpsRequest?.filter((val) => val.id == item.uid)
-  if (isRequested?.length > 0) isRequested = true
-  else isRequested = false
-
+  console.log(isRequested,'isRequested')
+  // if (isRequested?.length > 0) isRequested = true
+  // else isRequested = false
   return (
     <View style={styles.item}>
       <ChumInfoView name={item.displayName} profilePic={item.photoURL} distance={item.distance}   ></ChumInfoView>
       {ardeadyChams?.length > 0 ?
+        ardeadyChams[0]?.status === 'REQUESTED' &&
         <MyChumAcceptContainer />
         :
-        <ChumInviteButton user={user[0]} item={item} buttonType={isRequested ? 'REQUESTED' : 'ADD'}></ChumInviteButton>
+        <ChumInviteButton user={user[0]} item={item} buttonType={isRequested?.length>0?isRequested[0].status  : 'ADD'}></ChumInviteButton>
       }
     </View>
   )

@@ -33,7 +33,7 @@ export default class ChumInviteButton extends Component {
                             onPress={handeRequest}
                         >
                             <View style={styles.shadowButton}>
-                                {buttonType != 'CHUM' ? (<Text style={buttonType == 'ADD' ? styles.addButton : buttonType == 'REQUESTED' ? styles.requestedButton : buttonType == 'ACCEPT' ? styles.requestedButton : buttonType == 'DECLINE' ? styles.declineButton : styles.declineButton}>
+                                {buttonType != 'CHUMS' ? (<Text style={buttonType == 'ADD' ? styles.addButton : buttonType == 'REQUESTED' ? styles.requestedButton : buttonType == 'ACCEPT' ? styles.requestedButton : buttonType == 'DECLINE' ? styles.declineButton : styles.declineButton}>
                                     {buttonType == 'ADD' ? 'ADD' : buttonType == 'REQUESTED' ? 'Requested' : buttonType == 'ACCEPT' ? 'Accept' : buttonType == 'DECLINE' ? 'Decline' : 'Rejected'}
                                 </Text>) : (null)}
                             </View>

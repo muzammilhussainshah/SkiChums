@@ -5,8 +5,12 @@ import { MaterialIndicator } from 'react-native-indicators';
 import ChumInfoView from './ChumInfoView';
 import ChumInviteButton from './ChumInviteButton';
 import auth, { firebase } from '@react-native-firebase/auth'
+import MyChumAcceptContainer from './MyChumAcceptContainer';
 
 const Item = ({ item ,user}) => {
+  let ardeadyChams=user[0]?.myChams?.filter((val)=>val.id==item.uid)
+      console.log(ardeadyChams,'userDocuserDocuserDocuserDoc',item)
+      
   let isRequested= user[0]?.chumpsRequest?.filter((val )=>val.id==  item.uid)
 if(isRequested?.length>0){
   isRequested=true
@@ -16,7 +20,11 @@ if(isRequested?.length>0){
   return(
   <View style={styles.item}>
     <ChumInfoView name={item.displayName} profilePic={item.photoURL} distance={item.distance}   ></ChumInfoView>
+    {ardeadyChams.length>0?
+        <MyChumAcceptContainer />
+        :
     <ChumInviteButton user={user[0]} item={item} buttonType={isRequested?'REQUESTED':'ADD'}></ChumInviteButton>
+    }
   </View>
 )};
 

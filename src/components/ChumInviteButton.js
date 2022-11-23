@@ -12,24 +12,35 @@ export default class ChumInviteButton extends Component {
                     <View style={styles.container}>
                         <TouchableOpacity style={styles.button}
                             activeOpacity={.8}
-                            onPress={ async() => {
-                                // console.log(this.props.item.uid,'asadadsdss')
-                                const user = firebase.auth().currentUser
+                            onPress={async () => {
+                                // console.log(this.props.user, 'asadadsdss', this.props.item)
                                 if (buttonType === 'ADD' || buttonType === 'REQUESTED') {
+                                    const user = this.props.user
+                                    let index = user?.chumpsRequest?.findIndex((val) => val.id === this.props.item.uid)
+                                    if (buttonType === 'ADD' || buttonType === 'REQUESTED') {
+                                        if (index !== -1) user?.chumpsRequest?.splice(index, 1)
+                                        else user?.chumpsRequest?.push({ status: buttonType, id: this.props.item.uid })
+                                    }
+                                    let indexForMyChums = this?.props?.item?.myChams?.findIndex((val) => val.id === user.uid)
+                                    if (indexForMyChums !== -1) this?.props?.item?.myChams?.splice(indexForMyChums, 1)
+                                    else this?.props?.item?.myChams?.push({ status: buttonType, id: user.uid })
                                     await firestore()
                                         .collection('chums')
                                         .doc(user.uid)
                                         .update({
-                                            chumpsRequest: buttonType === 'REQUESTED' ? firestore.FieldValue.arrayRemove(this.props.item.uid) : firestore.FieldValue.arrayUnion(this.props.item.uid),
+                                            chumpsRequest: user.chumpsRequest
+                                            //  buttonType === 'REQUESTED' ? firestore.FieldValue.arrayRemove(this.props.item.uid) : firestore.FieldValue.arrayUnion(this.props.item.uid),
 
                                         });
                                     await firestore()
                                         .collection('chums')
                                         .doc(this.props.item.uid)
                                         .update({
-                                            myChams:  buttonType === 'REQUESTED' ? firestore.FieldValue.arrayRemove(user.uid) :firestore.FieldValue.arrayUnion(user.uid),
+                                            myChams: this?.props?.item?.myChams
+                                            //  buttonType === 'REQUESTED' ? firestore.FieldValue.arrayRemove(user.uid) :firestore.FieldValue.arrayUnion(user.uid),
                                         });
                                 }
+
                                 //     else if (buttonType==='REQUESTED'){
                                 //     firestore()
                                 //         .collection('chums')

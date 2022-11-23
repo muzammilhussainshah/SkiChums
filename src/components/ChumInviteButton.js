@@ -16,15 +16,27 @@ export default class ChumInviteButton extends Component {
                                 // console.log(this.props.user, 'asadadsdss', this.props.item)
                                 if (buttonType === 'ADD' || buttonType === 'REQUESTED') {
                                     const user = this.props.user
+                                    // if(user?.chumpsRequest){}
+                                    // else 
+                                    if (!user?.chumpsRequest) {
+                                        user.chumpsRequest = []
+                                    }
                                     let index = user?.chumpsRequest?.findIndex((val) => val.id === this.props.item.uid)
                                     if (buttonType === 'ADD' || buttonType === 'REQUESTED') {
                                         if (index !== -1) user?.chumpsRequest?.splice(index, 1)
                                         else user?.chumpsRequest?.push({ status: buttonType, id: this.props.item.uid })
                                     }
+
+                                    if (!this?.props?.item?.myChams) {
+                                        this.props.item.myChams = []
+                                    }
                                     let indexForMyChums = this?.props?.item?.myChams?.findIndex((val) => val.id === user.uid)
                                     if (indexForMyChums !== -1) this?.props?.item?.myChams?.splice(indexForMyChums, 1)
-                                    else this?.props?.item?.myChams?.push({ status: buttonType, id: user.uid })
-                                    await firestore()
+                                    else {
+                                        this?.props?.item?.myChams?.push({ status: buttonType, id: user.uid })
+                                    }
+                                    console.log(this?.props?.item, 'this?.props?.item?.myChams', indexForMyChums)
+                                      firestore()
                                         .collection('chums')
                                         .doc(user.uid)
                                         .update({
@@ -32,7 +44,7 @@ export default class ChumInviteButton extends Component {
                                             //  buttonType === 'REQUESTED' ? firestore.FieldValue.arrayRemove(this.props.item.uid) : firestore.FieldValue.arrayUnion(this.props.item.uid),
 
                                         });
-                                    await firestore()
+                                      firestore()
                                         .collection('chums')
                                         .doc(this.props.item.uid)
                                         .update({

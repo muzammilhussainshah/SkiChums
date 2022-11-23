@@ -15,7 +15,7 @@ if(isRequested?.length>0){
 }
   return(
   <View style={styles.item}>
-    <ChumInfoView name={item.name} profilePic={item.photoURL} distance={item.distance}   ></ChumInfoView>
+    <ChumInfoView name={item.displayName} profilePic={item.photoURL} distance={item.distance}   ></ChumInfoView>
     <ChumInviteButton user={user[0]} item={item} buttonType={isRequested?'REQUESTED':'ADD'}></ChumInviteButton>
   </View>
 )};

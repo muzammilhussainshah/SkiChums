@@ -18,62 +18,18 @@ export default class Chums extends Component {
       allChums: []
     }
   }
-  componentDidMount() {
-
-    // function onResult(QuerySnapshot) {
-    //   console.log('Got Users collection result.', QuerySnapshot);
-    //   let chums = []
-
-    //   QuerySnapshot.forEach(documentSnapshot => {
-    //     chums.push(documentSnapshot.data())
-    //     console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
-    //   });
-    //   this.setState({ allChums: chums })
-    // }
-
+  componentDidMount() { 
     function onError(error) {
       console.error(error);
     }
-
     firestore().collection('chums').onSnapshot((querySnapshot)=>{
           let chums = []
           querySnapshot.forEach(documentSnapshot => {
             chums.push(documentSnapshot.data())
-            // console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
           });
           this.setState({ allChums: chums })
-        // console.log(chums,'sdasadsdas')
-          
         }
-        // onResult
         , onError);
-        // console.log(this.state.allChums,'sdasadsdas')
-    // firestore()
-    //   .collection('chums')
-    //   .get()
-    //   .then(querySnapshot => {
-    //     console.log('Total users: ', querySnapshot.size);
-    //     let chums = []
-    //     querySnapshot.forEach(documentSnapshot => {
-    //       chums.push(documentSnapshot.data())
-    //       console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
-    //     });
-    //     this.setState({ allChums: chums })
-
-
-    //   });
-    //   firestore()
-    // .collection('chums')
-    // // .doc('ABC')
-    // .get()
-    // .then(documentSnapshot => {
-    //   console.log('User exists: ', documentSnapshot.exists);
-
-    //   if (documentSnapshot.exists) {
-    //     console.log('User data: ', documentSnapshot.data());
-    //   }
-    // });
-
   }
 
   render() {

@@ -6,72 +6,31 @@ import auth, { firebase } from '@react-native-firebase/auth'
 export default class ChumInviteButton extends Component {
     render() {
         const buttonType = this.props.buttonType;
+        const handeRequest = async () => {
+            if (buttonType === 'ADD' || buttonType === 'REQUESTED') {
+                const user = this.props.user
+                if (!user?.chumpsRequest) user.chumpsRequest = []
+                let index = user?.chumpsRequest?.findIndex((val) => val.id === this.props.item.uid)
+                if (buttonType === 'ADD' || buttonType === 'REQUESTED') {
+                    if (index !== -1) user?.chumpsRequest?.splice(index, 1)
+                    else user?.chumpsRequest?.push({ status: 'REQUESTED', id: this.props.item.uid })
+                }
+                if (!this?.props?.item?.myChams) this.props.item.myChams = []
+                let indexForMyChums = this?.props?.item?.myChams?.findIndex((val) => val.id === user.uid)
+                if (indexForMyChums !== -1) this?.props?.item?.myChams?.splice(indexForMyChums, 1)
+                else this?.props?.item?.myChams?.push({ status: 'REQUESTED', id: user.uid })
+                firestore().collection('chums').doc(user.uid).update({ chumpsRequest: user.chumpsRequest });
+                firestore().collection('chums').doc(this.props.item.uid).update({ myChams: this?.props?.item?.myChams });
+            }
+
+        }
         return (
             <>
                 {
                     <View style={styles.container}>
                         <TouchableOpacity style={styles.button}
                             activeOpacity={.8}
-                            onPress={async () => {
-                                // console.log(this.props.user, 'asadadsdss', this.props.item)
-                                if (buttonType === 'ADD' || buttonType === 'REQUESTED') {
-                                    const user = this.props.user
-                                    // if(user?.chumpsRequest){}
-                                    // else 
-                                    if (!user?.chumpsRequest) {
-                                        user.chumpsRequest = []
-                                    }
-                                    let index = user?.chumpsRequest?.findIndex((val) => val.id === this.props.item.uid)
-                                    if (buttonType === 'ADD' || buttonType === 'REQUESTED') {
-                                        if (index !== -1) user?.chumpsRequest?.splice(index, 1)
-                                        else user?.chumpsRequest?.push({ status: 'REQUESTED', id: this.props.item.uid })
-                                    }
-
-                                    if (!this?.props?.item?.myChams) {
-                                        this.props.item.myChams = []
-                                    }
-                                    let indexForMyChums = this?.props?.item?.myChams?.findIndex((val) => val.id === user.uid)
-                                    if (indexForMyChums !== -1) this?.props?.item?.myChams?.splice(indexForMyChums, 1)
-                                    else {
-                                        this?.props?.item?.myChams?.push({ status: 'REQUESTED', id: user.uid })
-                                    }
-                                    console.log(this?.props?.item, 'this?.props?.item?.myChams', indexForMyChums)
-                                      firestore()
-                                        .collection('chums')
-                                        .doc(user.uid)
-                                        .update({
-                                            chumpsRequest: user.chumpsRequest
-                                            //  buttonType === 'REQUESTED' ? firestore.FieldValue.arrayRemove(this.props.item.uid) : firestore.FieldValue.arrayUnion(this.props.item.uid),
-
-                                        });
-                                      firestore()
-                                        .collection('chums')
-                                        .doc(this.props.item.uid)
-                                        .update({
-                                            myChams: this?.props?.item?.myChams
-                                            //  buttonType === 'REQUESTED' ? firestore.FieldValue.arrayRemove(user.uid) :firestore.FieldValue.arrayUnion(user.uid),
-                                        });
-                                }
-
-                                //     else if (buttonType==='REQUESTED'){
-                                //     firestore()
-                                //         .collection('chums')
-                                //         .doc(user.uid)
-                                //         .update({
-                                //             chumpsRequest:  firestore.FieldValue.arrayUnion(this.props.item.uid),
-
-                                //         });
-                                //     firestore()
-                                //         .collection('chums')
-                                //         .doc(this.props.item.uid)
-                                //         .update({
-                                //             myChams: firestore.FieldValue.arrayUnion( user.uid) ,
-                                //         });
-
-
-                                // }
-
-                            }}
+                            onPress={handeRequest}
                         >
                             <View style={styles.shadowButton}>
                                 {buttonType != 'CHUM' ? (<Text style={buttonType == 'ADD' ? styles.addButton : buttonType == 'REQUESTED' ? styles.requestedButton : buttonType == 'ACCEPT' ? styles.requestedButton : buttonType == 'DECLINE' ? styles.declineButton : styles.declineButton}>

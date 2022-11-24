@@ -5,7 +5,7 @@
 #import <React/RCTRootView.h>
 
 #import <GoogleMaps/GoogleMaps.h>
-
+#import <FBSDKCoreKit/FBSDKCoreKit-swift.h>
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -47,6 +47,9 @@ static void InitializeFlipper(UIApplication *application) {
   }
   
   [FIRApp configure];
+  
+  [[FBSDKApplicationDelegate sharedInstance] application:application
+                        didFinishLaunchingWithOptions:launchOptions];
 
   [GMSServices provideAPIKey:@"AIzaSyDXmtUnJq1mRM3IglN3jHoHSk4QpYWFNQo"];
   

@@ -12,6 +12,8 @@ import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+
 
 import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
@@ -89,6 +91,7 @@ export default class LoginScreen extends Component {
                 <SocialLoginBox style={styles.socialBox}
                     handleGoogleLogin={handleGoogleLogin}
                     handleAppleLogin={this.handleAppleLogin}
+                    handleMetaLogin={this.handleMetaLogin}
                 />
                 <OrLineView style={styles.orline} />
 
@@ -235,6 +238,84 @@ export default class LoginScreen extends Component {
     // apple
     handleAppleLogin = async () => {
         console.log('apple login')
+    }
+    handleMetaLogin = async () => {
+        // console.log('apple login')
+        // Attempt login with permissions
+        // let logInUser = await auth().signInWithCredential(googleCredential)
+        // if (Object.keys(logInUser).length > 0) {
+        //     const { additionalUserInfo } = logInUser
+        //     let fcmToken = await messaging().getToken()
+        //     if (additionalUserInfo.isNewUser === true) {
+        //         let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
+        //         firestore()
+        //             .collection('chums')
+        //             .doc(userDatClone.uid)
+        //             .set(userDatClone)
+        //             .then(() => {
+        //                 firestore()
+        //                     .collection('chums')
+        //                     .doc(logInUser.user._user.uid)
+        //                     .update({
+        //                         fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+        //                     });
+        //             });
+        //     } else {
+        //         firestore()
+        //             .collection('chums')
+        //             .doc(logInUser.user._user.uid)
+        //             .update({
+        //                 fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+        //             });
+        //     }
+        // }
+        const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+        if (result.isCancelled) {
+            throw 'User cancelled the login process';
+        }
+
+        // Once signed in, get the users AccesToken
+        const data = await AccessToken.getCurrentAccessToken();
+
+        if (!data) {
+            throw 'Something went wrong obtaining access token';
+        }
+
+        // Create a Firebase credential with the AccessToken
+        const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+        // Sign-in the user with the credential
+        let logInUser=await auth().signInWithCredential(facebookCredential);
+        console.log(logInUser,'logInUserlogInUser')
+          if (Object.keys(logInUser).length > 0) {
+            const { additionalUserInfo } = logInUser
+            let fcmToken = await messaging().getToken()
+            if (additionalUserInfo.isNewUser === true) {
+                let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
+                firestore()
+                    .collection('chums')
+                    .doc(userDatClone.uid)
+                    .set(userDatClone)
+                    .then(() => {
+                        firestore()
+                            .collection('chums')
+                            .doc(logInUser.user._user.uid)
+                            .update({
+                                fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                            });
+                    });
+            } else {
+                firestore()
+                    .collection('chums')
+                    .doc(logInUser.user._user.uid)
+                    .update({
+                        fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                    });
+            }
+        }
+        // console.log(facebookCredential, 'facebookCredentialfacebookCredentialfacebookCredential',userInfo)
+
+
     }
 
     checkToken = async () => {

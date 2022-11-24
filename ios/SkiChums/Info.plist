@@ -80,5 +80,22 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+  
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>com.googleusercontent.apps.1018017946183-2427j2vjprc6m7kgo40b22s72l1vvogi</string>
+      <string>fb1146683405974038</string>
+    </array>
+    </dict>
+  </array>
+  <key>FacebookAppID</key>
+  <string>1146683405974038</string>
+  <key>FacebookClientToken</key>
+  <string>bddcbcddb60d569b3f70ae531761546f</string>
+  <key>FacebookDisplayName</key>
+  <string>SkiChums</string>
 </dict>
 </plist>

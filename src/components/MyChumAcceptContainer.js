@@ -5,38 +5,39 @@ export default class MyChumAcceptContainer extends Component {
     render() {
         return (
             <>
-            {
-                <View style={styles.container}>
-                    <TouchableOpacity 
-                    onPress={this.props.accept}
-                    style={styles.button}>
-                        
-                        <View style={styles.shadowButton}>
-                            <Text style={styles.requestedButton}>
-                                Accept
-                            </Text>                            
-                        </View>
-                        
-                    </TouchableOpacity>
-                    
-                    <TouchableOpacity style={styles.button}>
-                        
-                        <View style={styles.shadowButton}>
-                            <Text style={styles.declineButton}>
-                                Decline
-                            </Text>
-                            
-                        </View>
-                        
-                    </TouchableOpacity>   
+                {
+                    <View style={styles.container}>
+                        <TouchableOpacity
+                            onPress={this.props.accept}
+                            style={styles.button}>
 
-                    
-                    
-                </View>
-                
-            }
+                            <View style={styles.shadowButton}>
+                                <Text style={styles.requestedButton}>
+                                    Accept
+                                </Text>
+                            </View>
+
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.button}
+                            onPress={this.props.decline}>
+
+                            <View style={styles.shadowButton}>
+                                <Text style={styles.declineButton}>
+                                    Decline
+                                </Text>
+
+                            </View>
+
+                        </TouchableOpacity>
+
+
+
+                    </View>
+
+                }
             </>
-        )        
+        )
     }
 }
 
@@ -46,14 +47,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
-        
+
     },
     button: {
-        
+
     },
     shadowButton: {
         shadowColor: 'black',
-        shadowOffset: {width: 0, height: 3},
+        shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.4,
         shadowRadius: 3,
         elevation: 5
@@ -62,20 +63,20 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         fontSize: 12,
         width: 60,
-        height: 20  ,
+        height: 20,
         lineHeight: 20,
         borderRadius: 10,
         overflow: 'hidden',
         backgroundColor: 'white',
-        color: 'black',      
+        color: 'black',
         textAlign: "center",
-        marginVertical: 5  
+        marginVertical: 5
     },
     declineButton: {
         fontWeight: 'bold',
         fontSize: 12,
         width: 60,
-        height: 20  ,
+        height: 20,
         lineHeight: 20,
         borderRadius: 10,
         backgroundColor: 'red',
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         marginHorizontal: 5
     }
-    
-    
+
+
 
 })

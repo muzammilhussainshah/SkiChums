@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1018017946183",
+    "project_id": "skichums-9e048",
+    "storage_bucket": "skichums-9e048.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018017946183:android:ceb9b8f2eb53c988f16f62",
+        "android_client_info": {
+          "package_name": "com.skichums"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1018017946183-jn3phjtqbtg4cularvofhf6k9337mk7g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyn_-CYJ4BkFWbBCdSynZseRxITplDgSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1018017946183-jn3phjtqbtg4cularvofhf6k9337mk7g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1018017946183-2427j2vjprc6m7kgo40b22s72l1vvogi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tukan.skichums"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

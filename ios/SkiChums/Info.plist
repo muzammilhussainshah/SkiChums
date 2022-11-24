@@ -27,12 +27,20 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.1018017946183-2427j2vjprc6m7kgo40b22s72l1vvogi</string>
+				<!-- <string>com.googleusercontent.apps.558087928455-6hnjgmuodbdrdfejn61bb4i5ki5d2f6b</string> -->
+				<string>com.googleusercontent.apps.1018017946183-09kadh5ievfa59490d0eftnosv3e9qus</string>
+				<string>fb1146683405974038</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>FacebookAppID</key>
+	<string>1146683405974038</string>
+	<key>FacebookClientToken</key>
+	<string>bddcbcddb60d569b3f70ae531761546f</string>
+	<key>FacebookDisplayName</key>
+	<string>SkiChums</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -80,22 +88,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-  
-  <key>CFBundleURLTypes</key>
-  <array>
-    <dict>
-    <key>CFBundleURLSchemes</key>
-    <array>
-      <string>com.googleusercontent.apps.1018017946183-2427j2vjprc6m7kgo40b22s72l1vvogi</string>
-      <string>fb1146683405974038</string>
-    </array>
-    </dict>
-  </array>
-  <key>FacebookAppID</key>
-  <string>1146683405974038</string>
-  <key>FacebookClientToken</key>
-  <string>bddcbcddb60d569b3f70ae531761546f</string>
-  <key>FacebookDisplayName</key>
-  <string>SkiChums</string>
 </dict>
 </plist>

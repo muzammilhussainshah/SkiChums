@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>558087928455-6hnjgmuodbdrdfejn61bb4i5ki5d2f6b.apps.googleusercontent.com</string>
+	<string>1018017946183-09kadh5ievfa59490d0eftnosv3e9qus.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.558087928455-6hnjgmuodbdrdfejn61bb4i5ki5d2f6b</string>
+	<string>com.googleusercontent.apps.1018017946183-09kadh5ievfa59490d0eftnosv3e9qus</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC8LwhcEWxZ5ghUJUK3Ls-2FGrj50aOibw</string>
+	<string>AIzaSyBCwmtcQo7JLNOM-4dPgXz0eUQHDE5usAU</string>
 	<key>GCM_SENDER_ID</key>
-	<string>558087928455</string>
+	<string>1018017946183</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.tukan.skichums</string>
+	<string>org.tukan.skichums</string>
 	<key>PROJECT_ID</key>
-	<string>skichums</string>
+	<string>skichums-9e048</string>
 	<key>STORAGE_BUCKET</key>
-	<string>skichums.appspot.com</string>
+	<string>skichums-9e048.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:558087928455:ios:822a3759f4cb8a162ad622</string>
+	<string>1:1018017946183:ios:9467feac0a49f92bf16f62</string>
 </dict>
 </plist>

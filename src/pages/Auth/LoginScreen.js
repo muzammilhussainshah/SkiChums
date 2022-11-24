@@ -13,7 +13,10 @@ import messaging from '@react-native-firebase/messaging';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
-
+import {
+    appleAuth,
+    // AppleButton,
+  } from "@invertase/react-native-apple-authentication";
 
 import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
@@ -72,7 +75,25 @@ export default class LoginScreen extends Component {
             errorMessage: ''
         }
     }
-
+    handleAppleLogin = async () => {
+        // alert()
+        console.log('apple login integ')
+        const appleAuthRequestResponse = await appleAuth.performRequest({
+            requestedOperation: appleAuth.Operation.LOGIN,
+            requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+          });
+      console.log(appleAuthRequestResponse,'appleAuthRequestResponse')
+      const { identityToken, nonce } = appleAuthRequestResponse;
+      const appleCredential = auth.AppleAuthProvider.credential(
+          identityToken,
+          nonce,
+          );
+          console.log(appleCredential,'appleCredential')
+      
+          // Sign the user in with the credential
+          const user = await auth().signInWithCredential(appleCredential);
+          console.log(user, "user***")
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -236,9 +257,7 @@ export default class LoginScreen extends Component {
     }
 
     // apple
-    handleAppleLogin = async () => {
-        console.log('apple login')
-    }
+   
     handleMetaLogin = async () => {
         // console.log('apple login')
         // Attempt login with permissions

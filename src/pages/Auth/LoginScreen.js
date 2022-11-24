@@ -1,20 +1,25 @@
-import React, { Component, useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, Touchable, Alert } from 'react-native';
+import React, { Component } from "react";
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Alert
+} from 'react-native';
+
+import auth from '@react-native-firebase/auth'
+import firestore from '@react-native-firebase/firestore';
+import messaging from '@react-native-firebase/messaging';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { TouchableOpacity } from "react-native-gesture-handler";
+
 import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
-import auth from '@react-native-firebase/auth'
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import firestore from '@react-native-firebase/firestore';
-import messaging from '@react-native-firebase/messaging';
-
-
 
 GoogleSignin.configure({
     webClientId: '1018017946183-2427j2vjprc6m7kgo40b22s72l1vvogi.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
 });
-
 
 export async function handleGoogleLogin() {
     const { idToken } = await GoogleSignin.signIn()

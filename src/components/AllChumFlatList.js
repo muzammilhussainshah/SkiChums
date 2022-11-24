@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { FlatList, FlatListProps, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { MaterialIndicator } from 'react-native-indicators';
+import {
+  FlatList,
+  View,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native';
+
 import ChumInfoView from './ChumInfoView';
 import ChumInviteButton from './ChumInviteButton';
-import auth, { firebase } from '@react-native-firebase/auth'
 import MyChumAcceptContainer from './MyChumAcceptContainer';
+import { firebase } from '@react-native-firebase/auth'
 
 const Item = ({ item, user }) => {
   let ardeadyChams = user[0]?.myChams?.filter((val) => val.id == item.uid)
   let isRequested = user[0]?.chumpsRequest?.filter((val) => val.id == item.uid)
-  console.log(isRequested,'isRequested')
-  // if (isRequested?.length > 0) isRequested = true
-  // else isRequested = false
   return (
     <View style={styles.item}>
       <ChumInfoView name={item.displayName} profilePic={item.photoURL} distance={item.distance}   ></ChumInfoView>
@@ -20,7 +21,7 @@ const Item = ({ item, user }) => {
         ardeadyChams[0]?.status === 'REQUESTED' &&
         <MyChumAcceptContainer />
         :
-        <ChumInviteButton user={user[0]} item={item} buttonType={isRequested?.length>0?isRequested[0].status  : 'ADD'}></ChumInviteButton>
+        <ChumInviteButton user={user[0]} item={item} buttonType={isRequested?.length > 0 ? isRequested[0].status : 'ADD'}></ChumInviteButton>
       }
     </View>
   )

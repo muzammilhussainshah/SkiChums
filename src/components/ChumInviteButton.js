@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import firestore from '@react-native-firebase/firestore';
-import auth, { firebase } from '@react-native-firebase/auth'
 
 export default class ChumInviteButton extends Component {
     render() {
@@ -22,7 +21,6 @@ export default class ChumInviteButton extends Component {
                 firestore().collection('chums').doc(user.uid).update({ chumpsRequest: user.chumpsRequest });
                 firestore().collection('chums').doc(this.props.item.uid).update({ myChams: this?.props?.item?.myChams });
             }
-
         }
         return (
             <>

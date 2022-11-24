@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { StyleSheet, Image, View } from 'react-native';
-import { TouchableOpacity } from "react-native-gesture-handler";
 import AllChumFlatList from '../components/AllChumFlatList';
 import InviteChumButton from '../components/InviteChumButton';
 import MyChumFlatList from "../components/MyChumsFlatList";
@@ -18,18 +17,18 @@ export default class Chums extends Component {
       allChums: []
     }
   }
-  componentDidMount() { 
+  componentDidMount() {
     function onError(error) {
       console.error(error);
     }
-    firestore().collection('chums').onSnapshot((querySnapshot)=>{
-          let chums = []
-          querySnapshot.forEach(documentSnapshot => {
-            chums.push(documentSnapshot.data())
-          });
-          this.setState({ allChums: chums })
-        }
-        , onError);
+    firestore().collection('chums').onSnapshot((querySnapshot) => {
+      let chums = []
+      querySnapshot.forEach(documentSnapshot => {
+        chums.push(documentSnapshot.data())
+      });
+      this.setState({ allChums: chums })
+    }
+      , onError);
   }
 
   render() {
@@ -53,13 +52,8 @@ export default class Chums extends Component {
         </View>
 
         {this.state.listType == 'all' ? (
-
-          <AllChumFlatList style={styles.list} clickChum={this.onClickChum}
-            data={this.state.allChums}
-            />)
-            : (<MyChumFlatList
-          data={this.state.allChums}
-          style={styles.list}></MyChumFlatList>)}
+          <AllChumFlatList style={styles.list} clickChum={this.onClickChum} data={this.state.allChums} />)
+          : (<MyChumFlatList data={this.state.allChums} style={styles.list}></MyChumFlatList>)}
 
 
         <InviteChumButton style={styles.inviteButton} />

@@ -32,7 +32,7 @@ export default class AllChumFlatList extends Component {
     const renderItem = ({ item }) => {
       const user = firebase.auth().currentUser
       let userDoc = this.props.data.filter((val) => val.uid == user.uid)
-      if (user.uid !== item.uid) {
+      if (user?.uid !== item?.uid) {
         return (
           <TouchableOpacity
             onPress={this.props.clickChum}

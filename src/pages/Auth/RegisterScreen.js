@@ -15,7 +15,7 @@ import firestore from '@react-native-firebase/firestore';
 import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
-import { handleGoogleLogin } from './LoginScreen'
+import { handleGoogleLogin, handleMetaLogin, handleAppleLogin } from './LoginScreen'
 
 export default class RegisterScreen extends Component {
     constructor(props) {
@@ -48,6 +48,8 @@ export default class RegisterScreen extends Component {
 
                 <SocialLoginBox style={styles.socialBox}
                     handleGoogleLogin={handleGoogleLogin}
+                    handleMetaLogin={handleMetaLogin}
+                    handleAppleLogin={handleAppleLogin}
                 />
                 <OrLineView style={styles.orline} />
 
@@ -200,11 +202,10 @@ export default class RegisterScreen extends Component {
 
             auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
                 .then(async (logInUser) => {
-
                     if (Object.keys(logInUser).length > 0) {
+                        const { additionalUserInfo } = logInUser
                         let fcmToken = await messaging().getToken()
                         let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
-                        console.log('User registered successfully!', logInUser)
                         if (additionalUserInfo.isNewUser === true) {
                             firestore()
                                 .collection('chums')

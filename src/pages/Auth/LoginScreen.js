@@ -16,7 +16,7 @@ import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import {
     appleAuth,
     // AppleButton,
-  } from "@invertase/react-native-apple-authentication";
+} from "@invertase/react-native-apple-authentication";
 
 import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
@@ -26,6 +26,47 @@ GoogleSignin.configure({
     webClientId: '1018017946183-2427j2vjprc6m7kgo40b22s72l1vvogi.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
 });
 
+
+// META LOGIN
+export async function handleMetaLogin() {
+    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+    if (result.isCancelled) throw 'User cancelled the login process';
+    // Once signed in, get the users AccesToken
+    const data = await AccessToken.getCurrentAccessToken();
+    if (!data) throw 'Something went wrong obtaining access token';
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+    // Sign-in the user with the credential
+    let logInUser = await auth().signInWithCredential(facebookCredential);
+    if (Object.keys(logInUser).length > 0) {
+        const { additionalUserInfo } = logInUser
+        let fcmToken = await messaging().getToken()
+        if (additionalUserInfo.isNewUser === true) {
+            let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
+            firestore()
+                .collection('chums')
+                .doc(userDatClone.uid)
+                .set(userDatClone)
+                .then(() => {
+                    firestore()
+                        .collection('chums')
+                        .doc(logInUser.user._user.uid)
+                        .update({
+                            fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                        });
+                });
+        } else {
+            firestore()
+                .collection('chums')
+                .doc(logInUser.user._user.uid)
+                .update({
+                    fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                });
+        }
+    }
+}
+
+// GOOGLE LOGIN
 export async function handleGoogleLogin() {
     const { idToken } = await GoogleSignin.signIn()
     const googleCredential = auth.GoogleAuthProvider.credential(idToken)
@@ -62,6 +103,47 @@ export async function handleGoogleLogin() {
 
     }
 }
+
+// APPLE LOGIN
+export async function handleAppleLogin() {
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
+    const { identityToken, nonce } = appleAuthRequestResponse;
+    const appleCredential = auth.AppleAuthProvider.credential(
+        identityToken,
+        nonce,
+    );
+    // Sign the user in with the credential
+    const logInUser = await auth().signInWithCredential(appleCredential);
+    if (Object.keys(logInUser).length > 0) {
+        const { additionalUserInfo } = logInUser
+        let fcmToken = await messaging().getToken()
+        if (additionalUserInfo.isNewUser === true) {
+            let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
+            firestore()
+                .collection('chums')
+                .doc(userDatClone.uid)
+                .set(userDatClone)
+                .then(() => {
+                    firestore()
+                        .collection('chums')
+                        .doc(logInUser.user._user.uid)
+                        .update({
+                            fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                        });
+                });
+        } else {
+            firestore()
+                .collection('chums')
+                .doc(logInUser.user._user.uid)
+                .update({
+                    fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                });
+        }
+    }
+}
 export default class LoginScreen extends Component {
 
     constructor(props) {
@@ -74,25 +156,6 @@ export default class LoginScreen extends Component {
             isLoading: false,
             errorMessage: ''
         }
-    }
-    handleAppleLogin = async () => {
-        // alert()
-        console.log('apple login integ')
-        const appleAuthRequestResponse = await appleAuth.performRequest({
-            requestedOperation: appleAuth.Operation.LOGIN,
-            requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-          });
-      console.log(appleAuthRequestResponse,'appleAuthRequestResponse')
-      const { identityToken, nonce } = appleAuthRequestResponse;
-      const appleCredential = auth.AppleAuthProvider.credential(
-          identityToken,
-          nonce,
-          );
-          console.log(appleCredential,'appleCredential')
-      
-          // Sign the user in with the credential
-          const user = await auth().signInWithCredential(appleCredential);
-          console.log(user, "user***")
     }
     render() {
         return (
@@ -111,8 +174,8 @@ export default class LoginScreen extends Component {
 
                 <SocialLoginBox style={styles.socialBox}
                     handleGoogleLogin={handleGoogleLogin}
-                    handleAppleLogin={this.handleAppleLogin}
-                    handleMetaLogin={this.handleMetaLogin}
+                    handleAppleLogin={handleAppleLogin}
+                    handleMetaLogin={handleMetaLogin}
                 />
                 <OrLineView style={styles.orline} />
 
@@ -255,88 +318,6 @@ export default class LoginScreen extends Component {
                 });
         }
     }
-
-    // apple
-   
-    handleMetaLogin = async () => {
-        // console.log('apple login')
-        // Attempt login with permissions
-        // let logInUser = await auth().signInWithCredential(googleCredential)
-        // if (Object.keys(logInUser).length > 0) {
-        //     const { additionalUserInfo } = logInUser
-        //     let fcmToken = await messaging().getToken()
-        //     if (additionalUserInfo.isNewUser === true) {
-        //         let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
-        //         firestore()
-        //             .collection('chums')
-        //             .doc(userDatClone.uid)
-        //             .set(userDatClone)
-        //             .then(() => {
-        //                 firestore()
-        //                     .collection('chums')
-        //                     .doc(logInUser.user._user.uid)
-        //                     .update({
-        //                         fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-        //                     });
-        //             });
-        //     } else {
-        //         firestore()
-        //             .collection('chums')
-        //             .doc(logInUser.user._user.uid)
-        //             .update({
-        //                 fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-        //             });
-        //     }
-        // }
-        const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-
-        if (result.isCancelled) {
-            throw 'User cancelled the login process';
-        }
-
-        // Once signed in, get the users AccesToken
-        const data = await AccessToken.getCurrentAccessToken();
-
-        if (!data) {
-            throw 'Something went wrong obtaining access token';
-        }
-
-        // Create a Firebase credential with the AccessToken
-        const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
-        // Sign-in the user with the credential
-        let logInUser=await auth().signInWithCredential(facebookCredential);
-        console.log(logInUser,'logInUserlogInUser')
-          if (Object.keys(logInUser).length > 0) {
-            const { additionalUserInfo } = logInUser
-            let fcmToken = await messaging().getToken()
-            if (additionalUserInfo.isNewUser === true) {
-                let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
-                firestore()
-                    .collection('chums')
-                    .doc(userDatClone.uid)
-                    .set(userDatClone)
-                    .then(() => {
-                        firestore()
-                            .collection('chums')
-                            .doc(logInUser.user._user.uid)
-                            .update({
-                                fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                            });
-                    });
-            } else {
-                firestore()
-                    .collection('chums')
-                    .doc(logInUser.user._user.uid)
-                    .update({
-                        fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                    });
-            }
-        }
-        // console.log(facebookCredential, 'facebookCredentialfacebookCredentialfacebookCredential',userInfo)
-
-
-    }
-
     checkToken = async () => {
         const fcmToken = await messaging().getToken();
         if (fcmToken) {

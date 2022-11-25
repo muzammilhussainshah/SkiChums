@@ -19,10 +19,10 @@ export default class MyChumFlatList extends Component {
     // FOR ACCEPT CHUM REQUEST
     const handleAccept = (id) => {
       const user = firebase.auth().currentUser
-      let userDoc = this.props.data.filter((val) => val.uid == user.uid)
+      let userDoc = this?.props?.data?.filter((val) => val.uid == user.uid)
       let selectedChams = userDoc[0].myChams.filter((val) => val.id == id)
       if (selectedChams.length > 0) { selectedChams[0].status = 'CHUMS' }
-      let reciepentDoc = this.props.data.filter((val) => val.uid == id)
+      let reciepentDoc = this?.props?.data?.filter((val) => val.uid == id)
       let selectedReciepentRequestObj = reciepentDoc[0]?.chumpsRequest?.filter((val) => val.id === userDoc[0].uid)
       if (selectedReciepentRequestObj && selectedReciepentRequestObj.length > 0) { selectedReciepentRequestObj[0].status = 'CHUMS' }
       if (!reciepentDoc[0]?.myChams) reciepentDoc[0].myChams = []
@@ -35,10 +35,10 @@ export default class MyChumFlatList extends Component {
     // FOR DECLINE CHUM REQUEST
     const handleDecline = (id) => {
       const user = firebase.auth().currentUser
-      let userDoc = this.props.data.filter((val) => val.uid == user.uid)
+      let userDoc = this?.props?.data?.filter((val) => val.uid == user.uid)
       let removeChumIndex = userDoc[0].myChams.findIndex((val) => val.id == id)
       if (removeChumIndex !== -1) userDoc[0].myChams.splice(removeChumIndex, 1)
-      let reciepentDoc = this.props.data.filter((val) => val.uid == id)
+      let reciepentDoc = this?.props?.data?.filter((val) => val.uid == id)
       let removeReciepentIndex = reciepentDoc[0]?.chumpsRequest?.findIndex((val) => val.id === userDoc[0].uid)
       if (removeReciepentIndex !== -1) reciepentDoc[0]?.chumpsRequest.splice(removeReciepentIndex, 1)
       firestore().collection('chums').doc(user.uid).update({ myChams: userDoc[0].myChams });
@@ -74,7 +74,7 @@ export default class MyChumFlatList extends Component {
         {
           <View style={this.props.style ?? styles.container}>
             <FlatList
-              data={this.props.data.filter((val) => val.uid == user.uid)[0].myChams}
+              data={this?.props?.data?.filter((val) => val.uid == user.uid)[0].myChams}
               renderItem={renderItem}
               keyExtractor={item => item.id}></FlatList>
           </View>

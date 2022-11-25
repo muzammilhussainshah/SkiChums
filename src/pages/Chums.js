@@ -55,7 +55,7 @@ export default class Chums extends Component {
 
         {this.state.listType == 'all' ? (
           <AllChumFlatList style={styles.list} clickChum={this.onClickChum} data={this.state.allChums} />)
-          : (<MyChumFlatList data={this.state.allChums} style={styles.list}></MyChumFlatList>)}
+          : (<MyChumFlatList data={this.state.allChums} clickChum={this.onClickChum} style={styles.list}></MyChumFlatList>)}
 
         <InviteChumButton style={styles.inviteButton} />
       </View>

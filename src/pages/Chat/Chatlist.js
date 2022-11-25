@@ -16,59 +16,64 @@ export default class Chatlist extends Component {
       chatModalVisible: false,
     }
   }
-  
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logo}/>
-          <SCSearchBar/>
+          <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logo} />
+          <SCSearchBar />
         </View>
-  
-        <View style={styles.tabHeader}>
-          <TabButton 
-          selectedStatus={this.state.listType == 'chat' ? true : false}
-          buttonTitle={'CHATS'}
-          onTabBtnClick={() => this.setState({listType: 'chat'})}/>
 
-          <TabButton 
-          selectedStatus={this.state.listType == 'session' ? true : false}
-          buttonTitle={'SESSIONS'}
-          onTabBtnClick={() => this.setState({listType: 'session'})}/>
+        <View style={styles.tabHeader}>
+          <TabButton
+            selectedStatus={this.state.listType == 'chat' ? true : false}
+            buttonTitle={'CHATS'}
+            onTabBtnClick={() => this.setState({ listType: 'chat' })} />
+
+          <TabButton
+            selectedStatus={this.state.listType == 'session' ? true : false}
+            buttonTitle={'SESSIONS'}
+            onTabBtnClick={() => this.setState({ listType: 'session' })} />
         </View>
-        {this.state.listType == 'chat' ? (<ChatFlatList style={styles.list} onClick={this.onClickChatCell}></ChatFlatList>) : (<MyChumFlatList style={styles.list}></MyChumFlatList>)}
+        {this.state.listType == 'chat' ? (
+        <ChatFlatList style={styles.list} onClick={this.onClickChatCell}></ChatFlatList>) : (<MyChumFlatList style={styles.list}></MyChumFlatList>)}
 
         <View style={styles.messageButton}>
           <TouchableOpacity onPress={this.onSetupChat}>
-            <Image source={require("../../assets/icons/ic_chat.png")} resizeMode="cover" style={styles.logo}/>
+            <Image source={require("../../assets/icons/ic_chat.png")} resizeMode="cover" style={styles.logo} />
           </TouchableOpacity>
-          
+
         </View>
 
-        <InviteChumButton style={styles.inviteButton}/>
+        <InviteChumButton style={styles.inviteButton} />
 
         <Modal style={styles.modal} transparent={true} visible={this.state.chatModalVisible} presentationStyle={"overFullScreen"}>
-          <CreateChatScreen onNewMessage={this.onNewMessage} onNewGroup={this.onNewGroup} onClose={this.onClose}/>
+          <CreateChatScreen
+            onNewMessage={this.onNewMessage}
+            onNewGroup={this.onNewGroup}
+            onClose={this.onClose} />
         </Modal>
-   </View>
-    );    
+      </View>
+    );
   }
-  
+
   onSetupChat = () => {
-    this.setState({chatModalVisible: true})
+    this.setState({ chatModalVisible: true })
   }
 
   onNewMessage = () => {
-    this.setState({chatModalVisible: false})
+    this.setState({ chatModalVisible: false })
+    this.props.navigation.navigate('NewChatGroup', { 'singleMsg': true })
   }
 
   onNewGroup = () => {
-    this.setState({chatModalVisible: false})
+    this.setState({ chatModalVisible: false })
     this.props.navigation.navigate('NewChatGroup')
   }
 
   onClose = () => {
-    this.setState({chatModalVisible: false})
+    this.setState({ chatModalVisible: false })
   }
 
   onClickChatCell = () => {

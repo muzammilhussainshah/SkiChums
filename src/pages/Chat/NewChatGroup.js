@@ -13,54 +13,61 @@ export default class NewChatGroup extends Component {
     super(props);
 
     this.state = {
-      
+
     }
   }
-  
+
   render() {
+    const { params } = this?.props?.route
+    console.log('singleMsg', params, this?.props?.route)
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logo}/>
+          <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logo} />
           <View style={styles.topContainer}>
             <View style={styles.topBarContainer}>
-                <TouchableOpacity style={styles.back} onPress={this.onBack}>
-                    <Image source={require("../../assets/Settings/blue-chevron-left.png")} style={styles.backIcon}/>
-                </TouchableOpacity>
-                <View style={styles.groupNameContainer}>
-                    <Text style={styles.groupNameTxt}>
-                      Val d'lsere
-                    </Text>
-                    <Text style={styles.groupMemberTxt}>
-                        Add participants
-                    </Text>
-                </View>
-                <TouchableOpacity style={styles.searchIcon}>
-                    <Image source={require("../../assets/icons/ic_blue_search.png")} style={styles.searchIcon}/>
-                </TouchableOpacity>
+              <TouchableOpacity style={styles.back} onPress={this.onBack}>
+                <Image source={require("../../assets/Settings/blue-chevron-left.png")} style={styles.backIcon} />
+              </TouchableOpacity>
+              <View style={styles.groupNameContainer}>
+                <Text style={styles.groupNameTxt}>
+                  Val d'lsere
+                </Text>
+                <Text style={styles.groupMemberTxt}>
+                  Add participants
+                </Text>
+              </View>
+              <TouchableOpacity style={styles.searchIcon}>
+                <Image source={require("../../assets/icons/ic_blue_search.png")} style={styles.searchIcon} />
+              </TouchableOpacity>
             </View>
-            
-            <View style={styles.topLine}/>
+
+            <View style={styles.topLine} />
           </View>
-          
+
         </View>
-        
-        <View style={styles.memberContainer}>
-            <ChatGroupTagView style={styles.tagView}/>
-            <TouchableOpacity style={styles.createButton} onPress={this.onCreateChat}>
-                <Image style={styles.createButton} source={require("../../assets/icons/ic_blue_circle_arrow.png")}/>                
-            </TouchableOpacity>
-        </View>
-        <View style={styles.blueLine}/>
-        <ChatFlatList style={styles.list} onClick={this.onClickChatCell}/>
-    </View>
-    );    
+        {!params?.singleMsg &&
+          <>
+            <View style={styles.memberContainer}>
+              <ChatGroupTagView style={styles.tagView} />
+              <TouchableOpacity style={styles.createButton} onPress={this.onCreateChat}>
+                <Image style={styles.createButton} source={require("../../assets/icons/ic_blue_circle_arrow.png")} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.blueLine} />
+          </>
+        }
+        <ChatFlatList style={styles.list} onClick={this.onClickChatCell} />
+      </View>
+    );
   }
 
-
+ 
   onClickChatCell = () => {
     console.log('clicked chat cell')
-
+    this.props.navigation.navigate('ChatScreen', {
+      isPrivate: true
+    })
   }
 
   onBack = () => {
@@ -81,7 +88,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    flexDirection: 'column',    
+    flexDirection: 'column',
   },
   tagView: {
     flex: 1
@@ -98,7 +105,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  topBarContainer: {    
+  topBarContainer: {
     width: '100%',
     flex: 1,
     flexDirection: 'row',

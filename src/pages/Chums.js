@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, Image, View } from 'react-native';
+
+import firestore from '@react-native-firebase/firestore';
+
 import AllChumFlatList from '../components/AllChumFlatList';
 import InviteChumButton from '../components/InviteChumButton';
 import MyChumFlatList from "../components/MyChumsFlatList";
 import SCSearchBar from '../components/SCSearchBar';
 import TabButton from '../components/TabButton';
-import firestore from '@react-native-firebase/firestore';
 
 
 export default class Chums extends Component {

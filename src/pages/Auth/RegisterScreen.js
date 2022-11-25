@@ -15,7 +15,11 @@ import firestore from '@react-native-firebase/firestore';
 import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
-import { handleGoogleLogin, handleMetaLogin, handleAppleLogin } from './LoginScreen'
+import {
+    handleGoogleLogin,
+    handleMetaLogin,
+    handleAppleLogin
+} from './LoginScreen'
 
 export default class RegisterScreen extends Component {
     constructor(props) {

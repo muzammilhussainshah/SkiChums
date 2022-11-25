@@ -12,23 +12,6 @@ import MyChumAcceptContainer from './MyChumAcceptContainer';
 import { firebase } from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
 
-const Item = ({ item, user }) => {
-  let ardeadyChams = user[0]?.myChams?.filter((val) => val.id == item.uid)
-  let isRequested = user[0]?.chumpsRequest?.filter((val) => val.id == item.uid)
-  return (
-    <View style={styles.item}>
-      <ChumInfoView name={item.displayName} profilePic={item.photoURL} distance={item.distance}   ></ChumInfoView>
-      {ardeadyChams?.length > 0 ?
-        ardeadyChams[0]?.status === 'REQUESTED' &&
-        <MyChumAcceptContainer
-        />
-        :
-        <ChumInviteButton user={user[0]} item={item} buttonType={isRequested?.length > 0 ? isRequested[0].status : 'ADD'}></ChumInviteButton>
-      }
-    </View>
-  )
-};
-
 export default class AllChumFlatList extends Component {
 
   render() {
@@ -74,17 +57,23 @@ export default class AllChumFlatList extends Component {
           >
 
             <View style={styles.item}>
-              <ChumInfoView name={item.displayName} profilePic={item.photoURL} distance={item.distance}   ></ChumInfoView>
+              <ChumInfoView
+                name={item.displayName}
+                profilePic={item.photoURL}
+                distance={item.distance} />
               {ardeadyChams?.length > 0 ?
                 ardeadyChams[0]?.status === 'REQUESTED' &&
-                <MyChumAcceptContainer accept={() => handleAccept(item.uid)}
+                <MyChumAcceptContainer
+                  accept={() => handleAccept(item.uid)}
                   decline={() => handleDecline(item.uid)}
                 />
                 :
-                <ChumInviteButton user={userDoc[0]} item={item} buttonType={isRequested?.length > 0 ? isRequested[0].status : 'ADD'}></ChumInviteButton>
+                <ChumInviteButton
+                  user={userDoc[0]}
+                  item={item}
+                  buttonType={isRequested?.length > 0 ? isRequested[0].status : 'ADD'} />
               }
             </View>
-
           </TouchableOpacity>
         )
       }
@@ -121,6 +110,4 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   }
-
-
 })

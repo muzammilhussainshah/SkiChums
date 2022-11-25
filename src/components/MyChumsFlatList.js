@@ -6,26 +6,11 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import { firebase } from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
+import { firebase } from '@react-native-firebase/auth'
 
 import ChumInfoView from './ChumInfoView';
 import MyChumAcceptContainer from './MyChumAcceptContainer';
-
-const Item = ({ item, status }) => {
-  console.log(item, 'adlassakjlsadj', status)
-
-  return (
-    <View style={styles.item}>
-      <ChumInfoView name={item.displayName} profilePic={item.photoURL} distance={item.distance}   ></ChumInfoView>
-
-      {status == 'REQUESTED' ? (
-        <MyChumAcceptContainer accept={handleAccept} />
-      ) : (null)}
-
-    </View>
-  )
-};
 
 export default class MyChumFlatList extends Component {
 
@@ -68,9 +53,13 @@ export default class MyChumFlatList extends Component {
           activeOpacity={.8}
         >
           <View style={styles.item}>
-            <ChumInfoView name={data[0].displayName} profilePic={data[0].photoURL} distance={data[0].distance}></ChumInfoView>
+            <ChumInfoView
+              name={data[0].displayName}
+              profilePic={data[0].photoURL}
+              distance={data[0].distance} />
             {item.status == 'REQUESTED' ? (
-              <MyChumAcceptContainer accept={() => handleAccept(item.id)}
+              <MyChumAcceptContainer
+                accept={() => handleAccept(item.id)}
                 decline={() => handleDecline(item.id)}
               />
             ) : (null)}
@@ -111,6 +100,4 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   }
-
-
 })

@@ -13,19 +13,13 @@ import messaging from '@react-native-firebase/messaging';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
-import {
-    appleAuth,
-    // AppleButton,
-} from "@invertase/react-native-apple-authentication";
+import { appleAuth } from "@invertase/react-native-apple-authentication";
 
 import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
 
-GoogleSignin.configure({
-    webClientId: '1018017946183-2427j2vjprc6m7kgo40b22s72l1vvogi.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-});
-
+GoogleSignin.configure({ webClientId: '1018017946183-2427j2vjprc6m7kgo40b22s72l1vvogi.apps.googleusercontent.com', });
 
 // META LOGIN
 export async function handleMetaLogin() {
@@ -48,20 +42,10 @@ export async function handleMetaLogin() {
                 .doc(userDatClone.uid)
                 .set(userDatClone)
                 .then(() => {
-                    firestore()
-                        .collection('chums')
-                        .doc(logInUser.user._user.uid)
-                        .update({
-                            fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                        });
+                    firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
                 });
         } else {
-            firestore()
-                .collection('chums')
-                .doc(logInUser.user._user.uid)
-                .update({
-                    fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                });
+            firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
         }
     }
 }
@@ -82,20 +66,10 @@ export async function handleGoogleLogin() {
                     .doc(userDatClone.uid)
                     .set(userDatClone)
                     .then(() => {
-                        firestore()
-                            .collection('chums')
-                            .doc(logInUser.user._user.uid)
-                            .update({
-                                fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                            });
+                        firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
                     });
             } else {
-                firestore()
-                    .collection('chums')
-                    .doc(logInUser.user._user.uid)
-                    .update({
-                        fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                    });
+                firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
             }
         }
     } catch (error) {
@@ -110,11 +84,10 @@ export async function handleAppleLogin() {
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
     });
+
     const { identityToken, nonce } = appleAuthRequestResponse;
-    const appleCredential = auth.AppleAuthProvider.credential(
-        identityToken,
-        nonce,
-    );
+    const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce,);
+
     // Sign the user in with the credential
     const logInUser = await auth().signInWithCredential(appleCredential);
     if (Object.keys(logInUser).length > 0) {
@@ -127,20 +100,10 @@ export async function handleAppleLogin() {
                 .doc(userDatClone.uid)
                 .set(userDatClone)
                 .then(() => {
-                    firestore()
-                        .collection('chums')
-                        .doc(logInUser.user._user.uid)
-                        .update({
-                            fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                        });
+                    firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
                 });
         } else {
-            firestore()
-                .collection('chums')
-                .doc(logInUser.user._user.uid)
-                .update({
-                    fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                });
+            firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
         }
     }
 }
@@ -271,9 +234,7 @@ export default class LoginScreen extends Component {
         } else if (this.state.email === '') {
             Alert.alert('Please enter your email.')
         } else {
-            this.setState({
-                isLoading: true,
-            })
+            this.setState({ isLoading: true, })
 
             auth().signInWithEmailAndPassword(this.state.email, this.state.password)
                 .then(async (logInUser) => {
@@ -302,7 +263,6 @@ export default class LoginScreen extends Component {
                                 .update({
                                     fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
                                 });
-
                         }
                     }
                     this.setState({
@@ -336,7 +296,6 @@ const styles = StyleSheet.create({
     logo: {
         width: 59,
         height: 59,
-        // position: 'absolute',
         left: 28,
         top: 44
     },
@@ -344,7 +303,6 @@ const styles = StyleSheet.create({
         marginTop: 15,
         marginHorizontal: 42,
         alignItems: 'center',
-        // justifyContent: 'center',
         flexDirection: 'row'
     },
     buttonText: {
@@ -373,7 +331,6 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#D9D9D9',
-        // flex: 1,
         marginTop: 20,
         height: 36,
         borderRadius: 18,
@@ -393,12 +350,7 @@ const styles = StyleSheet.create({
         height: 18,
         bottom: 7,
     },
-    floatingTxt: {
-        // height: 73,
-        justifyContent: 'center'
-        // flex: 1,
-        // flexDirection: 'row'
-    },
+    floatingTxt: { justifyContent: 'center' },
     registerTxt: {
         color: 'white',
         fontSize: 24,
@@ -445,12 +397,3 @@ const styles = StyleSheet.create({
 });
 
 
-
-
-// if(uid1 > uid2){
-//     return uid1+uid2
-
-// }
-// else{
-//     return uid2 + uid1 
-// }

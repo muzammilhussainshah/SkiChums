@@ -59,7 +59,10 @@ export default class ChatScreen extends Component {
               <TouchableOpacity style={styles.back} onPress={this.onBack}>
                 <Image source={require("../../assets/Settings/blue-chevron-left.png")} style={styles.backIcon} />
               </TouchableOpacity>
-              {isPrivate ? (<PrivateChatTopBar />) : (<GroupChatTopBar onSettings={this.onSettings} />)}
+              {isPrivate ? (<PrivateChatTopBar
+                name={recipientData?.displayName ? recipientData?.displayName : recipientData?.email}
+                profilePic={recipientData.photoURL}
+              />) : (<GroupChatTopBar onSettings={this.onSettings} />)}
             </View>
 
             <View style={styles.topLine} />

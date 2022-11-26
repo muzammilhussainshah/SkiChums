@@ -7,15 +7,19 @@ export default class PrivateChatTopBar extends Component {
             <View style={[this.props.style ?? {}, styles.container]}>
                 <View style={styles.groupNameContainer}>
                     <Text style={styles.opponentNameTxt}>
-                        Jane Doe
+                        {this.props.name}
                     </Text>
-                    <View style={styles.status}/>
-                </View>                
+                    <View style={styles.status} />
+                </View>
                 <TouchableOpacity style={styles.profileIcon} onPress={this.props.onProfile}>
-                    <Image source={require("../../assets/icons/sample-chum-profile.png")} style={styles.profileIcon}/>
-                </TouchableOpacity>      
+                    {this.props.profilePic ?
+                        <Image source={{ uri: this.props.profilePic }} style={styles.profileIcon} />
+                        :
+                        <Image source={require("../../assets/icons/sample-chum-profile.png")} style={styles.profileIcon} />
+                    }
+                </TouchableOpacity>
             </View>
-        )        
+        )
     }
 }
 
@@ -24,7 +28,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginRight: 10
     },
-    
+
     groupNameContainer: {
         flex: 1,
         flexDirection: 'row',
@@ -43,9 +47,11 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: 'black',
         textAlign: 'center',
-    },   
+    },
     profileIcon: {
         width: 30,
-        height: 30
+        height: 30,
+        borderRadius: 15,
+        overflow: 'hidden'
     },
 })

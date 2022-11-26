@@ -1,13 +1,23 @@
 import React, { Component } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, Keyboard, Modal } from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  View,
+  TouchableOpacity,
+  Keyboard,
+  Modal
+} from 'react-native';
+
+import { connect } from 'react-redux'
+import { firebase } from "@react-native-firebase/auth";
 import ChatMessagesList from "../../components/Chat/ChatMessagesList";
+
 import ChatMessageSendBox from "../../components/Chat/ChatMessageSendBox";
 import EditGroupChatScreen from "./EditGroupChatScreen";
-import { connect } from 'react-redux'
 import GroupChatTopBar from "../../components/Chat/GroupChatTopBar";
 import PrivateChatTopBar from "../../components/Chat/PrivateChatTopBar";
-import { firebase } from "@react-native-firebase/auth";
-import { sendMessage } from '../../store/action/action'
+import { sendMessageToDb } from '../../store/action/action'
+
 class ChatScreen extends Component {
   constructor(props) {
     super(props);
@@ -48,22 +58,6 @@ class ChatScreen extends Component {
       keyboardOffset: 0,
     })
   }
-  handleSendMessage(recipientData) {
-    if (this.state.message.length > 0) {
-      const user = firebase.auth().currentUser
-      let msgObj = {
-        messageText: this.state.message,
-        sendBy: user.uid,
-        sendAt: new Date()
-      }
-      let docId;
-      if (user.uid.length > recipientData.uid.length) docId = recipientData.uid + user.uid
-      else docId = user.uid + recipientData.uid
-      this.props.sendMessage(docId, msgObj)
-      this.setState({ message: '' })
-    }
-  }
-  getMessage(message) { this.setState({ message: message }) }
   render() {
     let isPrivate = this.props.route.params.isPrivate ?? false
     let recipientData = this.props.route.params.recipientData ?? {}
@@ -103,6 +97,24 @@ class ChatScreen extends Component {
     );
   }
 
+  handleSendMessage(recipientData) {
+    if (this.state.message.length > 0) {
+      const user = firebase.auth().currentUser
+      let msgObj = {
+        messageText: this.state.message,
+        sendBy: user.uid,
+        sendAt: new Date()
+      }
+      let docId;
+      if (user.uid.length > recipientData.uid.length) docId = recipientData.uid + user.uid
+      else docId = user.uid + recipientData.uid
+      this.props.sendMessageToDb(docId, msgObj)
+      this.setState({ message: '' })
+    }
+  }
+
+  getMessage(message) { this.setState({ message: message }) }
+
   onClose = () => {
     this.setState({ editlVisible: false })
   }
@@ -128,15 +140,14 @@ class ChatScreen extends Component {
 
 function mapStateToProps(states) {
   return ({
-    // chums: states.root.chums
 
   })
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    sendMessage: (docId, msgObj) => {
-      dispatch(sendMessage(docId, msgObj));
+    sendMessageToDb: (docId, msgObj) => {
+      dispatch(sendMessageToDb(docId, msgObj));
     },
 
   }

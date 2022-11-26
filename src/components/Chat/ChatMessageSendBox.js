@@ -1,6 +1,11 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, TextInput, TouchableOpacity, Image } from "react-native";
-// import { TextInput } from "react-native-gesture-handler";
+import {
+    View,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    Image
+} from "react-native";
 
 export default class ChatMessageSendBox extends Component {
     render() {

@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
+import {
+    View,
+    StyleSheet,
+    Text,
+    Image
+} from "react-native";
 
 export default class ChatFlatListCell extends Component {
     render() {

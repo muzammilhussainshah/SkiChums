@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { FlatList, FlatListProps, Text, View, StyleSheet } from 'react-native';
+import {
+  FlatList,
+  View,
+  StyleSheet
+} from 'react-native';
+
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { MaterialIndicator } from 'react-native-indicators';
 import ChatFlatListCell from './ChatFlatListCell';
 
 const DATA = [
@@ -35,6 +39,7 @@ export default class ChatFlatList extends Component {
     })
   }
   render() {
+    console.log(this.props.data,'this.props.data')
     const renderItem = ({ item }) => {
       return (
         <TouchableWithoutFeedback onPress={this.navigationToChat.bind(this, item)} style={styles.item}>

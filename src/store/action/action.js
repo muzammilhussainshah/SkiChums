@@ -28,23 +28,35 @@ export function getAllChums(bolean) {
 }
 
 
-export function sendMessage(docId, msgObj) {
+export  function sendMessageToDb(docId, msgObj) {
     return dispatch => {
-        console.log(docId, msgObj, 'docId, msgObj')
-        // alert('send ')
-        // db
+        firestore().collection('message').doc(docId).set({ 'message': "message" })
         firestore().collection('message').doc(docId).collection('messages').add(msgObj)
-        // firestore()
-        //     .collection('message')
-        //     .doc(docId)
-        //     .set(msgObj)
-        //     .then(() => {
-        //         console.log('User added!');
-        //     });
-        // const user = firebase.auth().currentUser
-
-
     }
 }
 
+export function getChatroom(mychums) {
+    return dispatch => {
+        let chatroomArray = []
+        const user = firebase.auth().currentUser
+        mychums.map(async (item) => {
+            let docId;
+            if (user.uid.length > item.uid.length) docId = item.uid + user.uid
+            else docId = user.uid + item.uid
+            console.log(docId, 'docIddocIddocIddocId', item)
+            await firestore()
+                .collection('message')
+                .where(firebase.firestore.FieldPath.documentId(), '==', docId)
+                .get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(documentSnapshot => {
+                        chatroomArray.push(item)
+                        console.log(documentSnapshot.id, 'aaaaa', chatroomArray)
+                        dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
 
+                        // alert(documentSnapshot.id)
+                    });
+                });
+        })
+    }
+}

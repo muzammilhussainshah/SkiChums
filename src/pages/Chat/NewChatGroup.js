@@ -73,7 +73,6 @@ class NewChatGroup extends React.Component {
 
 
 function mapStateToProps(states) {
-  console.log(states, '//////')
   return ({
     mychums: states.root.mychums
   })

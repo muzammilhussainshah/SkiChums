@@ -36,8 +36,7 @@ export default class Chatlist extends Component {
             buttonTitle={'SESSIONS'}
             onTabBtnClick={() => this.setState({ listType: 'session' })} />
         </View>
-        {this.state.listType == 'chat' ? (
-        <ChatFlatList style={styles.list} onClick={this.onClickChatCell}></ChatFlatList>) : (<MyChumFlatList style={styles.list}></MyChumFlatList>)}
+        {this.state.listType == 'chat' ? (<ChatFlatList style={styles.list} onClick={this.onClickChatCell}></ChatFlatList>) : (<MyChumFlatList style={styles.list}></MyChumFlatList>)}
 
         <View style={styles.messageButton}>
           <TouchableOpacity onPress={this.onSetupChat}>

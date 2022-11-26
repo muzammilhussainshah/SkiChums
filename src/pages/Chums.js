@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Image, View } from 'react-native';
 
-import firestore from '@react-native-firebase/firestore';
-
 import AllChumFlatList from '../components/AllChumFlatList';
 import InviteChumButton from '../components/InviteChumButton';
 import { connect } from 'react-redux'
@@ -21,30 +19,13 @@ class Chums extends Component {
     }
   }
   componentDidMount() {
-    // function onError(error) {
-    //   console.error(error);
-    // }
     this.props.getAllChums()
-    // firestore().collection('chums').onSnapshot((querySnapshot) => {
-    //   let chums = []
-    //   querySnapshot.forEach(documentSnapshot => {
-    //     chums.push(documentSnapshot.data())
-    //   });
-    //   // this.props.chums = chums
-
-    //   this.setState({ allChums: chums })
-
-    // }
-    //   , onError);
-
   }
+
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.chums.length !== this.state.allChums.length) { this.setState({ allChums: nextProps.chums }) }
-  } 
-
-
+  }
   render() {
-    // console.log(this.props, 'NewChatGroupNewChatGroupNewChatGroup',)
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>

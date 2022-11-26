@@ -1,7 +1,8 @@
 import ActionTypes from '../constant/constant';
 
 const INITIAL_STATE = {
-    chums: []
+    chums: [],
+    mychums: []
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -11,6 +12,11 @@ export default (state = INITIAL_STATE, action) => {
             return ({
                 ...state,
                 chums: action.payload
+            })
+        case ActionTypes.MYCHUMS:
+            return ({
+                ...state,
+                mychums: action.payload
             })
         default:
             return state;

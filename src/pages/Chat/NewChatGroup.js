@@ -1,14 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import { StyleSheet, Image, View, TouchableOpacity, Text } from 'react-native';
 import ChatFlatList from "../../components/Chat/ChatFlatList";
 import ChatGroupTagView from "../../components/Chat/ChatGroupTagView";
 import { connect } from 'react-redux';
-import InviteChumButton from '../../components/InviteChumButton';
-import MyChumFlatList from "../../components/MyChumsFlatList";
-import SCSearchBar from "../../components/SCSearchBar";
-import TabButton from "../../components/TabButton";
-import CreateChatScreen from "./CreateChatScreen";
-
 class NewChatGroup extends React.Component {
   constructor(props) {
     super(props)
@@ -55,7 +49,11 @@ class NewChatGroup extends React.Component {
             <View style={styles.blueLine} />
           </>
         }
-        <ChatFlatList style={styles.list} onClick={this.onClickChatCell} />
+        <ChatFlatList
+           navigation={this.props.navigation}
+        style={styles.list}
+          data={this?.props?.mychums}
+          onClick={this.onClickChatCell} />
       </View>
     );
   }
@@ -81,8 +79,9 @@ class NewChatGroup extends React.Component {
 
 
 function mapStateToProps(states) {
-  console.log(states.root.chums, 'NewChatGroupNewChatGroupNewChatGroup')
+  console.log(states, '//////')
   return ({
+    mychums: states.root.mychums
   })
 }
 

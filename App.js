@@ -9,8 +9,6 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth'
-//  import auth from '@react-native-firebase/auth'
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import Navigation from './src/router/Tab';
 import { PortalProvider } from '@gorhom/portal';
@@ -33,7 +31,6 @@ function App() {
     return subscriber;
   }, []);
 
-  // if (initializing) return null;
 
   if (!user) {
     return (

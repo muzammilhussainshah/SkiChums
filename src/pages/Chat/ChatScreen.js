@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, Text, Keyboard, Modal } from 'react-native';
+import { StyleSheet, Image, View, TouchableOpacity, Keyboard, Modal } from 'react-native';
 import ChatMessagesList from "../../components/Chat/ChatMessagesList";
 import ChatMessageSendBox from "../../components/Chat/ChatMessageSendBox";
 import EditGroupChatScreen from "./EditGroupChatScreen";
@@ -15,69 +15,71 @@ export default class ChatScreen extends Component {
       editlVisible: false,
     }
   }
-  
+
   componentDidMount() {
     this.keyboardDidShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        this._keyboardDidShow.bind(this),
+      'keyboardDidShow',
+      this._keyboardDidShow.bind(this),
     );
     this.keyboardDidHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        this._keyboardDidHide.bind(this),
+      'keyboardDidHide',
+      this._keyboardDidHide.bind(this),
     );
   }
 
   componentWillUnmount() {
-      this.keyboardDidShowListener.remove();
-      this.keyboardDidHideListener.remove();
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
   }
 
   _keyboardDidShow(event) {
     console.log('keyboardDidShow: ', event.endCoordinates.height)
-      this.setState({
-          keyboardOffset: event.endCoordinates.height,
-      })
+    this.setState({
+      keyboardOffset: event.endCoordinates.height,
+    })
   }
 
   _keyboardDidHide() {
     console.log('keyboardDidHide')
-      this.setState({
-          keyboardOffset: 0,
-      })
+    this.setState({
+      keyboardOffset: 0,
+    })
   }
 
   render() {
     let isPrivate = this.props.route.params.isPrivate ?? false
+    let recipientData = this.props.route.params.recipientData ?? {}
+    console.log(recipientData, 'asdassadadsasdasdasdsaads')
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logo}/>
+          <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logo} />
           <View style={styles.topContainer}>
             <View style={styles.topBarContainer}>
-                <TouchableOpacity style={styles.back} onPress={this.onBack}>
-                    <Image source={require("../../assets/Settings/blue-chevron-left.png")} style={styles.backIcon}/>
-                </TouchableOpacity>
-                {isPrivate ? (<PrivateChatTopBar/>) : (<GroupChatTopBar onSettings={this.onSettings}/>)}
+              <TouchableOpacity style={styles.back} onPress={this.onBack}>
+                <Image source={require("../../assets/Settings/blue-chevron-left.png")} style={styles.backIcon} />
+              </TouchableOpacity>
+              {isPrivate ? (<PrivateChatTopBar />) : (<GroupChatTopBar onSettings={this.onSettings} />)}
             </View>
-            
-            <View style={styles.topLine}/>
+
+            <View style={styles.topLine} />
           </View>
-          
+
         </View>
-        
-        <ChatMessagesList style={styles.chat} isPrivate={isPrivate}/>
-        <ChatMessageSendBox keyboardOffset={this.state.keyboardOffset}/>
+
+        <ChatMessagesList style={styles.chat} isPrivate={isPrivate} />
+        <ChatMessageSendBox keyboardOffset={this.state.keyboardOffset} />
 
         <Modal style={styles.modal} transparent={true} visible={this.state.editlVisible} presentationStyle={"overFullScreen"}>
-          <EditGroupChatScreen onAddMember={this.onAddMember} onDeleteGroup={this.onDeleteGroup} onClose={this.onClose}/>
+          <EditGroupChatScreen onAddMember={this.onAddMember} onDeleteGroup={this.onDeleteGroup} onClose={this.onClose} />
         </Modal>
-        
-    </View>
-    );    
+
+      </View>
+    );
   }
 
   onClose = () => {
-    this.setState({editlVisible : false})
+    this.setState({ editlVisible: false })
   }
 
   onAddMember = () => {
@@ -93,7 +95,7 @@ export default class ChatScreen extends Component {
   }
 
   onSettings = () => {
-    this.setState({editlVisible: true})
+    this.setState({ editlVisible: true })
   }
 }
 
@@ -107,7 +109,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    flexDirection: 'column',    
+    flexDirection: 'column',
   },
   createButton: {
     width: 35,
@@ -121,7 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  topBarContainer: {    
+  topBarContainer: {
     width: '100%',
     flex: 1,
     flexDirection: 'row',
@@ -188,5 +190,5 @@ const styles = StyleSheet.create({
     width: 59,
     aspectRatio: 1,
     marginRight: 10
-  },  
+  },
 });

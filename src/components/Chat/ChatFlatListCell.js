@@ -9,24 +9,29 @@ export default class ChatFlatListCell extends Component {
         let id = this.props.id;
 
         return (
-                <View style={styles.container}>
-                    <View style={styles.profileImage}>
-                        {id == 0 ? (<Image source={require('../../assets/icons/sample-chum-profile1.png')} style={styles.profileImage}/>) : id == 1 ? (<Image source={require('../../assets/icons/sample-chum-profile.png')} style={styles.profileImage}/>) : (<Image source={require('../../assets/icons/sample-chum-profile2.png')} style={styles.profileImage}/>)}
-                        
-                    </View>
-                    <View style={styles.infoContainer}>
-                        <Text style={styles.chumName}>
-                            {name}
-                        </Text>
-                        <Text style={styles.message}>
-                            {last_msg}
-                        </Text>
-                    </View>
+            <View style={styles.container}>
+                <View style={styles.profileImage}>
+                    {this.props.profilePic ?
+                        <Image source={
+                            { uri: this.props.profilePic }
+                        } style={styles.profileImage} />
+                        :
+                        <Image source={require('../../assets/icons/sample-chum-profile2.png')} style={styles.profileImage} />
+                    }
+                </View>
+                <View style={styles.infoContainer}>
+                    <Text style={styles.chumName}>
+                        {name}
+                    </Text>
                     <Text style={styles.message}>
-                        {time}
+                        {last_msg}
                     </Text>
                 </View>
-        )        
+                <Text style={styles.message}>
+                    {time}
+                </Text>
+            </View>
+        )
     }
 }
 
@@ -55,6 +60,6 @@ const styles = StyleSheet.create({
         fontSize: 10,
         paddingTop: 3
     }
-    
+
 
 })

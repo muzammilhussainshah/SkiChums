@@ -31,14 +31,9 @@ class Chatlist extends Component {
     this.props.getChatroom(this.props.mychums)
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
-    // if (nextProps.myChatRoom.length !== this.state.allChums.length) { this.setState({ allChums: nextProps.chums }) }
-
     if (nextProps.myChatRoom !== this.props.myChatRoom) {
-      //Perform some operation
       this.setState({ chatroom: nextProps.myChatRoom })
-      console.log()
-      // this.setState({someState: someValue });
-      // this.classMethod();
+
     }
   }
   render() {

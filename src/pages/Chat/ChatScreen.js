@@ -25,7 +25,8 @@ class ChatScreen extends Component {
     this.state = {
       keyboardOffset: 0,
       editlVisible: false,
-      message: ''
+      message: '',
+      messages: []
     }
   }
 
@@ -59,33 +60,25 @@ class ChatScreen extends Component {
     })
   }
   componentDidMount() {
-    const user = firebase.auth().currentUser
 
+    const user = firebase.auth().currentUser
     let recipientData = this.props.route.params.recipientData ?? {}
     let docId;
-    if (user?.uid?.length > recipientData?.uid) docId = recipientData?.uid + user.uid
+    if (user?.uid > recipientData?.uid) docId = recipientData?.uid + user.uid
     else docId = user?.uid + recipientData?.uid
     this.props.getMessagesFromDb(docId)
-    console.log(recipientData, 'recipientData', user, docId)
+    // console.log(docId,'docIddocId')
   }
-  // handleGetMessage() {
-
-  //   const subscribe = firestore().collection(`message/${docId}/messages`).get()
-  //     .then((response) => {
-  //       response.forEach(documentSnapshot => {
-  //         console.log(documentSnapshot.data(), 'querySnapshotquerySnapshotquerySnapshot', docId)
-  //         // chums.push(documentSnapshot.data())
-  //       });
-  //       // console.log(response.data(), 'responseresponse  ')
-  //     })
-  // }
-  // componentWillUnmount() {
-  //   console.log('unmout')
-  // }
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    console.log( nextProps ,' nextProps.messages ')
+    // if (this.props.messages !== nextProps.messages) {
+      this.setState({ messages: nextProps.messages })
+    // }
+  }
   render() {
     let isPrivate = this.props.route.params.isPrivate ?? false
     let recipientData = this.props.route.params.recipientData ?? {}
-
+    // console.log(this.props, 'messagesmessagesmessages')
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -107,7 +100,7 @@ class ChatScreen extends Component {
         </View>
 
         <ChatMessagesList
-          // messages={}
+          messages={this.state.messages}
           style={styles.chat} isPrivate={isPrivate} />
         <ChatMessageSendBox
           sendMessage={() => this.handleSendMessage(recipientData)}
@@ -132,7 +125,7 @@ class ChatScreen extends Component {
         sendAt: new Date().valueOf()
       }
       let docId;
-      if (user.uid.length > recipientData.uid.length) docId = recipientData.uid + user.uid
+      if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
       else docId = user.uid + recipientData.uid
       this.props.sendMessageToDb(docId, msgObj)
       this.setState({ message: '' })
@@ -166,7 +159,7 @@ class ChatScreen extends Component {
 
 function mapStateToProps(states) {
   return ({
-
+    messages: states.root.messages
   })
 }
 

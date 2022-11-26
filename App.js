@@ -6,17 +6,20 @@
  * @flow strict-local
  */
 
- import React, { useState, useEffect } from 'react';
- import { SafeAreaProvider } from 'react-native-safe-area-context';
- import auth from '@react-native-firebase/auth'
+import React, { useState, useEffect } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import auth from '@react-native-firebase/auth'
 //  import auth from '@react-native-firebase/auth'
- import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
- import Navigation from './src/router/Tab';
- import { PortalProvider } from '@gorhom/portal';
- import AuthNavigation from './src/router/Auth';
+import Navigation from './src/router/Tab';
+import { PortalProvider } from '@gorhom/portal';
+import store from './src/store';
 
- function App() {
+import AuthNavigation from './src/router/Auth';
+import { Provider } from 'react-redux';
+
+function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
 
@@ -25,31 +28,34 @@
     if (initializing) setInitializing(false);
   }
 
-  useEffect( () => {
+  useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
   }, []);
-  
+
   // if (initializing) return null;
 
   if (!user) {
     return (
-      <SafeAreaProvider>
-      <PortalProvider>
-        <AuthNavigation/>
-      </PortalProvider>
-     </SafeAreaProvider>
-    );    
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <PortalProvider>
+            <AuthNavigation />
+          </PortalProvider>
+        </SafeAreaProvider>
+      </Provider>
+    );
   } else {
     return (
-      <SafeAreaProvider>
-      <PortalProvider>
-        <Navigation />
-      </PortalProvider>
-     </SafeAreaProvider>
-    );    
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <PortalProvider>
+            <Navigation />
+          </PortalProvider>
+        </SafeAreaProvider>
+      </Provider>
+    );
   }
- }
+}
 
- export default App;
- 
+export default App;

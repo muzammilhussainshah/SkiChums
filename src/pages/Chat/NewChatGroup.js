@@ -2,21 +2,19 @@ import React, { Component } from "react";
 import { StyleSheet, Image, View, TouchableOpacity, Text } from 'react-native';
 import ChatFlatList from "../../components/Chat/ChatFlatList";
 import ChatGroupTagView from "../../components/Chat/ChatGroupTagView";
+import { connect } from 'react-redux';
 import InviteChumButton from '../../components/InviteChumButton';
 import MyChumFlatList from "../../components/MyChumsFlatList";
 import SCSearchBar from "../../components/SCSearchBar";
 import TabButton from "../../components/TabButton";
 import CreateChatScreen from "./CreateChatScreen";
 
-export default class NewChatGroup extends Component {
+class NewChatGroup extends React.Component {
   constructor(props) {
-    super(props);
-
+    super(props)
     this.state = {
-
     }
-  }
-
+  };
   render() {
     const { params } = this?.props?.route
     console.log('singleMsg', params, this?.props?.route)
@@ -62,7 +60,7 @@ export default class NewChatGroup extends Component {
     );
   }
 
- 
+
   onClickChatCell = () => {
     console.log('clicked chat cell')
     this.props.navigation.navigate('ChatScreen', {
@@ -81,6 +79,20 @@ export default class NewChatGroup extends Component {
   }
 }
 
+
+function mapStateToProps(states) {
+  console.log(states.root.chums, 'NewChatGroupNewChatGroupNewChatGroup')
+  return ({
+  })
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewChatGroup);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -187,3 +199,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 25
   }
 });
+
+

@@ -5,12 +5,13 @@ import firestore from '@react-native-firebase/firestore';
 
 import AllChumFlatList from '../components/AllChumFlatList';
 import InviteChumButton from '../components/InviteChumButton';
+import { connect } from 'react-redux'
 import MyChumFlatList from "../components/MyChumsFlatList";
+import { getAllChums } from '../store/action/action'
 import SCSearchBar from '../components/SCSearchBar';
 import TabButton from '../components/TabButton';
 
-
-export default class Chums extends Component {
+class Chums extends Component {
   constructor(props) {
     super(props);
 
@@ -20,20 +21,30 @@ export default class Chums extends Component {
     }
   }
   componentDidMount() {
-    function onError(error) {
-      console.error(error);
-    }
-    firestore().collection('chums').onSnapshot((querySnapshot) => {
-      let chums = []
-      querySnapshot.forEach(documentSnapshot => {
-        chums.push(documentSnapshot.data())
-      });
-      this.setState({ allChums: chums })
-    }
-      , onError);
+    // function onError(error) {
+    //   console.error(error);
+    // }
+    this.props.getAllChums()
+    // firestore().collection('chums').onSnapshot((querySnapshot) => {
+    //   let chums = []
+    //   querySnapshot.forEach(documentSnapshot => {
+    //     chums.push(documentSnapshot.data())
+    //   });
+    //   // this.props.chums = chums
+
+    //   this.setState({ allChums: chums })
+
+    // }
+    //   , onError);
+
   }
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.chums.length !== this.state.allChums.length) { this.setState({ allChums: nextProps.chums }) }
+  } 
+
 
   render() {
+    // console.log(this.props, 'NewChatGroupNewChatGroupNewChatGroup',)
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -68,6 +79,24 @@ export default class Chums extends Component {
   }
 }
 
+
+function mapStateToProps(states) {
+  return ({
+    chums: states.root.chums
+
+  })
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getAllChums: () => {
+      dispatch(getAllChums());
+    },
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chums);
 const styles = StyleSheet.create({
   container: {
     flex: 1,

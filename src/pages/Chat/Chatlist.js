@@ -1,14 +1,20 @@
-import firestore from '@react-native-firebase/firestore';
 import React, { Component } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, Modal } from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  View,
+  TouchableOpacity,
+  Modal
+} from 'react-native';
+
+import { connect } from 'react-redux'
+
 import ChatFlatList from "../../components/Chat/ChatFlatList";
 import InviteChumButton from '../../components/InviteChumButton';
 import MyChumFlatList from "../../components/MyChumsFlatList";
-import { connect } from 'react-redux'
 import SCSearchBar from "../../components/SCSearchBar";
 import TabButton from "../../components/TabButton";
 import CreateChatScreen from "./CreateChatScreen";
-import { firebase } from '@react-native-firebase/auth';
 import { getChatroom } from '../../store/action/action';
 
 class Chatlist extends Component {
@@ -18,54 +24,24 @@ class Chatlist extends Component {
     this.state = {
       listType: 'chat',
       chatModalVisible: false,
+      chatroom: [],
     }
   }
   componentDidMount() {
-    // for chatroom
     this.props.getChatroom(this.props.mychums)
-    // console.log(this.props.myChatRoom,'aaaaaaaaaaaaaaa')
-    
-    // let chatroomArray = []
-    // const user = firebase.auth().currentUser
-    // this.props.mychums.map(async (item) => {
-    //   let docId;
-    //   if (user.uid.length > item.uid.length) docId = item.uid + user.uid
-    //   else docId = user.uid + item.uid
-    //   firestore()
-    //     .collection('message')
-    //     .where(firebase.firestore.FieldPath.documentId(), '==', docId)
-    //     .get()
-    //     .then(querySnapshot => {
-    //       querySnapshot.forEach(documentSnapshot => {
-    //         chatroomArray.push(documentSnapshot.id)
-    //         console.log(documentSnapshot.id, 'aaaaa', chatroomArray)
-    //         // alert(documentSnapshot.id)
-    //       });
-    //     });
-    // })
-    // console.log('aaaaa', chatroomArray)
-    // for chatroom
-
-    // console.log(this.state.charoomArray, 'querySnapshotquerySnapshotquerySnapshot',)
-
-    // firestore().collection(`message/${docId}/messages`).get()
-    //   .then((response) => {
-    //     response.forEach(documentSnapshot => {
-    //       console.log(   documentSnapshot.data(), 'querySnapshotquerySnapshotquerySnapshot', docId)
-    //       // chums.push(documentSnapshot.data())
-    //     });
-    //     // console.log(response.data(), 'responseresponse  ')
-    //   })
-
-    // console.log(charoomArray, 'charoomArray')
   }
-  UNSAFE_componentWillReceiveProps(props){
-    console.log(this.props.myChatRoom,'aaaaaaaaaaaaaaa',props)
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // if (nextProps.myChatRoom.length !== this.state.allChums.length) { this.setState({ allChums: nextProps.chums }) }
 
+    if (nextProps.myChatRoom !== this.props.myChatRoom) {
+      //Perform some operation
+      this.setState({ chatroom: nextProps.myChatRoom })
+      console.log()
+      // this.setState({someState: someValue });
+      // this.classMethod();
+    }
   }
   render() {
-    
-    // console.log(this.props,'aaaaaaaaaaaaaaa')
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -86,7 +62,7 @@ class Chatlist extends Component {
         </View>
         {this.state.listType == 'chat' ? (
           <ChatFlatList
-            data={this.props.myChatRoom}
+            data={this.state.chatroom}
             navigation={this?.props?.navigation}
             style={styles.list} onClick={this.onClickChatCell}></ChatFlatList>) : (<MyChumFlatList style={styles.list}></MyChumFlatList>)}
 

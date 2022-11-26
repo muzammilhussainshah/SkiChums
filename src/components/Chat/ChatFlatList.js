@@ -39,7 +39,6 @@ export default class ChatFlatList extends Component {
     })
   }
   render() {
-    console.log(this.props.data,'this.props.data')
     const renderItem = ({ item }) => {
       return (
         <TouchableWithoutFeedback onPress={this.navigationToChat.bind(this, item)} style={styles.item}>

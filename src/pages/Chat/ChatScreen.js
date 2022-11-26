@@ -16,7 +16,7 @@ import ChatMessageSendBox from "../../components/Chat/ChatMessageSendBox";
 import EditGroupChatScreen from "./EditGroupChatScreen";
 import GroupChatTopBar from "../../components/Chat/GroupChatTopBar";
 import PrivateChatTopBar from "../../components/Chat/PrivateChatTopBar";
-import { sendMessageToDb } from '../../store/action/action'
+import { sendMessageToDb, getMessagesFromDb } from '../../store/action/action'
 
 class ChatScreen extends Component {
   constructor(props) {
@@ -41,8 +41,8 @@ class ChatScreen extends Component {
   }
 
   componentWillUnmount() {
-    this.keyboardDidShowListener.remove();
-    this.keyboardDidHideListener.remove();
+    this?.keyboardDidShowListener?.remove();
+    this?.keyboardDidHideListener?.remove();
   }
 
   _keyboardDidShow(event) {
@@ -58,6 +58,30 @@ class ChatScreen extends Component {
       keyboardOffset: 0,
     })
   }
+  componentDidMount() {
+    const user = firebase.auth().currentUser
+
+    let recipientData = this.props.route.params.recipientData ?? {}
+    let docId;
+    if (user?.uid?.length > recipientData?.uid) docId = recipientData?.uid + user.uid
+    else docId = user?.uid + recipientData?.uid
+    this.props.getMessagesFromDb(docId)
+    console.log(recipientData, 'recipientData', user, docId)
+  }
+  // handleGetMessage() {
+
+  //   const subscribe = firestore().collection(`message/${docId}/messages`).get()
+  //     .then((response) => {
+  //       response.forEach(documentSnapshot => {
+  //         console.log(documentSnapshot.data(), 'querySnapshotquerySnapshotquerySnapshot', docId)
+  //         // chums.push(documentSnapshot.data())
+  //       });
+  //       // console.log(response.data(), 'responseresponse  ')
+  //     })
+  // }
+  // componentWillUnmount() {
+  //   console.log('unmout')
+  // }
   render() {
     let isPrivate = this.props.route.params.isPrivate ?? false
     let recipientData = this.props.route.params.recipientData ?? {}
@@ -82,7 +106,9 @@ class ChatScreen extends Component {
 
         </View>
 
-        <ChatMessagesList style={styles.chat} isPrivate={isPrivate} />
+        <ChatMessagesList
+          // messages={}
+          style={styles.chat} isPrivate={isPrivate} />
         <ChatMessageSendBox
           sendMessage={() => this.handleSendMessage(recipientData)}
           messageValue={this.state.message}
@@ -103,7 +129,7 @@ class ChatScreen extends Component {
       let msgObj = {
         messageText: this.state.message,
         sendBy: user.uid,
-        sendAt: new Date()
+        sendAt: new Date().valueOf()
       }
       let docId;
       if (user.uid.length > recipientData.uid.length) docId = recipientData.uid + user.uid
@@ -148,6 +174,9 @@ function mapDispatchToProps(dispatch) {
   return {
     sendMessageToDb: (docId, msgObj) => {
       dispatch(sendMessageToDb(docId, msgObj));
+    },
+    getMessagesFromDb: (docId,) => {
+      dispatch(getMessagesFromDb(docId,));
     },
 
   }

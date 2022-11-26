@@ -28,10 +28,27 @@ export function getAllChums(bolean) {
 }
 
 
-export  function sendMessageToDb(docId, msgObj) {
+export function sendMessageToDb(docId, msgObj) {
     return dispatch => {
         firestore().collection('message').doc(docId).set({ 'message': "message" })
         firestore().collection('message').doc(docId).collection('messages').add(msgObj)
+    }
+}
+export function getMessagesFromDb(docId,) {
+    return dispatch => {
+        let messages = []
+        // firestore().collection(`message/${docId}/messages`).get()
+        firestore().collection(`message/${docId}/messages`)
+            .orderBy('sendAt', 'desc')
+            .limit(10).onSnapshot((querySnapshot) => {
+                let chums = []
+                querySnapshot.forEach(documentSnapshot => {
+                    messages.push(documentSnapshot.data())
+                });
+                dispatch({ type: ActionTypes.MESSAGES, payload: messages })
+            }
+                , onError);
+
     }
 }
 

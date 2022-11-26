@@ -50,21 +50,15 @@ class NewChatGroup extends React.Component {
           </>
         }
         <ChatFlatList
-           navigation={this.props.navigation}
-        style={styles.list}
+          navigation={this.props.navigation}
+          style={styles.list}
           data={this?.props?.mychums}
-          onClick={this.onClickChatCell} />
+        />
       </View>
     );
   }
 
 
-  onClickChatCell = () => {
-    console.log('clicked chat cell')
-    this.props.navigation.navigate('ChatScreen', {
-      isPrivate: true
-    })
-  }
 
   onBack = () => {
     this.props.navigation.pop()

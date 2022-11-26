@@ -28,3 +28,23 @@ export function getAllChums(bolean) {
 }
 
 
+export function sendMessage(docId, msgObj) {
+    return dispatch => {
+        console.log(docId, msgObj, 'docId, msgObj')
+        // alert('send ')
+        // db
+        firestore().collection('message').doc(docId).collection('messages').add(msgObj)
+        // firestore()
+        //     .collection('message')
+        //     .doc(docId)
+        //     .set(msgObj)
+        //     .then(() => {
+        //         console.log('User added!');
+        //     });
+        // const user = firebase.auth().currentUser
+
+
+    }
+}
+
+

@@ -3,7 +3,7 @@ import { StyleSheet, Image, View } from 'react-native';
 
 import AllChumFlatList from '../components/AllChumFlatList';
 import InviteChumButton from '../components/InviteChumButton';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import MyChumFlatList from "../components/MyChumsFlatList";
 import { getAllChums } from '../store/action/action'
 import SCSearchBar from '../components/SCSearchBar';
@@ -76,8 +76,8 @@ function mapDispatchToProps(dispatch) {
 
   }
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(Chums);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

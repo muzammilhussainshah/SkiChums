@@ -3,16 +3,19 @@ import { StyleSheet, Image, View, TouchableOpacity, Keyboard, Modal } from 'reac
 import ChatMessagesList from "../../components/Chat/ChatMessagesList";
 import ChatMessageSendBox from "../../components/Chat/ChatMessageSendBox";
 import EditGroupChatScreen from "./EditGroupChatScreen";
+import { connect } from 'react-redux'
 import GroupChatTopBar from "../../components/Chat/GroupChatTopBar";
 import PrivateChatTopBar from "../../components/Chat/PrivateChatTopBar";
-
-export default class ChatScreen extends Component {
+import { firebase } from "@react-native-firebase/auth";
+import { sendMessage } from '../../store/action/action'
+class ChatScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       keyboardOffset: 0,
       editlVisible: false,
+      message: ''
     }
   }
 
@@ -45,11 +48,26 @@ export default class ChatScreen extends Component {
       keyboardOffset: 0,
     })
   }
-
+  handleSendMessage(recipientData) {
+    if (this.state.message.length > 0) {
+      const user = firebase.auth().currentUser
+      let msgObj = {
+        messageText: this.state.message,
+        sendBy: user.uid,
+        sendAt: new Date()
+      }
+      let docId;
+      if (user.uid.length > recipientData.uid.length) docId = recipientData.uid + user.uid
+      else docId = user.uid + recipientData.uid
+      this.props.sendMessage(docId, msgObj)
+      this.setState({ message: '' })
+    }
+  }
+  getMessage(message) { this.setState({ message: message }) }
   render() {
     let isPrivate = this.props.route.params.isPrivate ?? false
     let recipientData = this.props.route.params.recipientData ?? {}
-    console.log(recipientData, 'asdassadadsasdasdasdsaads')
+
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -71,7 +89,11 @@ export default class ChatScreen extends Component {
         </View>
 
         <ChatMessagesList style={styles.chat} isPrivate={isPrivate} />
-        <ChatMessageSendBox keyboardOffset={this.state.keyboardOffset} />
+        <ChatMessageSendBox
+          sendMessage={() => this.handleSendMessage(recipientData)}
+          messageValue={this.state.message}
+          getMessage={(message) => { this.getMessage(message) }}
+          keyboardOffset={this.state.keyboardOffset} />
 
         <Modal style={styles.modal} transparent={true} visible={this.state.editlVisible} presentationStyle={"overFullScreen"}>
           <EditGroupChatScreen onAddMember={this.onAddMember} onDeleteGroup={this.onDeleteGroup} onClose={this.onClose} />
@@ -101,6 +123,27 @@ export default class ChatScreen extends Component {
     this.setState({ editlVisible: true })
   }
 }
+
+
+
+function mapStateToProps(states) {
+  return ({
+    // chums: states.root.chums
+
+  })
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    sendMessage: (docId, msgObj) => {
+      dispatch(sendMessage(docId, msgObj));
+    },
+
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ChatScreen);
+
+
 
 const styles = StyleSheet.create({
   container: {

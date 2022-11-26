@@ -1,33 +1,36 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, Image } from "react-native";
+// import { TextInput } from "react-native-gesture-handler";
 
 export default class ChatMessageSendBox extends Component {
     render() {
         let keyboardOffset = this.props.keyboardOffset ?? 0
         let offset = keyboardOffset == 0 ? 36 : keyboardOffset - 70
         return (
-                <View style={[styles.container, {marginBottom: offset}]}>
-                    <TextInput style={styles.chatInput} placeholder={"Type your message..."} placeholderTextColor='#0362F9'/>
-                    <TouchableOpacity style={styles.emoji}>
-                        <Image source={require('../../assets/icons/ic_emoji.png')} style={styles.emoji}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.send}>
-                        <Image source={require('../../assets/icons/ic_send.png')} style={styles.send}/>
-                    </TouchableOpacity>
-                </View>
-        )        
+            <View style={[styles.container, { marginBottom: offset }]}>
+                <TextInput
+                    value={this.props.messageValue}
+                    onChangeText={(text) => this.props.getMessage(text)}
+                    style={styles.chatInput} placeholder={"Type your message..."} placeholderTextColor='#0362F9' />
+                <TouchableOpacity style={styles.emoji}>
+                    <Image source={require('../../assets/icons/ic_emoji.png')} style={styles.emoji} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.props.sendMessage} style={styles.send}>
+                    <Image source={require('../../assets/icons/ic_send.png')} style={styles.send} />
+                </TouchableOpacity>
+            </View>
+        )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
         height: 36,
-        
+
         backgroundColor: 'white',
         flexDirection: 'row',
         shadowColor: 'black',
-        shadowOffset: {width: 0, height: 3},
+        shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.4,
         shadowRadius: 3,
         borderRadius: 18,
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
     chatInput: {
         flex: 1,
         paddingHorizontal: 24,
-    },    
+    },
     send: {
         width: 20,
         height: 20,
@@ -50,6 +53,6 @@ const styles = StyleSheet.create({
         height: 18,
         marginRight: 8
     },
-    
+
 
 })

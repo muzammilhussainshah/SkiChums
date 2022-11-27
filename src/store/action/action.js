@@ -79,7 +79,6 @@ export function getChatroom(mychums) {
             .get()
             .then(querySnapshot => {
                 querySnapshot.forEach(documentSnapshot => {
-                    console.log(chatroomArray, 'chatroomArraychatroomArray', documentSnapshot.data())
                     chatroomArray.push(documentSnapshot.data())
                     dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
                 });
@@ -123,7 +122,6 @@ export function updateGroupName(recipientData, updatedname, myChatRoom) {
             }
         }
         let selectedGroup = myChatRoom.filter(({ id }) => id == recipientData.id)
-        console.log(recipientData, updatedname, myChatRoom, 'recipientData, updatedname,myChatRoom', selectedGroup)
         if (selectedGroup.length > 0) {
             selectedGroup[0].displayName = updatedname
         }

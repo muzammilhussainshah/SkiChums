@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
-
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 export default class ChumInfoView extends Component {
     render() {
         let name = this.props.name;
@@ -14,7 +14,7 @@ export default class ChumInfoView extends Component {
                             {profilePic ?
                                 <Image source={{ uri: profilePic }} style={styles.profileImage} />
                                 :
-                                <Image source={require('../assets/icons/sample-chum-profile.png')} style={styles.profileImage} />
+                                <FontAwesome name="user-circle-o" size={35} color={'gray'} />
                             }
                         </View>
                         <View style={styles.infoContainer}>

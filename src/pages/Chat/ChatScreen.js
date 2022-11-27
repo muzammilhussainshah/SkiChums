@@ -11,7 +11,6 @@ import {
 import { connect } from 'react-redux'
 import { firebase } from "@react-native-firebase/auth";
 import ChatMessagesList from "../../components/Chat/ChatMessagesList";
-import firestore from '@react-native-firebase/firestore';
 
 import ChatMessageSendBox from "../../components/Chat/ChatMessageSendBox";
 import EditGroupChatScreen from "./EditGroupChatScreen";
@@ -147,17 +146,7 @@ class ChatScreen extends Component {
     );
   }
   updateName(recipientData, updatedname) {
-    // const user = firebase.auth().currentUser
-    // if (Object.keys(user).length > 0 && Object.keys(recipientData).length > 0) {
-    //   let docId;
-    //   if (recipientData.type === 1) {
-    //     docId = recipientData.id
-    //     firestore().collection('group').doc(docId).update({ displayName: updatedname });
-    //   }
-    // }
-    // myChatRoom
-    console.log(this.props.myChatRoom,'myChatRoommyChatRoom',updatedname)
-    this.props.updateGroupName(recipientData, updatedname,this.props.myChatRoom)
+    this.props.updateGroupName(recipientData, updatedname, this.props.myChatRoom)
     this.setState({ editlVisible: false })
   }
 
@@ -240,8 +229,8 @@ function mapDispatchToProps(dispatch) {
     deleteGroup: (docId,) => {
       dispatch(deleteGroup(docId,));
     },
-    updateGroupName: (recipientData, updatedname,myChatRoom) => {
-      dispatch(updateGroupName(recipientData, updatedname,myChatRoom));
+    updateGroupName: (recipientData, updatedname, myChatRoom) => {
+      dispatch(updateGroupName(recipientData, updatedname, myChatRoom));
     },
 
   }

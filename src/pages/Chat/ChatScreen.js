@@ -67,17 +67,16 @@ class ChatScreen extends Component {
     if (user?.uid > recipientData?.uid) docId = recipientData?.uid + user.uid
     else docId = user?.uid + recipientData?.uid
     this.props.getMessagesFromDb(docId)
-    // console.log(docId,'docIddocId')
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log( nextProps ,' nextProps.messages ')
     if (this.state.messages !== nextProps.messages) {
       this.setState({ messages: nextProps.messages })
     }
   }
   render() {
-    let isPrivate = this.props.route.params.isPrivate ?? false
-    let recipientData = this.props.route.params.recipientData ?? {}
+    let isPrivate = this.props.route.params?.isPrivate ?? false
+    let recipientData = this.props.route?.params?.recipientData ?? {}
+    let member = this.props.route?.params?.members ?? {}
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -90,7 +89,11 @@ class ChatScreen extends Component {
               {isPrivate ? (<PrivateChatTopBar
                 name={recipientData?.displayName ? recipientData?.displayName : recipientData?.email}
                 profilePic={recipientData.photoURL}
-              />) : (<GroupChatTopBar onSettings={this.onSettings} />)}
+              />) : (
+                <GroupChatTopBar
+                  member={member}
+                  onSettings={this.onSettings} />
+              )}
             </View>
 
             <View style={styles.topLine} />
@@ -100,15 +103,23 @@ class ChatScreen extends Component {
 
         <ChatMessagesList
           messages={this.state.messages}
-          style={styles.chat} isPrivate={isPrivate} />
+          style={styles.chat}
+          isPrivate={isPrivate} />
         <ChatMessageSendBox
           sendMessage={() => this.handleSendMessage(recipientData)}
           messageValue={this.state.message}
           getMessage={(message) => { this.getMessage(message) }}
           keyboardOffset={this.state.keyboardOffset} />
 
-        <Modal style={styles.modal} transparent={true} visible={this.state.editlVisible} presentationStyle={"overFullScreen"}>
-          <EditGroupChatScreen onAddMember={this.onAddMember} onDeleteGroup={this.onDeleteGroup} onClose={this.onClose} />
+        <Modal
+          style={styles.modal}
+          transparent={true}
+          visible={this.state.editlVisible}
+          presentationStyle={"overFullScreen"}>
+          <EditGroupChatScreen
+            onAddMember={this.onAddMember}
+            onDeleteGroup={this.onDeleteGroup}
+            onClose={this.onClose} />
         </Modal>
 
       </View>

@@ -3,15 +3,16 @@ import { StyleSheet, Image, View, TouchableOpacity, Text } from 'react-native';
 import ChatFlatList from "../../components/Chat/ChatFlatList";
 import ChatGroupTagView from "../../components/Chat/ChatGroupTagView";
 import { connect } from 'react-redux';
+import { createGroup } from '../../store/action/action'
 class NewChatGroup extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      members: []
     }
   };
   render() {
     const { params } = this?.props?.route
-    console.log('singleMsg', params, this?.props?.route)
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -41,7 +42,10 @@ class NewChatGroup extends React.Component {
         {!params?.singleMsg &&
           <>
             <View style={styles.memberContainer}>
-              <ChatGroupTagView style={styles.tagView} />
+              <ChatGroupTagView
+                removeMember={this.addMember}
+                data={this.state.members}
+                style={styles.tagView} />
               <TouchableOpacity style={styles.createButton} onPress={this.onCreateChat}>
                 <Image style={styles.createButton} source={require("../../assets/icons/ic_blue_circle_arrow.png")} />
               </TouchableOpacity>
@@ -52,21 +56,37 @@ class NewChatGroup extends React.Component {
         <ChatFlatList
           navigation={this.props.navigation}
           style={styles.list}
+
+          forNewGourp={!params?.singleMsg ? this.addMember
+            : null}
           data={this?.props?.mychums}
         />
       </View>
     );
   }
 
-
+  addMember = (member, addMember) => {
+    let memberIndex = this.state.members.findIndex((stMember) => member.uid == stMember.uid)
+    if (memberIndex !== -1) {
+      // if (!addMember)
+      this.setState({ member: this.state.members.splice(memberIndex, 1) })
+    }
+    else {
+      //  if (addMember)
+      this.setState({ member: this.state.members.push(member) })
+    }
+  }
 
   onBack = () => {
     this.props.navigation.pop()
   }
 
   onCreateChat = () => {
+    let members = this.state.members
+    this.props.createGroup(members)
+    console.log(this.props, 'this.props.this.props.this.props.')
     this.props.navigation.navigate('ChatScreen', {
-      isPrivate: false
+      isPrivate: false, members: this.state.members
     })
   }
 }
@@ -79,7 +99,16 @@ function mapStateToProps(states) {
 }
 
 function mapDispatchToProps(dispatch) {
+  // return {
+  //   createGroup: (members) => {
+  //     createGroup(members)
+  //   }
+
+  // }
   return {
+    createGroup: (members) => {
+      dispatch(createGroup(members));
+    },
 
   }
 }

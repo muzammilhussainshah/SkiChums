@@ -6,12 +6,14 @@ import {
     Image
 } from "react-native";
 
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+
 export default class ChatFlatListCell extends Component {
     render() {
         let name = this.props.name;
         let last_msg = this.props.last_msg;
         let time = this.props.time;
-        let id = this.props.id;
 
         return (
             <View style={styles.container}>
@@ -21,7 +23,11 @@ export default class ChatFlatListCell extends Component {
                             { uri: this.props.profilePic }
                         } style={styles.profileImage} />
                         :
-                        <Image source={require('../../assets/icons/sample-chum-profile2.png')} style={styles.profileImage} />
+                        this?.props?.type === 1 ?
+                            <FontAwesome5 name="user-friends" size={25} color={'gray'} style={{ alignSelf: 'center' }} />
+                            :
+                            <FontAwesome name="user-circle-o" size={35} color={'gray'} />
+
                     }
                 </View>
                 <View style={styles.infoContainer}>

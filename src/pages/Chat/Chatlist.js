@@ -58,7 +58,8 @@ class Chatlist extends Component {
           <ChatFlatList
             data={this.state.chatroom}
             navigation={this?.props?.navigation}
-            style={styles.list} onClick={this.onClickChatCell}></ChatFlatList>) : (<MyChumFlatList style={styles.list}></MyChumFlatList>)}
+            style={styles.list} onClick={this.onClickChatCell}></ChatFlatList>) :
+          (<MyChumFlatList style={styles.list}></MyChumFlatList>)}
 
         <View style={styles.messageButton}>
           <TouchableOpacity onPress={this.onSetupChat}>

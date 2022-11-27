@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
 import ChatFlatListCell from './ChatFlatListCell';
 
 const DATA = [
@@ -30,7 +31,7 @@ const DATA = [
 
 ];
 
-export default class ChatFlatList extends Component {
+class ChatFlatList extends Component {
 
   navigationToChat(item) {
     this.props.navigation.navigate('ChatScreen', {
@@ -40,33 +41,72 @@ export default class ChatFlatList extends Component {
   }
   render() {
     const renderItem = ({ item }) => {
+      let name;
+      if (item?.type == 1) {
+
+        item?.members?.map((item) => {
+          let userData = this.props.mychums.filter((val) => val.uid == item)
+          if (userData?.length > 0) {
+            if (typeof name !== 'undefined') {
+              name += userData[0].displayName ? userData[0].displayName + ', ' : userData[0].email.split("@")[0] + ', '
+            }
+            else {
+              name = userData[0].displayName ? userData[0].displayName + ', ' : userData[0].email.split("@")[0] + ', '
+            }
+          }
+        })
+      }
+      else if (item.displayName) name = item.displayName
+      else name = item?.email?.split('@')[0]
       return (
-        <TouchableWithoutFeedback onPress={this.navigationToChat.bind(this, item)} style={styles.item}>
+        <TouchableWithoutFeedback onPress={
+          this.props.forNewGourp ?
+            () => this.props.forNewGourp(item, true) :
+            this.navigationToChat.bind(this, item)
+        }
+          style={styles.item} >
           <ChatFlatListCell
             profilePic={item.photoURL}
-            name={item.displayName ? item.displayName : item.email}
+            name={name}
+            type={item?.type}
             last_msg={'Should be perfect!'} time={'13:23'}
             id={item.uid} />
 
         </TouchableWithoutFeedback >
       )
     };
-console.log(this.props.data,'asdasasddsaads')
     return (
       <>
         {
-          <View style={this.props.style ?? styles.container}>
+          < View style={this.props.style ?? styles.container} >
             <FlatList
               data={this.props.data}
               renderItem={renderItem}
               keyExtractor={item => item.id}></FlatList>
-          </View>
+          </View >
 
         }
       </>
     )
   }
 }
+
+function mapStateToProps(states) {
+  return ({
+    mychums: states.root.mychums,
+  })
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    // getChatroom: (myChams) => {
+    //   dispatch(getChatroom(myChams));
+    // },
+
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ChatFlatList);
+
 
 const styles = StyleSheet.create({
   container: {

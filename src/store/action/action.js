@@ -30,7 +30,7 @@ export function getAllChums(bolean) {
 
 export function sendMessageToDb(docId, msgObj) {
     return dispatch => {
-        firestore().collection('message').doc(docId).set({ 'message': "message" })
+        firestore().collection('message').doc(docId).set({ 'type': "message" })
         firestore().collection('message').doc(docId).collection('messages').add(msgObj)
     }
 }
@@ -58,7 +58,7 @@ export function getChatroom(mychums) {
             let docId;
             if (user.uid > item.uid) docId = item.uid + user.uid
             else docId = user.uid + item.uid
-            await firestore()
+            firestore()
                 .collection('message')
                 .where(firebase.firestore.FieldPath.documentId(), '==', docId)
                 .get()
@@ -69,5 +69,46 @@ export function getChatroom(mychums) {
                     });
                 });
         })
+        firestore()
+            .collection('group')
+            .where(
+                "members",
+                "array-contains",
+                user.uid
+            )
+            .get()
+            .then(querySnapshot => {
+                querySnapshot.forEach(documentSnapshot => {
+                    chatroomArray.push(documentSnapshot.data())
+                });
+            });
+    }
+}
+export function createGroup(members) {
+    return dispatch => {
+        const user = firebase.auth().currentUser
+        let membersIds = members.map(({ uid }) => uid)
+        membersIds.push(user.uid)
+        let groupId = self.crypto.randomUUID()
+        let groupObj = {
+            creatAt: new Date(),
+            createBy: user.uid,
+            id: groupId,
+            members: membersIds,
+            // modifiedAt
+            // name
+            // recientMessage
+            // readBy
+            // sentAt
+            // sentBy
+            type: 1,
+            // users
+        }
+        firestore().collection('group').doc(groupId).set(groupObj)
+        firestore().collection('message').doc(groupId).set({ 'type': "group" })
+    }
+}
+export function sendMessageGroup() {
+    return dispatch => {
     }
 }

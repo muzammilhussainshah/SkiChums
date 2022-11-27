@@ -85,7 +85,6 @@ export default class ChatMessagesList extends Component {
     let isPrivate = this.props.isPrivate;
     const renderItem = ({ item }) => {
       const user = firebase.auth().currentUser
-      console.log(user.uid,'user.uid',item.sendBy)
       return (
         <TouchableWithoutFeedback onPress={this.props.onClick}>
           <Item
@@ -93,18 +92,16 @@ export default class ChatMessagesList extends Component {
             sender={user.uid == item.sendBy ? true : false}
             message={item.messageText} time={new Date(item.sendAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} isPrivate={isPrivate}
             type={'text'}
-          // type={item.type}
           />
         </TouchableWithoutFeedback>
       )
     };
-    console.log(this.props, '.....')
     return (
       <>
         {
-          <View style={[this.props.style ?? [], styles.container, {  }]}>
+          <View style={[this.props.style ?? [], styles.container, {}]}>
             <FlatList
-            contentContainerStyle={{paddingHorizontal:5,paddingVertical:30}}
+              contentContainerStyle={{ paddingHorizontal: 5, paddingVertical: 30 }}
               data={this?.props?.messages}
               renderItem={renderItem}
               inverted

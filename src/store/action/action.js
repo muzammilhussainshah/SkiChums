@@ -65,8 +65,8 @@ export function getChatroom(mychums) {
                 .then(querySnapshot => {
                     querySnapshot.forEach(documentSnapshot => {
                         chatroomArray.push(item)
-                        dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
                     });
+                    dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
                 });
         })
         firestore()
@@ -81,6 +81,7 @@ export function getChatroom(mychums) {
                 querySnapshot.forEach(documentSnapshot => {
                     chatroomArray.push(documentSnapshot.data())
                 });
+                dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
             });
     }
 }

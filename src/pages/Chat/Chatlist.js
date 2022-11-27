@@ -56,7 +56,7 @@ class Chatlist extends Component {
         </View>
         {this.state.listType == 'chat' ? (
           <ChatFlatList
-            data={this.state.chatroom}
+            data={this.props.myChatRoom}
             navigation={this?.props?.navigation}
             style={styles.list} onClick={this.onClickChatCell}></ChatFlatList>) :
           (<MyChumFlatList style={styles.list}></MyChumFlatList>)}

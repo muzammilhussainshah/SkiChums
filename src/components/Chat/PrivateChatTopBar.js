@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Image, TextInput } from "react-native";
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 export default class PrivateChatTopBar extends Component {
     render() {
@@ -15,7 +16,9 @@ export default class PrivateChatTopBar extends Component {
                     {this.props.profilePic ?
                         <Image source={{ uri: this.props.profilePic }} style={styles.profileIcon} />
                         :
-                        <Image source={require("../../assets/icons/sample-chum-profile.png")} style={styles.profileIcon} />
+                        <FontAwesome name="user-circle-o" size={25} color={'gray'} style={{alignSelf:'center'}}/>
+
+                        // <Image source={require("../../assets/icons/sample-chum-profile.png")} style={styles.profileIcon} />
                     }
                 </TouchableOpacity>
             </View>

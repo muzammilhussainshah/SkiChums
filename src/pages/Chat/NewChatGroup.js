@@ -3,7 +3,7 @@ import { StyleSheet, Image, View, TouchableOpacity, Text } from 'react-native';
 import ChatFlatList from "../../components/Chat/ChatFlatList";
 import ChatGroupTagView from "../../components/Chat/ChatGroupTagView";
 import { connect } from 'react-redux';
-import { createGroup } from '../../store/action/action'
+import { createGroup, addGroupMember } from '../../store/action/action'
 import { firebase } from "@react-native-firebase/auth";
 class NewChatGroup extends React.Component {
   constructor(props) {
@@ -83,31 +83,42 @@ class NewChatGroup extends React.Component {
   }
 
   onCreateChat = () => {
-    let members = this.state.members
-    const user = firebase.auth().currentUser
-    let membersIds = members?.map(({ uid }) => uid)
-    membersIds?.push(user.uid)
-    let groupId = self?.crypto?.randomUUID()
-    let groupObj = {
-      creatAt: new Date(),
-      createBy: user.uid,
-      id: groupId,
-      members: membersIds,
-      // modifiedAt
-      // name
-      // recientMessage
-      // readBy
-      // sentAt
-      // sentBy
-      type: 1,
-      // users
+    console.log(this.props, 'addMemberaddMember')
+    let addMember = this?.props?.route?.params?.addMember
+    if (addMember) {
+      let myChatRoom = this?.props?.route?.params?.myChatRoom
+      let recipientData = this?.props?.route?.params?.recipientData
+      this.props.addGroupMember(recipientData, this?.state?.members, myChatRoom)
+      // this.props.navigation.navigate('ChatScreen', {
+      this.props.navigation.pop( 2)
+
     }
-    this.props.createGroup(groupObj, groupId)
-    console.log(this.props, 'this.props.this.props.this.props.')
-    this.props.navigation.navigate('ChatScreen', {
-      isPrivate: false, members: this.state.members,
-      recipientData: groupObj
-    })
+    else {
+      let members = this.state.members
+      const user = firebase.auth().currentUser
+      let membersIds = members?.map(({ uid }) => uid)
+      membersIds?.push(user.uid)
+      let groupId = self?.crypto?.randomUUID()
+      let groupObj = {
+        creatAt: new Date(),
+        createBy: user.uid,
+        id: groupId,
+        members: membersIds,
+        // modifiedAt
+        // name
+        // recientMessage
+        // readBy
+        // sentAt
+        // sentBy
+        type: 1,
+        // users
+      }
+      this.props.createGroup(groupObj, groupId)
+      this.props.navigation.navigate('ChatScreen', {
+        isPrivate: false, members: this.state.members,
+        recipientData: groupObj
+      })
+    }
   }
 }
 
@@ -119,10 +130,13 @@ function mapStateToProps(states) {
 }
 
 function mapDispatchToProps(dispatch) {
-   return {
-    createGroup: (members,groupId) => {
-      dispatch(createGroup(members,groupId));
+  return {
+    createGroup: (members, groupId) => {
+      dispatch(createGroup(members, groupId));
     },
+    addGroupMember: (recipientData, updatedname, myChatRoom) => {
+      dispatch(addGroupMember(recipientData, updatedname, myChatRoom));
+    }
 
   }
 }

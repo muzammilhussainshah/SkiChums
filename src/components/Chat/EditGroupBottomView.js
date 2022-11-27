@@ -20,7 +20,7 @@ export default class EditGroupBottomView extends Component {
                         </TouchableOpacity>
                         <View style={styles.line} />
                         <View style={styles.messageButtonContainer}>
-                            <TouchableOpacity onPress={this.props.onNewMessage}>
+                            <TouchableOpacity onPress={()=>this.props.addMember()}>
                                 <Text style={styles.text}>
                                     Add members
                                 </Text>

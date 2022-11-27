@@ -130,6 +130,29 @@ export function updateGroupName(recipientData, updatedname, myChatRoom) {
         }
     }
 }
+export function addGroupMember(recipientData, updatedname, myChatRoom) {
+    return dispatch => {
+        console.log(recipientData, updatedname, myChatRoom, 'recipientData, updatedname, myChatRoom')
+        if (Object.keys(recipientData).length > 0) {
+            let docId;
+            if (recipientData.type === 1) {
+                docId = recipientData?.id
+                let array = updatedname?.map(({ uid }) => uid)
+                let array3 = array?.concat(recipientData?.members);
+                array3 = array3?.filter((item, index) => {
+                    return (array3.indexOf(item) == index)
+                })
+                //  console.log(array, 'arrayarrayarray', recipientData.members,  array3
+                // )
+                // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+
+                firestore().collection('group').doc(docId).update({ members: array3 });
+                let selectedGroup = myChatRoom?.filter(({ id }) => id == recipientData?.id)
+                if (selectedGroup.length > 0) selectedGroup[0].members = array3
+            }
+        }
+    }
+}
 export function sendMessageGroup() {
     return dispatch => {
     }

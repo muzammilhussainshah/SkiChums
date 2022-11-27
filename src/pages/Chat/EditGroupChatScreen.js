@@ -70,6 +70,7 @@ export default class EditGroupChatScreen extends Component {
             (<EditGroupBottomView
               onDeleteGroup={() => this.props.onDeleteGroup()}
               isIAmAdmin={this.props.isIAmAdmin}
+              addMember={()=>this.props.addMember()}
               groupName={this.props.displayName}
               onEditName={this.onEditName} />)}
         </View>

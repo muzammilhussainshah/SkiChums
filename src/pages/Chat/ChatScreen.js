@@ -137,6 +137,11 @@ class ChatScreen extends Component {
             isIAmAdmin={recipientData?.createBy == user?.uid ? true : false}
             displayName={recipientData?.displayName}
             updatedname={(updatedname) => this.updateName(recipientData, updatedname)}
+            addMember={() => {
+
+              this.setState({ editlVisible: false })
+              this.props.navigation.navigate('NewChatGroup', { addMember: true, recipientData: recipientData, myChatRoom: this.props.myChatRoom })
+            }}
             onAddMember={this.onAddMember}
             onDeleteGroup={() => this.onDeleteGroup(recipientData)}
             onClose={this.onClose} />

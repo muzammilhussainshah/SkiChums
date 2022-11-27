@@ -65,8 +65,8 @@ export function getChatroom(mychums) {
                 .then(querySnapshot => {
                     querySnapshot.forEach(documentSnapshot => {
                         chatroomArray.push(item)
+                        dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
                     });
-                    dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
                 });
         })
         firestore()
@@ -81,33 +81,14 @@ export function getChatroom(mychums) {
                 querySnapshot.forEach(documentSnapshot => {
                     console.log(chatroomArray, 'chatroomArraychatroomArray', documentSnapshot.data())
                     chatroomArray.push(documentSnapshot.data())
+                    dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
                 });
 
-                dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
             });
     }
 }
 export function createGroup(groupObj, groupId) {
     return dispatch => {
-        console.log(groupObj, groupId, 'groupObj,groupId')
-        // const user = firebase.auth().currentUser
-        // let membersIds = members.map(({ uid }) => uid)
-        // membersIds.push(user.uid)
-        // let groupId = self.crypto.randomUUID()
-        // let groupObj = {
-        //     creatAt: new Date(),
-        //     createBy: user.uid,
-        //     id: groupId,
-        //     members: membersIds,
-        //     // modifiedAt
-        //     // name
-        //     // recientMessage
-        //     // readBy
-        //     // sentAt
-        //     // sentBy
-        //     type: 1,
-        //     // users
-        // }
         firestore().collection('group').doc(groupId).set(groupObj)
         firestore().collection('message').doc(groupId).set({ 'type': "group" })
     }

@@ -33,7 +33,6 @@ class Chatlist extends Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.myChatRoom !== this.props.myChatRoom) {
       this.setState({ chatroom: nextProps.myChatRoom })
-
     }
   }
   render() {

@@ -71,14 +71,13 @@ class ChatScreen extends Component {
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
     console.log( nextProps ,' nextProps.messages ')
-    // if (this.props.messages !== nextProps.messages) {
+    if (this.state.messages !== nextProps.messages) {
       this.setState({ messages: nextProps.messages })
-    // }
+    }
   }
   render() {
     let isPrivate = this.props.route.params.isPrivate ?? false
     let recipientData = this.props.route.params.recipientData ?? {}
-    // console.log(this.props, 'messagesmessagesmessages')
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>

@@ -36,7 +36,6 @@ export function sendMessageToDb(docId, msgObj) {
 }
 export function getMessagesFromDb(docId,) {
     return dispatch => {
-        console.log(docId, 'docIddocId')
         firestore().collection(`message/${docId}/messages`)
             .orderBy('sendAt', 'desc')
             .limit(15).onSnapshot((querySnapshot) => {
@@ -44,8 +43,6 @@ export function getMessagesFromDb(docId,) {
                 querySnapshot.forEach(documentSnapshot => {
                     messages.push(documentSnapshot.data())
                 });
-                console.log(messages, '1111111111')
-
                 dispatch({ type: ActionTypes.MESSAGES, payload: messages })
             }
                 , onError);
@@ -56,24 +53,19 @@ export function getMessagesFromDb(docId,) {
 export function getChatroom(mychums) {
     return dispatch => {
         const user = firebase.auth().currentUser
+        let chatroomArray = []
         mychums.map(async (item) => {
             let docId;
             if (user.uid > item.uid) docId = item.uid + user.uid
             else docId = user.uid + item.uid
-            console.log(docId, 'docIddocIddocIddocId', item)
-            let chatroomArray = []
             await firestore()
                 .collection('message')
                 .where(firebase.firestore.FieldPath.documentId(), '==', docId)
                 .get()
                 .then(querySnapshot => {
-                    console.log(querySnapshot, 'querySnapshotquerySnapshotquerySnapshot')
                     querySnapshot.forEach(documentSnapshot => {
                         chatroomArray.push(item)
-                        console.log(documentSnapshot.id, 'aaaaa', chatroomArray)
                         dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
-
-                        // alert(documentSnapshot.id)
                     });
                 });
         })

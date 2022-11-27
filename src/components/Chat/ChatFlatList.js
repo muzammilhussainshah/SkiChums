@@ -51,7 +51,7 @@ export default class ChatFlatList extends Component {
         </TouchableWithoutFeedback >
       )
     };
-
+console.log(this.props.data,'asdasasddsaads')
     return (
       <>
         {

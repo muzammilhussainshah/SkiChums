@@ -4,6 +4,7 @@ import ChatFlatList from "../../components/Chat/ChatFlatList";
 import ChatGroupTagView from "../../components/Chat/ChatGroupTagView";
 import { connect } from 'react-redux';
 import { createGroup } from '../../store/action/action'
+import { firebase } from "@react-native-firebase/auth";
 class NewChatGroup extends React.Component {
   constructor(props) {
     super(props)
@@ -83,10 +84,29 @@ class NewChatGroup extends React.Component {
 
   onCreateChat = () => {
     let members = this.state.members
-    this.props.createGroup(members)
+    const user = firebase.auth().currentUser
+    let membersIds = members?.map(({ uid }) => uid)
+    membersIds?.push(user.uid)
+    let groupId = self?.crypto?.randomUUID()
+    let groupObj = {
+      creatAt: new Date(),
+      createBy: user.uid,
+      id: groupId,
+      members: membersIds,
+      // modifiedAt
+      // name
+      // recientMessage
+      // readBy
+      // sentAt
+      // sentBy
+      type: 1,
+      // users
+    }
+    this.props.createGroup(groupObj, groupId)
     console.log(this.props, 'this.props.this.props.this.props.')
     this.props.navigation.navigate('ChatScreen', {
-      isPrivate: false, members: this.state.members
+      isPrivate: false, members: this.state.members,
+      recipientData: groupObj
     })
   }
 }
@@ -106,8 +126,8 @@ function mapDispatchToProps(dispatch) {
 
   // }
   return {
-    createGroup: (members) => {
-      dispatch(createGroup(members));
+    createGroup: (members,groupId) => {
+      dispatch(createGroup(members,groupId));
     },
 
   }

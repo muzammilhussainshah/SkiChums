@@ -7,8 +7,9 @@ import SettingProfileContainer from "./SettingProfileContainer";
 import firestore from '@react-native-firebase/firestore';
 import auth, { firebase } from '@react-native-firebase/auth'
 import messaging from '@react-native-firebase/messaging';
-
-export default class SettingsRoundContainer extends Component {
+import { resetReducer } from '../../store/action/action'
+import { connect } from "react-redux";
+class SettingsRoundContainer extends Component {
     constructor(props) {
         super(props);
 
@@ -43,18 +44,37 @@ export default class SettingsRoundContainer extends Component {
     onLogout = async () => {
         const user = firebase.auth().currentUser
         let fcmToken = await messaging().getToken()
+        this.props.resetReducer()
         await
-         firestore()
-            .collection('chums')
-            .doc(user.uid)
-            .update({
-                fcmToken: firestore.FieldValue.arrayRemove(fcmToken),
-            });
+            firestore()
+                .collection('chums')
+                .doc(user.uid)
+                .update({
+                    fcmToken: firestore.FieldValue.arrayRemove(fcmToken),
+                });
         auth().signOut()
             .then(() => console.log('User signed out!'));
+
+
     }
 }
 
+
+function mapStateToProps(states) {
+    return ({
+    })
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        resetReducer: () => {
+            dispatch(resetReducer());
+        },
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsRoundContainer);
 const styles = StyleSheet.create({
     container: {
         flex: 1,

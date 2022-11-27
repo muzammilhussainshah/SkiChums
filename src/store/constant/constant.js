@@ -3,6 +3,7 @@ const ActionTypes = {
     MYCHUMS: 'MYCHUMS',
     MYCHATROOM: 'MYCHATROOM',
     MESSAGES: 'MESSAGES',
+    RESETREDUCER: 'RESETREDUCER',
 }
 
 export default ActionTypes;

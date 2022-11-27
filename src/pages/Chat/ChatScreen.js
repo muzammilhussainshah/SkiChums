@@ -63,16 +63,18 @@ class ChatScreen extends Component {
 
     const user = firebase.auth().currentUser
     let recipientData = this.props.route.params.recipientData ?? {}
-    let docId;
-    if (recipientData.type === 1) {
-      docId = recipientData.id
-    } else {
+    if (Object.keys(user).length > 0 && Object.keys(recipientData).length > 0) {
+      let docId;
+      if (recipientData.type === 1) {
+        docId = recipientData.id
+      } else {
 
-      if (user?.uid > recipientData?.uid) docId = recipientData?.uid + user.uid
-      else docId = user?.uid + recipientData?.uid
+        if (user?.uid > recipientData?.uid) docId = recipientData?.uid + user.uid
+        else docId = user?.uid + recipientData?.uid
+      }
+
+      this.props.getMessagesFromDb(docId)
     }
-
-    this.props.getMessagesFromDb(docId)
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
 
@@ -84,7 +86,7 @@ class ChatScreen extends Component {
     let isPrivate = this.props.route.params?.isPrivate ?? false
     let recipientData = this.props.route?.params?.recipientData ?? {}
     let member = this.props.route?.params?.members ?? {}
-
+    console.log(recipientData, 'recipientDatarecipientDatarecipientData')
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -138,19 +140,22 @@ class ChatScreen extends Component {
 
     if (this.state.message.length > 0) {
       const user = firebase.auth().currentUser
-      let msgObj = {
-        messageText: this.state.message,
-        sendBy: user.uid,
-        sendAt: new Date().valueOf()
+      if (Object.keys(user).length > 0 && Object.keys(recipientData).length > 0) {
+
+        let msgObj = {
+          messageText: this.state.message,
+          sendBy: user.uid,
+          sendAt: new Date().valueOf()
+        }
+        let docId;
+        if (recipientData.type === 1) {
+          docId = recipientData.id
+        } else {
+          if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
+          else docId = user.uid + recipientData.uid
+        }
+        this.props.sendMessageToDb(docId, msgObj)
       }
-      let docId;
-      if (recipientData.type === 1) {
-        docId = recipientData.id
-      } else {
-        if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
-        else docId = user.uid + recipientData.uid
-      }
-      this.props.sendMessageToDb(docId, msgObj)
       this.setState({ message: '' })
     }
   }

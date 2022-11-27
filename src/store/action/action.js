@@ -79,34 +79,43 @@ export function getChatroom(mychums) {
             .get()
             .then(querySnapshot => {
                 querySnapshot.forEach(documentSnapshot => {
+                    console.log(chatroomArray, 'chatroomArraychatroomArray', documentSnapshot.data())
                     chatroomArray.push(documentSnapshot.data())
                 });
+
                 dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
             });
     }
 }
-export function createGroup(members) {
+export function createGroup(groupObj, groupId) {
     return dispatch => {
-        const user = firebase.auth().currentUser
-        let membersIds = members.map(({ uid }) => uid)
-        membersIds.push(user.uid)
-        let groupId = self.crypto.randomUUID()
-        let groupObj = {
-            creatAt: new Date(),
-            createBy: user.uid,
-            id: groupId,
-            members: membersIds,
-            // modifiedAt
-            // name
-            // recientMessage
-            // readBy
-            // sentAt
-            // sentBy
-            type: 1,
-            // users
-        }
+        console.log(groupObj, groupId, 'groupObj,groupId')
+        // const user = firebase.auth().currentUser
+        // let membersIds = members.map(({ uid }) => uid)
+        // membersIds.push(user.uid)
+        // let groupId = self.crypto.randomUUID()
+        // let groupObj = {
+        //     creatAt: new Date(),
+        //     createBy: user.uid,
+        //     id: groupId,
+        //     members: membersIds,
+        //     // modifiedAt
+        //     // name
+        //     // recientMessage
+        //     // readBy
+        //     // sentAt
+        //     // sentBy
+        //     type: 1,
+        //     // users
+        // }
         firestore().collection('group').doc(groupId).set(groupObj)
         firestore().collection('message').doc(groupId).set({ 'type': "group" })
+    }
+}
+export function resetReducer() {
+    return dispatch => {
+        dispatch({ type: ActionTypes.RESETREDUCER })
+
     }
 }
 export function sendMessageGroup() {

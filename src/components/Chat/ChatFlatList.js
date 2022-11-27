@@ -34,9 +34,17 @@ const DATA = [
 class ChatFlatList extends Component {
 
   navigationToChat(item) {
+    let isPrivate = true
+    if (item?.type === 1) { isPrivate = false }
+    let groupMembers = []
+    item?.members?.map((item) => {
+      let members = this.props.mychums.filter(({ uid }) => uid == item)
+      if (members?.length > 0) groupMembers.push(members[0])
+    })
     this.props.navigation.navigate('ChatScreen', {
-      isPrivate: true,
-      recipientData: item
+      isPrivate: isPrivate,
+      recipientData: item,
+      members: groupMembers
     })
   }
   render() {
@@ -44,15 +52,20 @@ class ChatFlatList extends Component {
       let name;
       if (item?.type == 1) {
 
-        item?.members?.map((item) => {
-          let userData = this.props.mychums.filter((val) => val.uid == item)
-          if (userData?.length > 0) {
-            if (typeof name !== 'undefined') {
-              name += userData[0].displayName ? userData[0].displayName + ', ' : userData[0].email.split("@")[0] + ', '
+        item?.members?.map((item, index) => {
+          if (index < 3) {
+            let userData = this.props.mychums.filter((val) => val.uid == item)
+            if (userData?.length > 0) {
+              if (typeof name !== 'undefined') {
+                name += userData[0].displayName ? userData[0].displayName + ', ' : userData[0].email.split("@")[0] + ', '
+              }
+              else {
+                name = userData[0].displayName ? userData[0].displayName + ', ' : userData[0].email.split("@")[0] + ', '
+              }
             }
-            else {
-              name = userData[0].displayName ? userData[0].displayName + ', ' : userData[0].email.split("@")[0] + ', '
-            }
+          } else if (index === 3) {
+            name += '...'
+
           }
         })
       }

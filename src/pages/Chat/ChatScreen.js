@@ -77,6 +77,7 @@ class ChatScreen extends Component {
     let isPrivate = this.props.route.params?.isPrivate ?? false
     let recipientData = this.props.route?.params?.recipientData ?? {}
     let member = this.props.route?.params?.members ?? {}
+    console.log(member,'membermembermember')
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -87,7 +88,7 @@ class ChatScreen extends Component {
                 <Image source={require("../../assets/Settings/blue-chevron-left.png")} style={styles.backIcon} />
               </TouchableOpacity>
               {isPrivate ? (<PrivateChatTopBar
-                name={recipientData?.displayName ? recipientData?.displayName : recipientData?.email}
+                name={recipientData?.displayName ? recipientData?.displayName : recipientData?.email?.split('@')[0]}
                 profilePic={recipientData.photoURL}
               />) : (
                 <GroupChatTopBar

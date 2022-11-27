@@ -77,7 +77,7 @@ class ChatScreen extends Component {
     let isPrivate = this.props.route.params?.isPrivate ?? false
     let recipientData = this.props.route?.params?.recipientData ?? {}
     let member = this.props.route?.params?.members ?? {}
-    console.log(member,'membermembermember')
+
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -128,6 +128,7 @@ class ChatScreen extends Component {
   }
 
   handleSendMessage(recipientData) {
+
     if (this.state.message.length > 0) {
       const user = firebase.auth().currentUser
       let msgObj = {
@@ -136,8 +137,12 @@ class ChatScreen extends Component {
         sendAt: new Date().valueOf()
       }
       let docId;
-      if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
-      else docId = user.uid + recipientData.uid
+      if (recipientData.type === 1) {
+        docId = recipientData.id
+      } else {
+        if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
+        else docId = user.uid + recipientData.uid
+      }
       this.props.sendMessageToDb(docId, msgObj)
       this.setState({ message: '' })
     }

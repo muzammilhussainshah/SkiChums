@@ -51,17 +51,20 @@ class SettingsRoundContainer extends Component {
 
     onLogout = async () => {
         const user = firebase.auth().currentUser
-        let fcmToken = await messaging().getToken()
-        this.props.resetReducer()
-        await
-            firestore()
-                .collection('chums')
-                .doc(user.uid)
-                .update({
-                    fcmToken: firestore.FieldValue.arrayRemove(fcmToken),
-                });
         auth().signOut()
-            .then(() => console.log('User signed out!'));
+        .then(async()=>{
+
+            let fcmToken = await messaging().getToken()
+            this.props.resetReducer()
+            await
+            firestore()
+            .collection('chums')
+            .doc(user.uid)
+            .update({
+                fcmToken: firestore.FieldValue.arrayRemove(fcmToken),
+            });
+            
+        });
 
 
     }

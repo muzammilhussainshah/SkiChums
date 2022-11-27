@@ -13,14 +13,17 @@ export function getAllChums(bolean) {
             querySnapshot.forEach(documentSnapshot => {
                 chums.push(documentSnapshot.data())
             });
-            let myChumsIdsAndStatus = chums?.filter((val) => val.uid == user.uid)[0].myChams
+            let myChumsIdsAndStatus = chums?.filter((val) => val?.uid == user?.uid)[0]?.myChams
             let myChumsArr = []
-            myChumsIdsAndStatus.map((item) => {
-                let myChums = chums.filter((val) => val.uid == item.id)
-                if (myChums.length > 0) { myChumsArr.push(myChums[0]) }
-            })
+            if (myChumsIdsAndStatus?.length > 0) {
+
+                myChumsIdsAndStatus.map((item) => {
+                    let myChums = chums.filter((val) => val.uid == item.id)
+                    if (myChums.length > 0) { myChumsArr.push(myChums[0]) }
+                })
+                dispatch({ type: ActionTypes.MYCHUMS, payload: myChumsArr })
+            }
             dispatch({ type: ActionTypes.CHUMS, payload: chums })
-            dispatch({ type: ActionTypes.MYCHUMS, payload: myChumsArr })
         }
             , onError);
 

@@ -74,7 +74,7 @@ export default class MyChumFlatList extends Component {
         {
           <View style={this.props.style ?? styles.container}>
             <FlatList
-              data={this?.props?.data?.filter((val) => val.uid == user.uid)[0].myChams}
+              data={this?.props?.data?.filter((val) => val?.uid == user?.uid)[0]?.myChams}
               renderItem={renderItem}
               keyExtractor={item => item.id}></FlatList>
           </View>

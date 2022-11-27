@@ -99,6 +99,20 @@ export function resetReducer() {
 
     }
 }
+export function deleteGroup(docId) {
+    return dispatch => {
+        // alert()
+        firestore().collection('group').doc(docId).delete()
+            .then(() => {
+                console.log('group deleted!');
+            });
+        firestore().collection('message').doc(docId).delete()
+            .then(() => {
+                console.log('group deleted!');
+            });
+
+    }
+}
 export function sendMessageGroup() {
     return dispatch => {
     }

@@ -16,7 +16,7 @@ import ChatMessageSendBox from "../../components/Chat/ChatMessageSendBox";
 import EditGroupChatScreen from "./EditGroupChatScreen";
 import GroupChatTopBar from "../../components/Chat/GroupChatTopBar";
 import PrivateChatTopBar from "../../components/Chat/PrivateChatTopBar";
-import { sendMessageToDb, getMessagesFromDb } from '../../store/action/action'
+import { sendMessageToDb, getMessagesFromDb, deleteGroup } from '../../store/action/action'
 
 class ChatScreen extends Component {
   constructor(props) {
@@ -86,7 +86,9 @@ class ChatScreen extends Component {
     let isPrivate = this.props.route.params?.isPrivate ?? false
     let recipientData = this.props.route?.params?.recipientData ?? {}
     let member = this.props.route?.params?.members ?? {}
-    console.log(recipientData, 'recipientDatarecipientDatarecipientData')
+    const user = firebase.auth().currentUser
+
+
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -127,8 +129,9 @@ class ChatScreen extends Component {
           visible={this.state.editlVisible}
           presentationStyle={"overFullScreen"}>
           <EditGroupChatScreen
+            isIAmAdmin={recipientData?.createBy == user?.uid ? true : false}
             onAddMember={this.onAddMember}
-            onDeleteGroup={this.onDeleteGroup}
+            onDeleteGroup={() => this.onDeleteGroup(recipientData)}
             onClose={this.onClose} />
         </Modal>
 
@@ -170,8 +173,22 @@ class ChatScreen extends Component {
 
   }
 
-  onDeleteGroup = () => {
+  onDeleteGroup = (recipientData) => {
+    // alert()
+    const user = firebase.auth().currentUser
 
+    if (Object.keys(user)?.length > 0 && Object.keys(recipientData)?.length > 0) {
+      let docId;
+      if (recipientData?.type === 1) {
+        docId = recipientData.id
+      } else {
+        if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
+        else docId = user.uid + recipientData.uid
+      }
+
+      this.props.deleteGroup(docId)
+      this.props.navigation.pop(this.props.route.params.isPrivate ? 1 : 2)
+    }
   }
 
   onBack = () => {
@@ -198,6 +215,9 @@ function mapDispatchToProps(dispatch) {
     },
     getMessagesFromDb: (docId,) => {
       dispatch(getMessagesFromDb(docId,));
+    },
+    deleteGroup: (docId,) => {
+      dispatch(deleteGroup(docId,));
     },
 
   }

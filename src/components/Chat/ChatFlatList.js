@@ -51,7 +51,6 @@ class ChatFlatList extends Component {
     const renderItem = ({ item }) => {
       let name;
       if (item?.type == 1) {
-
         item?.members?.map((item, index) => {
           if (index < 3) {
             let userData = this.props.mychums.filter((val) => val.uid == item)
@@ -64,7 +63,7 @@ class ChatFlatList extends Component {
               }
             }
           } else if (index === 3) {
-            name += '...'
+            name += '...' 
 
           }
         })
@@ -106,7 +105,7 @@ class ChatFlatList extends Component {
 
 function mapStateToProps(states) {
   return ({
-    mychums: states.root.mychums,
+    mychums: states.root.chums,
   })
 }
 

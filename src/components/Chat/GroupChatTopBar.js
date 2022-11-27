@@ -19,18 +19,7 @@ export default class GroupChatTopBar extends Component {
                     <FlatList
                         data={this.props.member}
                         horizontal
-                        renderItem={({ item, index }) => {
-                            if (index < 3) {
-                                return (
-                                    <Text style={styles.groupMemberTxt}>{item.displayName ? item.displayName : item.email.split('@')[0]}{index + 1 !== this.props.member.length && ','}</Text>
-                                )
-                            } else if (index === 3) {
-                                return (
-                                    <Text style={styles.groupMemberTxt}>{'...'}</Text>
-                                )
-                            }
-                        }
-                        }
+                        renderItem={({ item, index }) => <Text style={styles.groupMemberTxt}>{item.displayName ? item.displayName : item.email.split('@')[0]}{index + 1 !== this.props.member.length && ','}</Text>}
                         keyExtractor={item => item.uid}
                     />
                 </View>

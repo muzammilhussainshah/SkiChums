@@ -64,11 +64,18 @@ class ChatScreen extends Component {
     const user = firebase.auth().currentUser
     let recipientData = this.props.route.params.recipientData ?? {}
     let docId;
-    if (user?.uid > recipientData?.uid) docId = recipientData?.uid + user.uid
-    else docId = user?.uid + recipientData?.uid
+    if (recipientData.type === 1) {
+      docId = recipientData.id
+    } else {
+
+      if (user?.uid > recipientData?.uid) docId = recipientData?.uid + user.uid
+      else docId = user?.uid + recipientData?.uid
+    }
+
     this.props.getMessagesFromDb(docId)
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
+
     if (this.state.messages !== nextProps.messages) {
       this.setState({ messages: nextProps.messages })
     }

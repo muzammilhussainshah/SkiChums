@@ -119,13 +119,7 @@ function mapStateToProps(states) {
 }
 
 function mapDispatchToProps(dispatch) {
-  // return {
-  //   createGroup: (members) => {
-  //     createGroup(members)
-  //   }
-
-  // }
-  return {
+   return {
     createGroup: (members,groupId) => {
       dispatch(createGroup(members,groupId));
     },

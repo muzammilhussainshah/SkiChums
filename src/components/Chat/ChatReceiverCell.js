@@ -1,30 +1,29 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, Text, } from "react-native";
 
 export default class ChatReceiverCell extends Component {
     render() {
         let name = this.props.name;
         let message = this.props.message;
         let time = this.props.time;
-        let isPrivate = this.props.isPrivate;
         return (
-                <View style={styles.container}>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.name}>
-                            {name}
-                        </Text>
-                        <Text style={styles.message}>
-                            {message}
-                        </Text>
-                    </View>
-                    <View style={styles.space}/>
-                    <Text style={styles.time}>
-                        {time}
+            <View style={styles.container}>
+                <View style={styles.textContainer}>
+                    <Text style={styles.name}>
+                        {name}
                     </Text>
-                    
-                    
+                    <Text style={styles.message}>
+                        {message}
+                    </Text>
                 </View>
-        )        
+                <View style={styles.space} />
+                <Text style={styles.time}>
+                    {time}
+                </Text>
+
+
+            </View>
+        )
     }
 }
 
@@ -64,6 +63,6 @@ const styles = StyleSheet.create({
         fontSize: 10,
         color: 'black'
     }
-    
+
 
 })

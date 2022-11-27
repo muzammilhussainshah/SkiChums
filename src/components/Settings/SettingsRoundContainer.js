@@ -1,18 +1,22 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Platform } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import SettingContainer from "./SettingContainer";
-import SettingItem from "./SettingItem";
-import SettingProfileContainer from "./SettingProfileContainer";
+import {
+    View,
+    StyleSheet,
+    Platform
+} from "react-native";
+
 import firestore from '@react-native-firebase/firestore';
-import auth, { firebase } from '@react-native-firebase/auth'
 import messaging from '@react-native-firebase/messaging';
-import { resetReducer } from '../../store/action/action'
+import auth, { firebase } from '@react-native-firebase/auth'
 import { connect } from "react-redux";
+
+import SettingContainer from "./SettingContainer";
+import SettingProfileContainer from "./SettingProfileContainer";
+import { resetReducer } from '../../store/action/action'
+
 class SettingsRoundContainer extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             viewMode: 'setting'
         }
@@ -22,7 +26,11 @@ class SettingsRoundContainer extends Component {
         let viewMode = this.props.viewMode;
         return (
             <View style={[this.props.style ?? {}, styles.container]}>
-                {this.state.viewMode == 'setting' ? (<SettingContainer onProfileClicked={this.onProfileClicked} onLogout={this.onLogout} onSessionClicked={this.onSessionClicked} />) : (<SettingProfileContainer onBackClicked={this.onProfileBackClicked} />)}
+                {this.state.viewMode == 'setting' ? (<SettingContainer
+                    onProfileClicked={this.onProfileClicked}
+                    onLogout={this.onLogout}
+                    onSessionClicked={this.onSessionClicked} />) :
+                    (<SettingProfileContainer onBackClicked={this.onProfileBackClicked} />)}
 
             </View>
         )

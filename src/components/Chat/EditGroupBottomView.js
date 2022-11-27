@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
+import {
+    View,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    Image
+} from "react-native";
 
 export default class EditGroupBottomView extends Component {
     render() {
@@ -9,7 +15,7 @@ export default class EditGroupBottomView extends Component {
                     <View style={[this.props.style ?? {}, styles.container]}>
                         <TouchableOpacity onPress={this.props.onEditName}>
                             <Text style={styles.groupTitle}>
-                                GROUP NAME HERE
+                                {this.props.groupName}
                             </Text>
                         </TouchableOpacity>
                         <View style={styles.line} />

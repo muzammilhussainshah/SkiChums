@@ -11,12 +11,19 @@ import {
 import { connect } from 'react-redux'
 import { firebase } from "@react-native-firebase/auth";
 import ChatMessagesList from "../../components/Chat/ChatMessagesList";
+import firestore from '@react-native-firebase/firestore';
 
 import ChatMessageSendBox from "../../components/Chat/ChatMessageSendBox";
 import EditGroupChatScreen from "./EditGroupChatScreen";
 import GroupChatTopBar from "../../components/Chat/GroupChatTopBar";
 import PrivateChatTopBar from "../../components/Chat/PrivateChatTopBar";
-import { sendMessageToDb, getMessagesFromDb, deleteGroup } from '../../store/action/action'
+import {
+  sendMessageToDb,
+  getMessagesFromDb,
+  deleteGroup,
+  updateGroupName
+} from '../../store/action/action'
+
 
 class ChatScreen extends Component {
   constructor(props) {
@@ -29,7 +36,6 @@ class ChatScreen extends Component {
       messages: []
     }
   }
-
   componentDidMount() {
     this.keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
@@ -130,6 +136,8 @@ class ChatScreen extends Component {
           presentationStyle={"overFullScreen"}>
           <EditGroupChatScreen
             isIAmAdmin={recipientData?.createBy == user?.uid ? true : false}
+            displayName={recipientData?.displayName}
+            updatedname={(updatedname) => this.updateName(recipientData, updatedname)}
             onAddMember={this.onAddMember}
             onDeleteGroup={() => this.onDeleteGroup(recipientData)}
             onClose={this.onClose} />
@@ -138,13 +146,25 @@ class ChatScreen extends Component {
       </View>
     );
   }
+  updateName(recipientData, updatedname) {
+    // const user = firebase.auth().currentUser
+    // if (Object.keys(user).length > 0 && Object.keys(recipientData).length > 0) {
+    //   let docId;
+    //   if (recipientData.type === 1) {
+    //     docId = recipientData.id
+    //     firestore().collection('group').doc(docId).update({ displayName: updatedname });
+    //   }
+    // }
+    // myChatRoom
+    console.log(this.props.myChatRoom,'myChatRoommyChatRoom',updatedname)
+    this.props.updateGroupName(recipientData, updatedname,this.props.myChatRoom)
+    this.setState({ editlVisible: false })
+  }
 
   handleSendMessage(recipientData) {
-
     if (this.state.message.length > 0) {
       const user = firebase.auth().currentUser
       if (Object.keys(user).length > 0 && Object.keys(recipientData).length > 0) {
-
         let msgObj = {
           messageText: this.state.message,
           sendBy: user.uid,
@@ -204,7 +224,8 @@ class ChatScreen extends Component {
 
 function mapStateToProps(states) {
   return ({
-    messages: states.root.messages
+    messages: states.root.messages,
+    myChatRoom: states.root.myChatRoom
   })
 }
 
@@ -218,6 +239,9 @@ function mapDispatchToProps(dispatch) {
     },
     deleteGroup: (docId,) => {
       dispatch(deleteGroup(docId,));
+    },
+    updateGroupName: (recipientData, updatedname,myChatRoom) => {
+      dispatch(updateGroupName(recipientData, updatedname,myChatRoom));
     },
 
   }

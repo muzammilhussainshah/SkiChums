@@ -113,6 +113,22 @@ export function deleteGroup(docId) {
 
     }
 }
+export function updateGroupName(recipientData, updatedname, myChatRoom) {
+    return dispatch => {
+        if (Object.keys(recipientData).length > 0) {
+            let docId;
+            if (recipientData.type === 1) {
+                docId = recipientData.id
+                firestore().collection('group').doc(docId).update({ displayName: updatedname });
+            }
+        }
+        let selectedGroup = myChatRoom.filter(({ id }) => id == recipientData.id)
+        console.log(recipientData, updatedname, myChatRoom, 'recipientData, updatedname,myChatRoom', selectedGroup)
+        if (selectedGroup.length > 0) {
+            selectedGroup[0].displayName = updatedname
+        }
+    }
+}
 export function sendMessageGroup() {
     return dispatch => {
     }

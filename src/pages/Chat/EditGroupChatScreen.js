@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, Text, Touchable, Keyboard } from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  View,
+  TouchableOpacity,
+  Keyboard
+} from 'react-native';
+
 import ChatGroupMemberList from "../../components/Chat/ChatGroupMemberList";
 import EditGroupBottomView from "../../components/Chat/EditGroupBottomView";
 import EditGroupNameView from "../../components/Chat/EditGroupNameView";
@@ -57,10 +64,13 @@ export default class EditGroupChatScreen extends Component {
           </TouchableOpacity>
 
           {this.state.editName ?
-            (<EditGroupNameView />) :
+            (<EditGroupNameView
+              updatedname={(updatedname) => this.props.updatedname(updatedname)}
+              groupName={this.props.displayName} />) :
             (<EditGroupBottomView
               onDeleteGroup={() => this.props.onDeleteGroup()}
               isIAmAdmin={this.props.isIAmAdmin}
+              groupName={this.props.displayName}
               onEditName={this.onEditName} />)}
         </View>
 

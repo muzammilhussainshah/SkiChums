@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
+
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { firebase } from '@react-native-firebase/auth';
+import { connect } from 'react-redux';
+
 import ChatReceiverCell from './ChatReceiverCell';
 import ChatSenderCell from './ChatSenderCell';
 import ChatPrivateReceiverCell from './ChatPrivateReceiverCell';
 import ChatSenderGifCell from './ChatSenderGifCell';
-import { firebase } from '@react-native-firebase/auth';
-import { connect } from 'react-redux';
 
 const DATA = [
   {
@@ -85,14 +87,12 @@ class ChatMessagesList extends Component {
   render() {
     let isPrivate = this.props.isPrivate;
     const renderItem = ({ item }) => {
-      console.log(item, 'adasdsadassaddsa')
       let sendByDetail = this.props.allchums.filter((val) => val.uid == item.sendBy)
       let name;
       if (sendByDetail.length > 0) {
 
         name = sendByDetail[0].displayName ? sendByDetail[0].displayName : sendByDetail[0].email.split('@')[0]
       }
-      console.log(name, 'namenamename', sendByDetail)
       const user = firebase.auth().currentUser
       return (
         <TouchableWithoutFeedback onPress={this.props.onClick}>
@@ -124,9 +124,6 @@ class ChatMessagesList extends Component {
     )
   }
 }
-
-
-
 
 function mapStateToProps(states) {
   return ({

@@ -38,7 +38,6 @@ class Chatlist extends Component {
     // }
   }
   render() {
-    console.log(this.props,'asadsasaddsadsa')
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>

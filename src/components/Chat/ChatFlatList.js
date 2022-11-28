@@ -70,6 +70,7 @@ class ChatFlatList extends Component {
       }
       else if (item.displayName) name = item.displayName
       else name = item?.email?.split('@')[0]
+      console.log(item, 'itemitemitemitemitem', this.props.data)
       return (
         <TouchableWithoutFeedback onPress={
           this.props.forNewGourp ?
@@ -81,7 +82,8 @@ class ChatFlatList extends Component {
             profilePic={item.photoURL}
             name={name}
             type={item?.type}
-            last_msg={'Should be perfect!'} time={'13:23'}
+            last_msg={item.messageText ? item.messageText : 'New Chat'}
+            time={item?.sendAt && new Date(item?.sendAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             id={item.uid} />
 
         </TouchableWithoutFeedback >

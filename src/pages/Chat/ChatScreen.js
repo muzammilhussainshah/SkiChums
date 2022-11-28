@@ -160,6 +160,7 @@ class ChatScreen extends Component {
   handleSendMessage(recipientData) {
     if (this.state.message.length > 0) {
       const user = firebase.auth().currentUser
+      let messageType;
       if (Object.keys(user).length > 0 && Object.keys(recipientData).length > 0) {
         let msgObj = {
           messageText: this.state.message,
@@ -168,12 +169,14 @@ class ChatScreen extends Component {
         }
         let docId;
         if (recipientData.type === 1) {
+          messageType = 'group'
           docId = recipientData.id
         } else {
+          messageType = 'single'
           if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
           else docId = user.uid + recipientData.uid
-        }
-        this.props.sendMessageToDb(docId, msgObj)
+        } 
+        this.props.sendMessageToDb(docId, msgObj, messageType)
       }
       this.setState({ message: '' })
     }
@@ -208,7 +211,7 @@ class ChatScreen extends Component {
   }
 
   onBack = () => {
-    this.props.navigation.pop(this.props.route.params.isPrivate ? 1 : 2)
+    this.props.navigation.pop(2)
   }
 
   onSettings = () => {
@@ -227,8 +230,8 @@ function mapStateToProps(states) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    sendMessageToDb: (docId, msgObj) => {
-      dispatch(sendMessageToDb(docId, msgObj));
+    sendMessageToDb: (docId, msgObj, messageType) => {
+      dispatch(sendMessageToDb(docId, msgObj, messageType));
     },
     getMessagesFromDb: (docId,) => {
       dispatch(getMessagesFromDb(docId,));

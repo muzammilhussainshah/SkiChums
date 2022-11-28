@@ -31,10 +31,16 @@ export function getAllChums(bolean) {
 }
 
 
-export function sendMessageToDb(docId, msgObj) {
+export function sendMessageToDb(docId, msgObj, messageType) {
     return dispatch => {
         firestore().collection('message').doc(docId).set({ 'type': "message" })
+        if (messageType == 'group') {
+            firestore().collection('group').doc(docId).update({ messageText: msgObj.messageText, sendAt: msgObj.sendAt, sendBy: msgObj.sendBy });
+        } else {
+            firestore().collection('message').doc(docId).set(msgObj)
+        }
         firestore().collection('message').doc(docId).collection('messages').add(msgObj)
+
     }
 }
 export function getMessagesFromDb(docId,) {
@@ -47,6 +53,7 @@ export function getMessagesFromDb(docId,) {
                     messages.push(documentSnapshot.data())
                 });
                 dispatch({ type: ActionTypes.MESSAGES, payload: messages })
+
             }
                 , onError);
 
@@ -67,7 +74,7 @@ export function getChatroom(mychums) {
                 .get()
                 .then(querySnapshot => {
                     querySnapshot.forEach(documentSnapshot => {
-                        chatroomArray.push(item)
+                        chatroomArray.push({ ...documentSnapshot.data(), ...item })
                         dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
                     });
                 });
@@ -83,7 +90,6 @@ export function getChatroom(mychums) {
             .then(querySnapshot => {
                 querySnapshot.forEach(documentSnapshot => {
                     chatroomArray.push(documentSnapshot.data())
-                    console.log(chatroomArray, 'chatroomArray chatroomArray ')
                     dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
                 });
 
@@ -92,9 +98,10 @@ export function getChatroom(mychums) {
 }
 export function createGroup(groupObj, groupId) {
     return dispatch => {
-        console.log(groupObj, groupId, 'groupObj, groupIdgroupObj, groupId')
+
         firestore().collection('group').doc(groupId).set(groupObj)
         firestore().collection('message').doc(groupId).set({ 'type': "group" })
+
     }
 }
 export function resetReducer() {
@@ -134,7 +141,6 @@ export function updateGroupName(recipientData, updatedname, myChatRoom) {
 }
 export function addGroupMember(recipientData, updatedname, myChatRoom) {
     return dispatch => {
-        console.log(recipientData, updatedname, myChatRoom, 'recipientData, updatedname, myChatRoom')
         if (Object.keys(recipientData).length > 0) {
             let docId;
             if (recipientData.type === 1) {

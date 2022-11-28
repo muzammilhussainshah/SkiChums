@@ -58,7 +58,7 @@ export default class AllChumFlatList extends Component {
 
             <View style={styles.item}>
               <ChumInfoView
-                name={item.displayName}
+                name={item?.displayName ? item?.displayName : item?.email.split('@')[0]}
                 profilePic={item.photoURL}
                 distance={item.distance} />
               {ardeadyChams?.length > 0 ?

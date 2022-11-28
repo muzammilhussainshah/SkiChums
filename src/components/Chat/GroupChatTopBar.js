@@ -14,7 +14,7 @@ export default class GroupChatTopBar extends Component {
             <View style={[this.props.style ?? {}, styles.container]}>
                 <View style={styles.groupNameContainer}>
                     <Text style={styles.groupNameTxt}>
-                        Val d'lsere
+                        {this.props.name ? this.props.name : `Val d'lsere`}
                     </Text>
                     <FlatList
                         data={this.props.member}

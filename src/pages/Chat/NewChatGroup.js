@@ -90,14 +90,14 @@ class NewChatGroup extends React.Component {
       let recipientData = this?.props?.route?.params?.recipientData
       this.props.addGroupMember(recipientData, this?.state?.members, myChatRoom)
       // this.props.navigation.navigate('ChatScreen', {
-      this.props.navigation.pop( 2)
+      this.props.navigation.pop(2)
 
     }
     else {
       let members = this.state.members
       const user = firebase.auth().currentUser
       let membersIds = members?.map(({ uid }) => uid)
-      membersIds?.push(user.uid)
+      if (membersIds?.length > 0) membersIds?.push(user.uid)
       let groupId = self?.crypto?.randomUUID()
       let groupObj = {
         creatAt: new Date(),

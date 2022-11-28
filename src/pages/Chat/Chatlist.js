@@ -25,17 +25,20 @@ class Chatlist extends Component {
       listType: 'chat',
       chatModalVisible: false,
       chatroom: [],
+      flag: true,
     }
   }
   componentDidMount() {
     this.props.getChatroom(this.props.mychums)
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.myChatRoom !== this.props.myChatRoom) {
-      this.setState({ chatroom: nextProps.myChatRoom })
-    }
+
+    this.setState({ chatroom: nextProps.myChatRoom, flag: !this.state.flag })
+    // if (nextProps.myChatRoom !== this.props.myChatRoom) {
+    // }
   }
   render() {
+    console.log(this.props,'asadsasaddsadsa')
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>

@@ -108,6 +108,8 @@ class ChatScreen extends Component {
                 profilePic={recipientData.photoURL}
               />) : (
                 <GroupChatTopBar
+                  name={recipientData?.displayName ? recipientData?.displayName : recipientData?.email?.split('@')[0]}
+
                   member={member}
                   onSettings={this.onSettings} />
               )}

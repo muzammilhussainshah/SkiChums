@@ -83,6 +83,7 @@ export function getChatroom(mychums) {
             .then(querySnapshot => {
                 querySnapshot.forEach(documentSnapshot => {
                     chatroomArray.push(documentSnapshot.data())
+                    console.log(chatroomArray, 'chatroomArray chatroomArray ')
                     dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
                 });
 
@@ -91,6 +92,7 @@ export function getChatroom(mychums) {
 }
 export function createGroup(groupObj, groupId) {
     return dispatch => {
+        console.log(groupObj, groupId, 'groupObj, groupIdgroupObj, groupId')
         firestore().collection('group').doc(groupId).set(groupObj)
         firestore().collection('message').doc(groupId).set({ 'type': "group" })
     }
@@ -122,11 +124,11 @@ export function updateGroupName(recipientData, updatedname, myChatRoom) {
             if (recipientData.type === 1) {
                 docId = recipientData.id
                 firestore().collection('group').doc(docId).update({ displayName: updatedname });
+                let selectedGroup = myChatRoom.filter(({ id }) => id == recipientData.id)
+                if (selectedGroup.length > 0) {
+                    selectedGroup[0].displayName = updatedname
+                }
             }
-        }
-        let selectedGroup = myChatRoom.filter(({ id }) => id == recipientData.id)
-        if (selectedGroup.length > 0) {
-            selectedGroup[0].displayName = updatedname
         }
     }
 }
@@ -142,10 +144,6 @@ export function addGroupMember(recipientData, updatedname, myChatRoom) {
                 array3 = array3?.filter((item, index) => {
                     return (array3.indexOf(item) == index)
                 })
-                //  console.log(array, 'arrayarrayarray', recipientData.members,  array3
-                // )
-                // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
-
                 firestore().collection('group').doc(docId).update({ members: array3 });
                 let selectedGroup = myChatRoom?.filter(({ id }) => id == recipientData?.id)
                 if (selectedGroup.length > 0) selectedGroup[0].members = array3

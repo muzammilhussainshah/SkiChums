@@ -1,0 +1,37 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+platform :ios, '13.0'
+use_react_native!
+
+target 'SkiChums' do
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
+  # pod 'Google-Maps-iOS-Utils'
+  pod 'GoogleMaps'
+  pod 'GoogleSignIn', '~> 5.0.0'
+  pod 'FirebaseAuth'
+
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    :hermes_enabled => false
+  )
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+  
+  target 'SkiChumsTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+
+  post_install do |installer|
+    react_native_post_install(installer)
+  end
+  
+  pre_install do |installer|
+    Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+  end
+  
+end

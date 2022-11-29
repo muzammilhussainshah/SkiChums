@@ -82,7 +82,7 @@ class NewChatGroup extends React.Component {
     this.props.navigation.pop()
   }
 
-  onCreateChat = () => {
+  onCreateChat = async () => {
     console.log(this.props, 'addMemberaddMember')
     let addMember = this?.props?.route?.params?.addMember
     if (addMember) {
@@ -109,7 +109,7 @@ class NewChatGroup extends React.Component {
       let membersIds = members?.map(({ uid }) => uid)
       if (membersIds?.length > 0) membersIds?.push(user.uid)
       let groupId = create_UUID()
-      console.log(groupId,' self?.crypto?.randomUUID()')
+      console.log(groupId, ' self?.crypto?.randomUUID()')
       let groupObj = {
         creatAt: new Date(),
         createBy: user.uid,
@@ -133,8 +133,8 @@ class NewChatGroup extends React.Component {
       }
       if (invalidObj == true) {
       } else {
-// console.log(groupObj, groupId,'groupObj, groupIdgroupObj, groupId')
-        this.props.createGroup(groupObj, groupId)
+        // console.log(groupObj, groupId,'groupObj, groupIdgroupObj, groupId')
+        await this.props.createGroup(groupObj, groupId)
         this.props.navigation.navigate('ChatScreen', {
           isPrivate: false, members: this.state.members,
           recipientData: groupObj

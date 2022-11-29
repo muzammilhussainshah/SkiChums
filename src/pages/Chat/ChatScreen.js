@@ -69,8 +69,30 @@ class ChatScreen extends Component {
   }
   componentDidMount() {
 
+
+    let recipientData = this.props.route?.params?.recipientData ?? {}
+    if (recipientData.type == 1) {
+
+      this.setState({ recipientData: this.props.route.params.recipientData })
+    }
+    else[
+
+      subscriber = firestore().collection('chums').
+        where(firebase.firestore.FieldPath.documentId(), '==', recipientData.uid)
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach(documentSnapshot => {
+            this.setState({ recipientData: documentSnapshot.data() })
+          });
+
+        }
+          , () => { })
+    ]
+
+
+
+
     const user = firebase.auth().currentUser
-    let recipientData = this.props.route.params.recipientData ?? {}
+    // let recipientData = this.props.route.params.recipientData ?? {}
     if (Object.keys(user).length > 0 && Object.keys(recipientData).length > 0) {
       let docId;
       if (recipientData.type === 1) {
@@ -90,22 +112,25 @@ class ChatScreen extends Component {
       this.setState({ messages: nextProps.messages })
     }
   }
-  componentDidUpdate() {
-    let recipientData = this.props.route?.params?.recipientData ?? {}
-    if (recipientData.type == 1) { }
-    else[
+  // componentDidMount() {
+  //   let recipientData = this.props.route?.params?.recipientData ?? {}
+  //   if (recipientData.type == 1) {
 
-      subscriber = firestore().collection('chums').
-        where(firebase.firestore.FieldPath.documentId(), '==', recipientData.uid)
-        .onSnapshot((querySnapshot) => {
-          querySnapshot.forEach(documentSnapshot => {
-            this.setState({ recipientData: documentSnapshot.data() })
-          });
+  //     this.setState({ recipientData: this.props.route.params.recipientData })
+  //   }
+  //   else[
 
-        }
-          , () => { })
-    ]
-  }
+  //     subscriber = firestore().collection('chums').
+  //       where(firebase.firestore.FieldPath.documentId(), '==', recipientData.uid)
+  //       .onSnapshot((querySnapshot) => {
+  //         querySnapshot.forEach(documentSnapshot => {
+  //           this.setState({ recipientData: documentSnapshot.data() })
+  //         });
+
+  //       }
+  //         , () => { })
+  //   ]
+  // }
   componentWillUnmount() {
     if (subscriber) subscriber()
   }
@@ -182,6 +207,8 @@ class ChatScreen extends Component {
     if (this.state.message.length > 0) {
       const user = firebase.auth().currentUser
       let messageType;
+      console.log(user, recipientData, '1232132132')
+
       if (Object.keys(user).length > 0 && Object.keys(recipientData).length > 0) {
         let msgObj = {
           messageText: this.state.message,
@@ -197,6 +224,7 @@ class ChatScreen extends Component {
           if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
           else docId = user.uid + recipientData.uid
         }
+        console.log(docId, msgObj, messageType, '1232132132')
         this.props.sendMessageToDb(docId, msgObj, messageType)
       }
       this.setState({ message: '' })

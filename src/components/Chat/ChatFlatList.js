@@ -49,6 +49,7 @@ class ChatFlatList extends Component {
   }
   render() {
     const renderItem = ({ item }) => {
+      console.log(item, 'item item sendBy', item?.creatAt?.toDate())
       let name;
       if (item?.type == 1 && !item.displayName) {
         item?.members?.map((item, index) => {
@@ -82,7 +83,7 @@ class ChatFlatList extends Component {
             name={name}
             type={item?.type}
             last_msg={item?.messageText ? item?.messageText : ''}
-            time={item?.sendAt && new Date(item?.sendAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+            time={item?.sendAt ? new Date(item?.sendAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : new Date(item?.creatAt?.toDate()).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             id={item.uid} />
 
         </TouchableWithoutFeedback >

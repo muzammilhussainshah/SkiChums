@@ -33,14 +33,10 @@ class Chatlist extends Component {
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
     let sortedData = nextProps?.myChatRoom.concat(nextProps?.myGroupChatRoom)
-
-    // sortedData.sort((date1, date2) => date1.sendAt - date2.sendAt);
-    sortedData.sort(({ sendAt: a }, { sendAt: b }) => a < b ? 1 : a > b ? -1 : 0)
-
-    console.log(sortedData, '[...th11111tRoom]', nextProps?.myChatRoom.concat(nextProps?.myGroupChatRoom))
+    sortedData?.sort((a, b) => (b.sendAt || new Date(b.creatAt?.toDate()).valueOf()) - (a.sendAt || new Date(a.creatAt?.toDate()).valueOf()))
     this.setState({ chatroom: sortedData, flag: !this.state.flag })
-    // if (nextProps.myChatRoom !== this.props.myChatRoom) {
-    // }
+    if (nextProps.myChatRoom !== this.props.myChatRoom) {
+    }
   }
   render() {
     return (

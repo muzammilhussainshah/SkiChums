@@ -76,7 +76,6 @@ class ChatScreen extends Component {
       this.setState({ recipientData: this.props.route.params.recipientData })
     }
     else[
-
       subscriber = firestore().collection('chums').
         where(firebase.firestore.FieldPath.documentId(), '==', recipientData.uid)
         .onSnapshot((querySnapshot) => {
@@ -87,12 +86,7 @@ class ChatScreen extends Component {
         }
           , () => { })
     ]
-
-
-
-
     const user = firebase.auth().currentUser
-    // let recipientData = this.props.route.params.recipientData ?? {}
     if (Object.keys(user).length > 0 && Object.keys(recipientData).length > 0) {
       let docId;
       if (recipientData.type === 1) {
@@ -102,35 +96,15 @@ class ChatScreen extends Component {
         if (user?.uid > recipientData?.uid) docId = recipientData?.uid + user.uid
         else docId = user?.uid + recipientData?.uid
       }
-
       this.props.getMessagesFromDb(docId)
     }
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
 
+    this.setState({ messages: nextProps.messages })
     if (this.state.messages !== nextProps.messages) {
-      this.setState({ messages: nextProps.messages })
     }
-  }
-  // componentDidMount() {
-  //   let recipientData = this.props.route?.params?.recipientData ?? {}
-  //   if (recipientData.type == 1) {
-
-  //     this.setState({ recipientData: this.props.route.params.recipientData })
-  //   }
-  //   else[
-
-  //     subscriber = firestore().collection('chums').
-  //       where(firebase.firestore.FieldPath.documentId(), '==', recipientData.uid)
-  //       .onSnapshot((querySnapshot) => {
-  //         querySnapshot.forEach(documentSnapshot => {
-  //           this.setState({ recipientData: documentSnapshot.data() })
-  //         });
-
-  //       }
-  //         , () => { })
-  //   ]
-  // }
+  } 
   componentWillUnmount() {
     if (subscriber) subscriber()
   }

@@ -46,13 +46,16 @@ export function sendMessageToDb(docId, msgObj, messageType) {
 }
 export function getMessagesFromDb(docId,) {
     return dispatch => {
+        console.log(docId, 'docIddocIddocIddocId')
         firestore().collection(`message/${docId}/messages`)
             .orderBy('sendAt', 'desc')
             .limit(15).onSnapshot((querySnapshot) => {
                 let messages = []
                 querySnapshot.forEach(documentSnapshot => {
+                    console.log(documentSnapshot.data(), 'documentSnapshot')
                     messages.push(documentSnapshot.data())
                 });
+
                 dispatch({ type: ActionTypes.MESSAGES, payload: messages })
 
             }
@@ -64,18 +67,14 @@ export function getMessagesFromDb(docId,) {
 export function getChatroom(mychums) {
     return dispatch => {
         const user = firebase.auth().currentUser
-        // let chatroomArray = []
-        let listOfDocIDs = mychums.map((item) => {
+        let listOfDocIDs = mychums?.map((item) => {
             let docId;
             if (user.uid > item.uid) docId = item.uid + user.uid
             else docId = user.uid + item.uid
             return docId
         })
         let remainingVal = listOfDocIDs % 10
-
         for (let limit = 0; limit < listOfDocIDs.length; limit = limit + 10 < listOfDocIDs.length ? limit + 10 : remainingVal) {
-            // const element = array[limit];
-            console.log(listOfDocIDs[limit], 'array[limit]array[limit]')
             firestore()
                 .collection('message')
                 .where(firebase.firestore.FieldPath.documentId(), 'in', listOfDocIDs.slice(limit, limit + 10))
@@ -86,6 +85,8 @@ export function getChatroom(mychums) {
                         if (result?.length > 0) chatroomArray.push({ ...documentSnapshot.data(), ...result[0] })
                         else chatroomArray.push({ ...documentSnapshot.data() })
                     });
+                    // console.log(chatroomArray, 'chatroomArraychatroomArraychatroomArray')
+                    // chatroomArray?.sort((a, b) => b?.sendAt - a?.sendAt)
                     dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
 
                 }
@@ -102,57 +103,11 @@ export function getChatroom(mychums) {
                 let groupchatroomArray = []
                 querySnapshot.forEach(documentSnapshot => {
                     groupchatroomArray.push(documentSnapshot.data())
-                    console.log(groupchatroomArray, 'groupchatroomArray')
                 });
+                // console.log(groupchatroomArray, 'chatroomArraychatroomArraychatroomArray')
+                // groupchatroomArray?.sort((a, b) => b?.sendAt - a?.sendAt)
                 dispatch({ type: ActionTypes.MYGROUPCHATROOM, payload: groupchatroomArray })
             });
-        // while (listOfDocIDs.length) {
-        //     const res = await firestore()
-        //         .collection('users')
-        //         .where('uid', 'in', listOfDocIDs.slice(0, limit))
-        //         .get()
-        //     const _users = res.docs.map((doc) => {
-        //         const _data = doc.data() as UserModel
-        //         _data.docId = doc.id
-        //         return _data
-        //     })
-
-        //     users.push(..._users)
-        //     listOfDocIDs.splice(0, limit)
-        // }
-
-        // return users
-
-        // firestore()
-        //     .collection('message')
-        //     .where(firebase.firestore.FieldPath.documentId(), 'in', listOfDocIDs.slice(0, listOfDocIDs.length - 1))
-        //     .get()
-        //     .then(querySnapshot => {
-        //         let chatroomArray = []
-
-        //         querySnapshot.forEach(documentSnapshot => {
-        //             // chatroomArray.push({ ...documentSnapshot.data(), 'chatroomchatroomchatroom' })
-        //             console.log(documentSnapshot.data(), 'chatroomchatroomchatroom')
-        //             chatroomArray.push({ ...documentSnapshot.data() })
-
-        //             dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
-        //         });
-        //     });
-        // firestore()
-        //     .collection('group')
-        //     .where(
-        //         "members",
-        //         "array-contains",
-        //         user.uid
-        //     )
-        //     .get()
-        //     .then(querySnapshot => {
-        //         querySnapshot.forEach(documentSnapshot => {
-        //             chatroomArray.push(documentSnapshot.data())
-        //             dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
-        //         });
-
-        //     });
     }
 }
 export function createGroup(groupObj, groupId) {

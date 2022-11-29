@@ -49,7 +49,7 @@ class ChatFlatList extends Component {
   }
   render() {
     const renderItem = ({ item }) => {
-      console.log(item, 'item item sendBy', item?.creatAt?.toDate())
+
       let name;
       if (item?.type == 1 && !item.displayName) {
         item?.members?.map((item, index) => {

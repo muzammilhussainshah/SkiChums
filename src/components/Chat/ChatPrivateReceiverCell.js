@@ -7,20 +7,20 @@ export default class ChatPrivateReceiverCell extends Component {
         let message = this.props.message;
         let time = this.props.time;
         return (
-                <View style={styles.container}>
-                    <View style={styles.textContainer}>                       
-                        <Text style={styles.message}>
-                            {message}
-                        </Text>
-                    </View>
-                    <View style={styles.space}/>
-                    <Text style={styles.time}>
-                        {time}
+            <View style={styles.container}>
+                <View style={styles.textContainer}>
+                    <Text style={styles.message}>
+                        {message}
                     </Text>
-                    
-                    
                 </View>
-        )        
+                <View style={styles.space} />
+                <Text style={styles.time}>
+                    {time}
+                </Text>
+
+
+            </View>
+        )
     }
 }
 
@@ -46,8 +46,12 @@ const styles = StyleSheet.create({
     },
     name: {
         width: '100%',
-        paddingLeft: 8,
-        paddingTop: 5,
+
+
+        margin: 5,
+        textAlign: 'center',
+        // paddingLeft: 8,
+        // paddingTop: 5,
         textAlign: 'left',
         fontWeight: "bold",
         fontSize: 10,
@@ -60,6 +64,6 @@ const styles = StyleSheet.create({
         fontSize: 10,
         color: 'black'
     }
-    
+
 
 })

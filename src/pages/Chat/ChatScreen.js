@@ -158,7 +158,7 @@ class ChatScreen extends Component {
           <EditGroupChatScreen
             isIAmAdmin={recipientData?.createBy == user?.uid ? true : false}
             displayName={recipientData?.displayName}
-            updatedname={(updatedname) => this.updateName(recipientData, updatedname)}
+            updatedname={(updatedname) => this.updateName(recipientData, updatedname,)}
             addMember={() => {
 
               this.setState({ editlVisible: false })

@@ -143,6 +143,7 @@ export function updateGroupName(recipientData, updatedname, myChatRoom) {
             if (recipientData.type === 1) {
                 docId = recipientData.id
                 firestore().collection('group').doc(docId).update({ displayName: updatedname });
+                recipientData.displayName = updatedname
                 let selectedGroup = myChatRoom.filter(({ id }) => id == recipientData.id)
                 if (selectedGroup.length > 0) {
                     selectedGroup[0].displayName = updatedname

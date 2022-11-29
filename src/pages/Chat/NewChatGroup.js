@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Image, View, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, Image, View, TouchableOpacity, Text, Alert } from 'react-native';
 import ChatFlatList from "../../components/Chat/ChatFlatList";
 import ChatGroupTagView from "../../components/Chat/ChatGroupTagView";
 import { connect } from 'react-redux';
@@ -96,9 +96,20 @@ class NewChatGroup extends React.Component {
     else {
       let members = this.state.members
       const user = firebase.auth().currentUser
+      function create_UUID() {
+        var dt = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+          var r = (dt + Math.random() * 16) % 16 | 0;
+          dt = Math.floor(dt / 16);
+          return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+        return uuid;
+      }
+
       let membersIds = members?.map(({ uid }) => uid)
       if (membersIds?.length > 0) membersIds?.push(user.uid)
-      let groupId = self?.crypto?.randomUUID()
+      let groupId = create_UUID()
+      console.log(groupId,' self?.crypto?.randomUUID()')
       let groupObj = {
         creatAt: new Date(),
         createBy: user.uid,
@@ -113,11 +124,22 @@ class NewChatGroup extends React.Component {
         type: 1,
         // users
       }
-      this.props.createGroup(groupObj, groupId)
-      this.props.navigation.navigate('ChatScreen', {
-        isPrivate: false, members: this.state.members,
-        recipientData: groupObj
-      })
+      let invalidObj
+      for (var key in groupObj) {
+        if (groupObj[key] === "" || groupObj[key] === undefined || groupObj[key] === null) {
+          Alert.alert(key + ' is empty')
+          invalidObj = true
+        }
+      }
+      if (invalidObj == true) {
+      } else {
+
+        this.props.createGroup(groupObj, groupId)
+        this.props.navigation.navigate('ChatScreen', {
+          isPrivate: false, members: this.state.members,
+          recipientData: groupObj
+        })
+      }
     }
   }
 }

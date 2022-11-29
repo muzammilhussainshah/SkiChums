@@ -70,7 +70,6 @@ class ChatFlatList extends Component {
       }
       else if (item.displayName) name = item.displayName
       else name = item?.email?.split('@')[0]
-      console.log(item, 'itemitemitemitemitem', this.props.data)
       return (
         <TouchableWithoutFeedback onPress={
           this.props.forNewGourp ?

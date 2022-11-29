@@ -8,7 +8,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import auth from '@react-native-firebase/auth'
+import auth, { firebase } from '@react-native-firebase/auth'
 
 import Navigation from './src/router/Tab';
 import { PortalProvider } from '@gorhom/portal';
@@ -16,19 +16,64 @@ import store from './src/store';
 
 import AuthNavigation from './src/router/Auth';
 import { Provider } from 'react-redux';
+import { AppState } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 
 function App() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+  const [appState, setappState] = useState('');
 
   function onAuthStateChanged(user) {
+    console.log(user, 'userrruserrruserrruserrr')
+    if (user?._user) {
+      firestore()
+        .collection('chums')
+        .doc(user._user.uid)
+        .update({ isOnline: true });
+    }
+    // setappState('active')
     setUser(user);
     if (initializing) setInitializing(false);
   }
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
+  useEffect(async () => {
+
+    const subscriber = await auth().onAuthStateChanged(onAuthStateChanged);
+    const subscription = AppState.addEventListener('change',
+      (nextAppState) => {
+        const user = firebase.auth().currentUser
+        // setappState('active')
+        console.log(user, 'useruseruser')
+        if (nextAppState === 'active') {
+          if (user?._user) {
+
+            firestore()
+              .collection('chums')
+              .doc(user?._user?.uid)
+              .update({ isOnline: true });
+          }
+          // setappState('active')
+        }
+        else {
+          // setappState('inActive')
+          if (user?._user) {
+
+            firestore()
+              .collection('chums')
+              .doc(user._user.uid)
+              .update({ isOnline: false });
+          }
+        }
+        console.log('AppState', nextAppState);
+      }
+    );
+    // console.log(subscriber, 'subscribersubscribersubscriber')
+    return () => {
+      subscriber()
+      subscription.remove()
+
+    }
   }, []);
 
 

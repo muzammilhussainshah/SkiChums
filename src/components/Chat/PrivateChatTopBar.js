@@ -16,7 +16,10 @@ export default class PrivateChatTopBar extends Component {
                     <Text style={styles.opponentNameTxt}>
                         {this.props.name}
                     </Text>
-                    <View style={styles.status} />
+                    {this.props.isOnline ?
+                        <View style={styles.status} /> :
+                        <View style={[styles.status, { backgroundColor: 'gray' }]} />
+                    }
                 </View>
                 <TouchableOpacity style={styles.profileIcon} onPress={this.props.onProfile}>
                     {this.props.profilePic ?

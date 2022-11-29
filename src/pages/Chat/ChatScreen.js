@@ -10,6 +10,7 @@ import {
 
 import { connect } from 'react-redux'
 import { firebase } from "@react-native-firebase/auth";
+import firestore from '@react-native-firebase/firestore';
 import ChatMessagesList from "../../components/Chat/ChatMessagesList";
 
 import ChatMessageSendBox from "../../components/Chat/ChatMessageSendBox";
@@ -24,6 +25,7 @@ import {
 } from '../../store/action/action'
 
 
+let subscriber;
 class ChatScreen extends Component {
   constructor(props) {
     super(props);
@@ -32,7 +34,8 @@ class ChatScreen extends Component {
       keyboardOffset: 0,
       editlVisible: false,
       message: '',
-      messages: []
+      messages: [],
+      recipientData: [],
     }
   }
   componentDidMount() {
@@ -87,13 +90,26 @@ class ChatScreen extends Component {
       this.setState({ messages: nextProps.messages })
     }
   }
+  componentDidUpdate() {
+    let recipientData = this.props.route?.params?.recipientData ?? {}
+    subscriber = firestore().collection('chums').
+      where(firebase.firestore.FieldPath.documentId(), '==', recipientData.uid)
+      .onSnapshot((querySnapshot) => {
+        querySnapshot.forEach(documentSnapshot => {
+          this.setState({ recipientData: documentSnapshot.data() })
+        });
+
+      }
+        , () => { });
+  }
+  componentWillUnmount() {
+    subscriber()
+  }
   render() {
     let isPrivate = this.props.route.params?.isPrivate ?? false
-    let recipientData = this.props.route?.params?.recipientData ?? {}
+    let recipientData = this.state.recipientData
     let member = this.props.route?.params?.members ?? {}
     const user = firebase.auth().currentUser
-
-
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -104,6 +120,7 @@ class ChatScreen extends Component {
                 <Image source={require("../../assets/Settings/blue-chevron-left.png")} style={styles.backIcon} />
               </TouchableOpacity>
               {isPrivate ? (<PrivateChatTopBar
+                isOnline={recipientData?.isOnline}
                 name={recipientData?.displayName ? recipientData?.displayName : recipientData?.email?.split('@')[0]}
                 profilePic={recipientData.photoURL}
               />) : (
@@ -175,7 +192,7 @@ class ChatScreen extends Component {
           messageType = 'single'
           if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
           else docId = user.uid + recipientData.uid
-        } 
+        }
         this.props.sendMessageToDb(docId, msgObj, messageType)
       }
       this.setState({ message: '' })

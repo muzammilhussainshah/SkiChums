@@ -90,7 +90,6 @@ export function getChatroom(mychums) {
             .get()
             .then(querySnapshot => {
                 querySnapshot.forEach(documentSnapshot => {
-
                     chatroomArray.push(documentSnapshot.data())
                     dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
                 });

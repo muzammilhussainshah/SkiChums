@@ -81,7 +81,7 @@ class ChatFlatList extends Component {
             profilePic={item.photoURL}
             name={name}
             type={item?.type}
-            last_msg={item.messageText ? item.messageText : 'New Chat'}
+            last_msg={item?.messageText ? item?.messageText : ''}
             time={item?.sendAt && new Date(item?.sendAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             id={item.uid} />
 

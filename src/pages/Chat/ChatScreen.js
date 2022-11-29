@@ -92,18 +92,22 @@ class ChatScreen extends Component {
   }
   componentDidUpdate() {
     let recipientData = this.props.route?.params?.recipientData ?? {}
-    subscriber = firestore().collection('chums').
-      where(firebase.firestore.FieldPath.documentId(), '==', recipientData.uid)
-      .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach(documentSnapshot => {
-          this.setState({ recipientData: documentSnapshot.data() })
-        });
+    if (recipientData.type == 1) { }
+    else[
 
-      }
-        , () => { });
+      subscriber = firestore().collection('chums').
+        where(firebase.firestore.FieldPath.documentId(), '==', recipientData.uid)
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach(documentSnapshot => {
+            this.setState({ recipientData: documentSnapshot.data() })
+          });
+
+        }
+          , () => { })
+    ]
   }
   componentWillUnmount() {
-    subscriber()
+    if (subscriber) subscriber()
   }
   render() {
     let isPrivate = this.props.route.params?.isPrivate ?? false

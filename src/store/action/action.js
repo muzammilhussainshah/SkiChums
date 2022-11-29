@@ -11,6 +11,7 @@ export function getAllChums(bolean) {
         firestore().collection('chums').onSnapshot((querySnapshot) => {
             let chums = []
             querySnapshot.forEach(documentSnapshot => {
+                console.log(documentSnapshot.data(),'asddasasddas')
                 chums.push(documentSnapshot.data())
             });
             let myChumsIdsAndStatus = chums?.filter((val) => val?.uid == user?.uid)[0]?.myChams
@@ -21,6 +22,7 @@ export function getAllChums(bolean) {
                     let myChums = chums.filter((val) => val.uid == item.id)
                     if (myChums.length > 0) { myChumsArr.push(myChums[0]) }
                 })
+                // console.log()
                 dispatch({ type: ActionTypes.MYCHUMS, payload: myChumsArr })
             }
             dispatch({ type: ActionTypes.CHUMS, payload: chums })

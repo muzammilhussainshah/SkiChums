@@ -55,8 +55,8 @@ export default class MyChumFlatList extends Component {
           <View style={styles.item}>
             <ChumInfoView
               name={data[0]?.displayName ? data[0]?.displayName : data[0]?.email.split('@')[0]}
-              profilePic={data[0].photoURL}
-              distance={data[0].distance} />
+              profilePic={data[0]?.photoURL}
+              distance={data[0]?.distance} />
             {item.status == 'REQUESTED' ? (
               <MyChumAcceptContainer
                 accept={() => handleAccept(item.id)}

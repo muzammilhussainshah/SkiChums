@@ -1,101 +1,302 @@
 import React, { Component } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, Text, Keyboard, Modal } from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  View,
+  TouchableOpacity,
+  Keyboard,
+  Modal
+} from 'react-native';
+
+import { connect } from 'react-redux'
+import { firebase } from "@react-native-firebase/auth";
+import firestore from '@react-native-firebase/firestore';
 import ChatMessagesList from "../../components/Chat/ChatMessagesList";
+
 import ChatMessageSendBox from "../../components/Chat/ChatMessageSendBox";
 import EditGroupChatScreen from "./EditGroupChatScreen";
 import GroupChatTopBar from "../../components/Chat/GroupChatTopBar";
 import PrivateChatTopBar from "../../components/Chat/PrivateChatTopBar";
+import {
+  sendMessageToDb,
+  getMessagesFromDb,
+  deleteGroup,
+  updateGroupName
+} from '../../store/action/action'
 
-export default class ChatScreen extends Component {
+
+let subscriber;
+class ChatScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       keyboardOffset: 0,
       editlVisible: false,
+      message: '',
+      messages: [],
+      recipientData: [],
     }
   }
-  
   componentDidMount() {
     this.keyboardDidShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        this._keyboardDidShow.bind(this),
+      'keyboardDidShow',
+      this._keyboardDidShow.bind(this),
     );
     this.keyboardDidHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        this._keyboardDidHide.bind(this),
+      'keyboardDidHide',
+      this._keyboardDidHide.bind(this),
     );
   }
 
   componentWillUnmount() {
-      this.keyboardDidShowListener.remove();
-      this.keyboardDidHideListener.remove();
+    this?.keyboardDidShowListener?.remove();
+    this?.keyboardDidHideListener?.remove();
   }
 
   _keyboardDidShow(event) {
     console.log('keyboardDidShow: ', event.endCoordinates.height)
-      this.setState({
-          keyboardOffset: event.endCoordinates.height,
-      })
+    this.setState({
+      keyboardOffset: event.endCoordinates.height,
+    })
   }
 
   _keyboardDidHide() {
     console.log('keyboardDidHide')
-      this.setState({
-          keyboardOffset: 0,
-      })
+    this.setState({
+      keyboardOffset: 0,
+    })
   }
+  componentDidMount() {
 
+
+    let recipientData = this.props.route?.params?.recipientData ?? {}
+    if (recipientData.type == 1) {
+
+      this.setState({ recipientData: this.props.route.params.recipientData })
+    }
+    else[
+
+      subscriber = firestore().collection('chums').
+        where(firebase.firestore.FieldPath.documentId(), '==', recipientData.uid)
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach(documentSnapshot => {
+            this.setState({ recipientData: documentSnapshot.data() })
+          });
+
+        }
+          , () => { })
+    ]
+
+
+
+
+    const user = firebase.auth().currentUser
+    // let recipientData = this.props.route.params.recipientData ?? {}
+    if (Object.keys(user).length > 0 && Object.keys(recipientData).length > 0) {
+      let docId;
+      if (recipientData.type === 1) {
+        docId = recipientData.id
+      } else {
+
+        if (user?.uid > recipientData?.uid) docId = recipientData?.uid + user.uid
+        else docId = user?.uid + recipientData?.uid
+      }
+
+      this.props.getMessagesFromDb(docId)
+    }
+  }
+  UNSAFE_componentWillReceiveProps(nextProps) {
+
+    if (this.state.messages !== nextProps.messages) {
+      this.setState({ messages: nextProps.messages })
+    }
+  }
+  // componentDidMount() {
+  //   let recipientData = this.props.route?.params?.recipientData ?? {}
+  //   if (recipientData.type == 1) {
+
+  //     this.setState({ recipientData: this.props.route.params.recipientData })
+  //   }
+  //   else[
+
+  //     subscriber = firestore().collection('chums').
+  //       where(firebase.firestore.FieldPath.documentId(), '==', recipientData.uid)
+  //       .onSnapshot((querySnapshot) => {
+  //         querySnapshot.forEach(documentSnapshot => {
+  //           this.setState({ recipientData: documentSnapshot.data() })
+  //         });
+
+  //       }
+  //         , () => { })
+  //   ]
+  // }
+  componentWillUnmount() {
+    if (subscriber) subscriber()
+  }
   render() {
-    let isPrivate = this.props.route.params.isPrivate ?? false
+    let isPrivate = this.props.route.params?.isPrivate ?? false
+    let recipientData = this.state.recipientData
+    let member = this.props.route?.params?.members ?? {}
+    const user = firebase.auth().currentUser
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logo}/>
+          <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logo} />
           <View style={styles.topContainer}>
             <View style={styles.topBarContainer}>
-                <TouchableOpacity style={styles.back} onPress={this.onBack}>
-                    <Image source={require("../../assets/Settings/blue-chevron-left.png")} style={styles.backIcon}/>
-                </TouchableOpacity>
-                {isPrivate ? (<PrivateChatTopBar/>) : (<GroupChatTopBar onSettings={this.onSettings}/>)}
-            </View>
-            
-            <View style={styles.topLine}/>
-          </View>
-          
-        </View>
-        
-        <ChatMessagesList style={styles.chat} isPrivate={isPrivate}/>
-        <ChatMessageSendBox keyboardOffset={this.state.keyboardOffset}/>
+              <TouchableOpacity style={styles.back} onPress={this.onBack}>
+                <Image source={require("../../assets/Settings/blue-chevron-left.png")} style={styles.backIcon} />
+              </TouchableOpacity>
+              {isPrivate ? (<PrivateChatTopBar
+                isOnline={recipientData?.isOnline}
+                name={recipientData?.displayName ? recipientData?.displayName : recipientData?.email?.split('@')[0]}
+                profilePic={recipientData.photoURL}
+              />) : (
+                <GroupChatTopBar
+                  name={recipientData?.displayName ? recipientData?.displayName : recipientData?.email?.split('@')[0]}
 
-        <Modal style={styles.modal} transparent={true} visible={this.state.editlVisible} presentationStyle={"overFullScreen"}>
-          <EditGroupChatScreen onAddMember={this.onAddMember} onDeleteGroup={this.onDeleteGroup} onClose={this.onClose}/>
+                  member={member}
+                  onSettings={this.onSettings} />
+              )}
+            </View>
+
+            <View style={styles.topLine} />
+          </View>
+
+        </View>
+
+        <ChatMessagesList
+          messages={this.state.messages}
+          style={styles.chat}
+          isPrivate={isPrivate} />
+        <ChatMessageSendBox
+          sendMessage={() => this.handleSendMessage(recipientData)}
+          messageValue={this.state.message}
+          getMessage={(message) => { this.getMessage(message) }}
+          keyboardOffset={this.state.keyboardOffset} />
+
+        <Modal
+          style={styles.modal}
+          transparent={true}
+          visible={this.state.editlVisible}
+          presentationStyle={"overFullScreen"}>
+          <EditGroupChatScreen
+            isIAmAdmin={recipientData?.createBy == user?.uid ? true : false}
+            displayName={recipientData?.displayName}
+            updatedname={(updatedname) => this.updateName(recipientData, updatedname)}
+            addMember={() => {
+
+              this.setState({ editlVisible: false })
+              this.props.navigation.navigate('NewChatGroup', { addMember: true, recipientData: recipientData, myChatRoom: this.props.myChatRoom })
+            }}
+            onAddMember={this.onAddMember}
+            onDeleteGroup={() => this.onDeleteGroup(recipientData)}
+            onClose={this.onClose} />
         </Modal>
-        
-    </View>
-    );    
+
+      </View>
+    );
+  }
+  updateName(recipientData, updatedname) {
+    this.props.updateGroupName(recipientData, updatedname, this.props.myChatRoom)
+    this.setState({ editlVisible: false })
   }
 
+  handleSendMessage(recipientData) {
+    if (this.state.message.length > 0) {
+      const user = firebase.auth().currentUser
+      let messageType;
+      console.log(user, recipientData, '1232132132')
+
+      if (Object.keys(user).length > 0 && Object.keys(recipientData).length > 0) {
+        let msgObj = {
+          messageText: this.state.message,
+          sendBy: user.uid,
+          sendAt: new Date().valueOf()
+        }
+        let docId;
+        if (recipientData.type === 1) {
+          messageType = 'group'
+          docId = recipientData.id
+        } else {
+          messageType = 'single'
+          if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
+          else docId = user.uid + recipientData.uid
+        }
+        console.log(docId, msgObj, messageType, '1232132132')
+        this.props.sendMessageToDb(docId, msgObj, messageType)
+      }
+      this.setState({ message: '' })
+    }
+  }
+
+  getMessage(message) { this.setState({ message: message }) }
+
   onClose = () => {
-    this.setState({editlVisible : false})
+    this.setState({ editlVisible: false })
   }
 
   onAddMember = () => {
 
   }
 
-  onDeleteGroup = () => {
+  onDeleteGroup = (recipientData) => {
+    // alert()
+    const user = firebase.auth().currentUser
 
+    if (Object.keys(user)?.length > 0 && Object.keys(recipientData)?.length > 0) {
+      let docId;
+      if (recipientData?.type === 1) {
+        docId = recipientData.id
+      } else {
+        if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
+        else docId = user.uid + recipientData.uid
+      }
+
+      this.props.deleteGroup(docId)
+      this.props.navigation.pop(this.props.route.params.isPrivate ? 1 : 2)
+    }
   }
 
   onBack = () => {
-    this.props.navigation.pop(this.props.route.params.isPrivate ? 1 : 2)
+    this.props.navigation.pop(2)
   }
 
   onSettings = () => {
-    this.setState({editlVisible: true})
+    this.setState({ editlVisible: true })
   }
 }
+
+
+
+function mapStateToProps(states) {
+  return ({
+    messages: states.root.messages,
+    myChatRoom: states.root.myChatRoom
+  })
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    sendMessageToDb: (docId, msgObj, messageType) => {
+      dispatch(sendMessageToDb(docId, msgObj, messageType));
+    },
+    getMessagesFromDb: (docId,) => {
+      dispatch(getMessagesFromDb(docId,));
+    },
+    deleteGroup: (docId,) => {
+      dispatch(deleteGroup(docId,));
+    },
+    updateGroupName: (recipientData, updatedname, myChatRoom) => {
+      dispatch(updateGroupName(recipientData, updatedname, myChatRoom));
+    },
+
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ChatScreen);
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -107,7 +308,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    flexDirection: 'column',    
+    flexDirection: 'column',
   },
   createButton: {
     width: 35,
@@ -121,7 +322,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  topBarContainer: {    
+  topBarContainer: {
     width: '100%',
     flex: 1,
     flexDirection: 'row',
@@ -188,5 +389,5 @@ const styles = StyleSheet.create({
     width: 59,
     aspectRatio: 1,
     marginRight: 10
-  },  
+  },
 });

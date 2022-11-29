@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, Text, Touchable, Keyboard } from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  View,
+  TouchableOpacity,
+  Keyboard
+} from 'react-native';
+
 import ChatGroupMemberList from "../../components/Chat/ChatGroupMemberList";
 import EditGroupBottomView from "../../components/Chat/EditGroupBottomView";
 import EditGroupNameView from "../../components/Chat/EditGroupNameView";
@@ -13,63 +20,72 @@ export default class EditGroupChatScreen extends Component {
       keyboardOffset: 0,
     }
   }
-  
+
   componentDidMount() {
     this.keyboardDidShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        this._keyboardDidShow.bind(this),
+      'keyboardDidShow',
+      this._keyboardDidShow.bind(this),
     );
     this.keyboardDidHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        this._keyboardDidHide.bind(this),
+      'keyboardDidHide',
+      this._keyboardDidHide.bind(this),
     );
   }
 
   componentWillUnmount() {
-      this.keyboardDidShowListener.remove();
-      this.keyboardDidHideListener.remove();
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
   }
 
   _keyboardDidShow(event) {
     console.log('keyboardDidShow: ', event.endCoordinates.height)
-      this.setState({
-          keyboardOffset: event.endCoordinates.height,
-      })
+    this.setState({
+      keyboardOffset: event.endCoordinates.height,
+    })
   }
 
   _keyboardDidHide() {
     console.log('keyboardDidHide')
-      this.setState({
-          keyboardOffset: 0,
-      })
+    this.setState({
+      keyboardOffset: 0,
+    })
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.props.onClose} style={styles.transparent}/>
-        
-        <View style={[styles.bottomContainer, {bottom: this.state.keyboardOffset > 0 ? 200 : 107}]}>
-            
-            <ChatGroupMemberList style={styles.imageList}/>
-            <TouchableOpacity style={styles.close} onPress={this.onCloseBottomView}>
-                <Image style={styles.image} source={require("../../assets/icons/ic_close_blue.png")}/>                
-            </TouchableOpacity>
-            
-            {this.state.editName ? (<EditGroupNameView />) : (<EditGroupBottomView onEditName={this.onEditName}/>)}
+        <TouchableOpacity onPress={this.props.onClose} style={styles.transparent} />
+
+        <View style={[styles.bottomContainer, { bottom: this.state.keyboardOffset > 0 ? 200 : 107 }]}>
+
+          <ChatGroupMemberList style={styles.imageList} />
+          <TouchableOpacity style={styles.close} onPress={this.onCloseBottomView}>
+            <Image style={styles.image} source={require("../../assets/icons/ic_close_blue.png")} />
+          </TouchableOpacity>
+
+          {this.state.editName ?
+            (<EditGroupNameView
+              updatedname={(updatedname) => this.props.updatedname(updatedname)}
+              groupName={this.props.displayName} />) :
+            (<EditGroupBottomView
+              onDeleteGroup={() => this.props.onDeleteGroup()}
+              isIAmAdmin={this.props.isIAmAdmin}
+              addMember={()=>this.props.addMember()}
+              groupName={this.props.displayName}
+              onEditName={this.onEditName} />)}
         </View>
-        
-        
-    </View>
-    );    
+
+
+      </View>
+    );
   }
-  
+
   onEditName = () => {
-    this.setState({editName: true})
+    this.setState({ editName: true })
   }
 
   onCloseBottomView = () => {
-    {this.state.editName ? this.setState({editName: false}) : this.props.onClose()}
+    { this.state.editName ? this.setState({ editName: false }) : this.props.onClose() }
   }
 }
 
@@ -77,7 +93,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'rgba(0, 0, 0, 0)',    
+    backgroundColor: 'rgba(0, 0, 0, 0)',
     // justifyContent: 'space-between'
     // alignItems: 'center',
     // justifyContent: 'space-between'
@@ -125,7 +141,7 @@ const styles = StyleSheet.create({
   text: {
     color: 'black',
     fontSize: 15,
-    
+
   },
   image: {
     width: 11,
@@ -133,7 +149,7 @@ const styles = StyleSheet.create({
   },
   line: {
     backgroundColor: '#035BF8',
-    height: 0.5,    
+    height: 0.5,
     marginHorizontal: 42,
     marginTop: 8
   },

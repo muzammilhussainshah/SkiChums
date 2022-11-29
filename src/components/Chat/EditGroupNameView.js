@@ -2,25 +2,42 @@ import React, { Component } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Image, TextInput } from "react-native";
 
 export default class EditGroupNameView extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            nameValue: ''
+        }
+    }
+    componentDidMount() {
+        this.setState({ nameValue: this.props.groupName })
+    }
     render() {
+
         return (
             <View style={[this.props.style ?? {}, styles.container]}>
-                <TextInput style={styles.groupTitle} placeholder='Group Title' text={this.props.groupName}/>
-                    <View style={styles.line}/>
-                    <View style={styles.messageButtonContainer}>
-                        <TouchableOpacity onPress={this.props.onClearGroupName}>
-                            <Text style={styles.clear}>
-                                CLEAR
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.save} onPress={this.props.onSaveGroupName}>
-                            <Text style={styles.saveTxt}>
-                                Save
-                            </Text>
-                        </TouchableOpacity>
-                    </View>                    
+                <TextInput style={styles.groupTitle} placeholder='Group Title'
+                    onChangeText={(val) => {
+                        this.setState({ nameValue: val })
+                    }}
+                    value={this.state.nameValue}
+                />
+                <View style={styles.line} />
+                <View style={styles.messageButtonContainer}>
+                    <TouchableOpacity onPress={() => { this.setState({ nameValue: '' }) }}>
+                        <Text style={styles.clear}>
+                            CLEAR
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.save} onPress={() => this.props.updatedname(this.state.nameValue) }>
+                        <Text style={styles.saveTxt}>
+                            Save
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        )        
+        )
     }
 }
 
@@ -58,7 +75,7 @@ const styles = StyleSheet.create({
     saveTxt: {
         fontSize: 12,
         fontWeight: 'bold',
-        color: 'white',        
+        color: 'white',
     },
     clear: {
         color: '#252430',
@@ -67,7 +84,7 @@ const styles = StyleSheet.create({
     },
     line: {
         backgroundColor: '#035BF8',
-        height: 0.5,    
+        height: 0.5,
         marginHorizontal: 42,
         marginTop: 8
     },

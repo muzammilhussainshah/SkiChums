@@ -11,13 +11,20 @@ export default class SocialLoginBox extends Component {
             {
                 <View style={[this.props.style ?? [], styles.container]}>
                     <View style={styles.socialContainer}>
-                        <TouchableOpacity style={styles.meta}>
+                        <TouchableOpacity style={styles.meta}
+                        onPress={this.props.handleMetaLogin}
+                        
+                        >
                             <Image source={require('../../assets/Auth/ic_meta.png')}/>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.apple} onPress={this.props.handleAppleLogin}>
+                        <TouchableOpacity style={styles.apple} 
+                        onPress={this.props.handleAppleLogin}
+                        >
                             <Image source={require('../../assets/Auth/ic_apple.png')}/>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.google}>
+                        <TouchableOpacity style={styles.google}
+                        onPress={this.props.handleGoogleLogin}
+                        >
                             <Image source={require('../../assets/Auth/ic_google.png')}/>
                         </TouchableOpacity>
                     </View>

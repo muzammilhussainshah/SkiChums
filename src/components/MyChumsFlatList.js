@@ -1,131 +1,103 @@
 import React, { Component } from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import {
+  FlatList,
+  View,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native';
+
+import firestore from '@react-native-firebase/firestore';
+import { firebase } from '@react-native-firebase/auth'
+
 import ChumInfoView from './ChumInfoView';
 import MyChumAcceptContainer from './MyChumAcceptContainer';
 
-const DATA = [
-    {
-      id: '1',
-      name: 'Jane Doe',
-      distance: '3km',
-      status: 'REQUESTED'
-    },
-    {
-      id: '2',
-      name: 'Jack Sparrow',
-      distance: '5km',
-      status: 'REQUESTED'
-    },
-    {
-      id: '3',
-      name: 'Peter Parker',
-      distance: '15km',
-      status: 'CHUM'
-    },
-    {
-        id: '4',
-        name: 'Jane Doe',
-        distance: '3km',
-        status: 'CHUM'
-      },
-      {
-        id: '5',
-        name: 'Jack Sparrow',
-        distance: '5km',
-        status: 'CHUM'
-      },
-      {
-        id: '6',
-        name: 'Peter Parker',
-        distance: '15km',
-        status: 'CHUM'
-      },
-      {
-        id: '7',
-        name: 'Jane Doe',
-        distance: '3km',
-        status: 'CHUM'
-      },
-      {
-        id: '8',
-        name: 'Jack Sparrow',
-        distance: '5km',
-        status: 'CHUM'
-      },
-      {
-        id: '9',
-        name: 'Peter Parker',
-        distance: '15km',
-        status: 'CHUM'
-      },
-      {
-        id: '10',
-        name: 'Jane Doe',
-        distance: '3km',
-        status: 'CHUM'
-      },
-      {
-        id: '11',
-        name: 'Jack Sparrow',
-        distance: '5km',
-        status: 'CHUM'
-      },
-      {
-        id: '12',
-        name: 'Peter Parker',
-        distance: '15km',
-        status: 'CHUM'
-      }
-  ];
-
-const Item = ({ name, distance, status }) => (
-    <View style={styles.item}>
-        <ChumInfoView name={name} distance={distance}></ChumInfoView>
-        {status == 'REQUESTED' ? (
-            <MyChumAcceptContainer/>
-        ) : (null)}
-        
-    </View>
-  );
-
 export default class MyChumFlatList extends Component {
-    
-    render() {
-        const renderItem = ({ item }) => (
-            <Item name={item.name} distance={item.distance} status={item.status} />
-          );
 
-        return (
-            <>
-            {
-                <View style={this.props.style ?? styles.container}>
-                    <FlatList
-                    data={DATA}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}></FlatList>
-                </View>
-                
-            }
-            </>
-        )        
+  render() {
+
+    // FOR ACCEPT CHUM REQUEST
+    const handleAccept = (id) => {
+      const user = firebase.auth().currentUser
+      let userDoc = this?.props?.data?.filter((val) => val.uid == user.uid)
+      let selectedChams = userDoc[0].myChams.filter((val) => val.id == id)
+      if (selectedChams.length > 0) { selectedChams[0].status = 'CHUMS' }
+      let reciepentDoc = this?.props?.data?.filter((val) => val.uid == id)
+      let selectedReciepentRequestObj = reciepentDoc[0]?.chumpsRequest?.filter((val) => val.id === userDoc[0].uid)
+      if (selectedReciepentRequestObj && selectedReciepentRequestObj.length > 0) { selectedReciepentRequestObj[0].status = 'CHUMS' }
+      if (!reciepentDoc[0]?.myChams) reciepentDoc[0].myChams = []
+      reciepentDoc[0].myChams.push(selectedReciepentRequestObj[0])
+      firestore().collection('chums').doc(user.uid).update({ myChams: userDoc[0].myChams });
+      firestore().collection('chums').doc(id).update({ chumpsRequest: reciepentDoc[0].chumpsRequest });
+      firestore().collection('chums').doc(id).update({ myChams: reciepentDoc[0].myChams });
     }
+
+    // FOR DECLINE CHUM REQUEST
+    const handleDecline = (id) => {
+      const user = firebase.auth().currentUser
+      let userDoc = this?.props?.data?.filter((val) => val.uid == user.uid)
+      let removeChumIndex = userDoc[0].myChams.findIndex((val) => val.id == id)
+      if (removeChumIndex !== -1) userDoc[0].myChams.splice(removeChumIndex, 1)
+      let reciepentDoc = this?.props?.data?.filter((val) => val.uid == id)
+      let removeReciepentIndex = reciepentDoc[0]?.chumpsRequest?.findIndex((val) => val.id === userDoc[0].uid)
+      if (removeReciepentIndex !== -1) reciepentDoc[0]?.chumpsRequest.splice(removeReciepentIndex, 1)
+      firestore().collection('chums').doc(user.uid).update({ myChams: userDoc[0].myChams });
+      firestore().collection('chums').doc(id).update({ chumpsRequest: reciepentDoc[0].chumpsRequest });
+    }
+
+    const renderItem = ({ item }) => {
+      let data = this.props.data.filter((val) => val.uid == item.id)
+      return (
+        <TouchableOpacity
+          onPress={this.props.clickChum}
+          activeOpacity={.8}
+        >
+          <View style={styles.item}>
+            <ChumInfoView
+              name={data[0]?.displayName ? data[0]?.displayName : data[0]?.email.split('@')[0]}
+              profilePic={data[0]?.photoURL}
+              distance={data[0]?.distance} />
+            {item.status == 'REQUESTED' ? (
+              <MyChumAcceptContainer
+                accept={() => handleAccept(item.id)}
+                decline={() => handleDecline(item.id)}
+              />
+            ) : (null)}
+          </View>
+        </TouchableOpacity>
+      )
+
+    };
+    const user = firebase.auth().currentUser
+    return (
+      <>
+        {
+          <View style={this.props.style ?? styles.container}>
+            <FlatList
+              data={this?.props?.data?.filter((val) => val?.uid == user?.uid)[0]?.myChams}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}></FlatList>
+          </View>
+
+        }
+      </>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'row',    
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'green'
-    },
-    item: {
-        flex: 1,
-        flexDirection: 'row',
-        padding: 0,
-        marginVertical: 8,
-        marginHorizontal: 16,
-      }
-    
-
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'green'
+  },
+  item: {
+    flex: 1,
+    flexDirection: 'row',
+    padding: 0,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  }
 })

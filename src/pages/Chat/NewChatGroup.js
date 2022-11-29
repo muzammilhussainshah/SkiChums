@@ -1,79 +1,169 @@
-import React, { Component } from "react";
-import { StyleSheet, Image, View, TouchableOpacity, Text } from 'react-native';
+import React from "react";
+import { StyleSheet, Image, View, TouchableOpacity, Text, Alert } from 'react-native';
 import ChatFlatList from "../../components/Chat/ChatFlatList";
 import ChatGroupTagView from "../../components/Chat/ChatGroupTagView";
-import InviteChumButton from '../../components/InviteChumButton';
-import MyChumFlatList from "../../components/MyChumsFlatList";
-import SCSearchBar from "../../components/SCSearchBar";
-import TabButton from "../../components/TabButton";
-import CreateChatScreen from "./CreateChatScreen";
-
-export default class NewChatGroup extends Component {
+import { connect } from 'react-redux';
+import { createGroup, addGroupMember } from '../../store/action/action'
+import { firebase } from "@react-native-firebase/auth";
+class NewChatGroup extends React.Component {
   constructor(props) {
-    super(props);
-
+    super(props)
     this.state = {
-      
+      members: []
     }
-  }
-  
+  };
   render() {
+    const { params } = this?.props?.route
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logo}/>
+          <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logo} />
           <View style={styles.topContainer}>
             <View style={styles.topBarContainer}>
-                <TouchableOpacity style={styles.back} onPress={this.onBack}>
-                    <Image source={require("../../assets/Settings/blue-chevron-left.png")} style={styles.backIcon}/>
-                </TouchableOpacity>
-                <View style={styles.groupNameContainer}>
-                    <Text style={styles.groupNameTxt}>
-                      Val d'lsere
-                    </Text>
-                    <Text style={styles.groupMemberTxt}>
-                        Add participants
-                    </Text>
-                </View>
-                <TouchableOpacity style={styles.searchIcon}>
-                    <Image source={require("../../assets/icons/ic_blue_search.png")} style={styles.searchIcon}/>
-                </TouchableOpacity>
+              <TouchableOpacity style={styles.back} onPress={this.onBack}>
+                <Image source={require("../../assets/Settings/blue-chevron-left.png")} style={styles.backIcon} />
+              </TouchableOpacity>
+              <View style={styles.groupNameContainer}>
+                <Text style={styles.groupNameTxt}>
+                  Val d'lsere
+                </Text>
+                <Text style={styles.groupMemberTxt}>
+                  Add participants
+                </Text>
+              </View>
+              <TouchableOpacity style={styles.searchIcon}>
+                <Image source={require("../../assets/icons/ic_blue_search.png")} style={styles.searchIcon} />
+              </TouchableOpacity>
             </View>
-            
-            <View style={styles.topLine}/>
+
+            <View style={styles.topLine} />
           </View>
-          
+
         </View>
-        
-        <View style={styles.memberContainer}>
-            <ChatGroupTagView style={styles.tagView}/>
-            <TouchableOpacity style={styles.createButton} onPress={this.onCreateChat}>
-                <Image style={styles.createButton} source={require("../../assets/icons/ic_blue_circle_arrow.png")}/>                
-            </TouchableOpacity>
-        </View>
-        <View style={styles.blueLine}/>
-        <ChatFlatList style={styles.list} onClick={this.onClickChatCell}/>
-    </View>
-    );    
+        {!params?.singleMsg &&
+          <>
+            <View style={styles.memberContainer}>
+              <ChatGroupTagView
+                removeMember={this.addMember}
+                data={this.state.members}
+                style={styles.tagView} />
+              <TouchableOpacity style={styles.createButton} onPress={this.onCreateChat}>
+                <Image style={styles.createButton} source={require("../../assets/icons/ic_blue_circle_arrow.png")} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.blueLine} />
+          </>
+        }
+        <ChatFlatList
+          navigation={this.props.navigation}
+          style={styles.list}
+
+          forNewGourp={!params?.singleMsg ? this.addMember
+            : null}
+          data={this?.props?.mychums}
+        />
+      </View>
+    );
   }
 
-
-  onClickChatCell = () => {
-    console.log('clicked chat cell')
-
+  addMember = (member, addMember) => {
+    let memberIndex = this.state.members.findIndex((stMember) => member.uid == stMember.uid)
+    if (memberIndex !== -1) {
+      // if (!addMember)
+      this.setState({ member: this.state.members.splice(memberIndex, 1) })
+    }
+    else {
+      //  if (addMember)
+      this.setState({ member: this.state.members.push(member) })
+    }
   }
 
   onBack = () => {
     this.props.navigation.pop()
   }
 
-  onCreateChat = () => {
-    this.props.navigation.navigate('ChatScreen', {
-      isPrivate: false
-    })
+  onCreateChat = async () => {
+    console.log(this.props, 'addMemberaddMember')
+    let addMember = this?.props?.route?.params?.addMember
+    if (addMember) {
+      let myChatRoom = this?.props?.route?.params?.myChatRoom
+      let recipientData = this?.props?.route?.params?.recipientData
+      this.props.addGroupMember(recipientData, this?.state?.members, myChatRoom)
+      // this.props.navigation.navigate('ChatScreen', {
+      this.props.navigation.pop(2)
+
+    }
+    else {
+      let members = this.state.members
+      const user = firebase.auth().currentUser
+      function create_UUID() {
+        var dt = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+          var r = (dt + Math.random() * 16) % 16 | 0;
+          dt = Math.floor(dt / 16);
+          return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+        return uuid;
+      }
+
+      let membersIds = members?.map(({ uid }) => uid)
+      if (membersIds?.length > 0) membersIds?.push(user.uid)
+      let groupId = create_UUID()
+      console.log(groupId, ' self?.crypto?.randomUUID()')
+      let groupObj = {
+        creatAt: new Date(),
+        createBy: user.uid,
+        id: groupId,
+        members: membersIds,
+        // modifiedAt
+        // name
+        // recientMessage
+        // readBy
+        // sentAt
+        // sentBy
+        type: 1,
+        // users
+      }
+      let invalidObj
+      for (var key in groupObj) {
+        if (groupObj[key] === "" || groupObj[key] === undefined || groupObj[key] === null) {
+          Alert.alert(key + ' is empty')
+          invalidObj = true
+        }
+      }
+      if (invalidObj == true) {
+      } else {
+        // console.log(groupObj, groupId,'groupObj, groupIdgroupObj, groupId')
+        await this.props.createGroup(groupObj, groupId)
+        this.props.navigation.navigate('ChatScreen', {
+          isPrivate: false, members: this.state.members,
+          recipientData: groupObj
+        })
+      }
+    }
   }
 }
 
+
+function mapStateToProps(states) {
+  return ({
+    mychums: states.root.mychums
+  })
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    createGroup: (members, groupId) => {
+      dispatch(createGroup(members, groupId));
+    },
+    addGroupMember: (recipientData, updatedname, myChatRoom) => {
+      dispatch(addGroupMember(recipientData, updatedname, myChatRoom));
+    }
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewChatGroup);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -81,7 +171,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    flexDirection: 'column',    
+    flexDirection: 'column',
   },
   tagView: {
     flex: 1
@@ -98,7 +188,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  topBarContainer: {    
+  topBarContainer: {
     width: '100%',
     flex: 1,
     flexDirection: 'row',
@@ -180,3 +270,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 25
   }
 });
+
+

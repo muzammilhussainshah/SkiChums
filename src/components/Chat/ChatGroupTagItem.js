@@ -1,22 +1,32 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
+import {
+    View,
+    StyleSheet,
+    TouchableOpacity,
+    Image
+} from "react-native";
+
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 export default class ChatGroupTagItem extends Component {
     render() {
-        let name = this.props.name;
-        let last_msg = this.props.last_msg;
-        let time = this.props.time;
-        let id = this.props.id;
+        let profilePic = this?.props?.profilePic;
         return (
-                <View style={styles.container}>
-                    <View style={styles.profileImage}>
-                    {id == 0 ? (<Image source={require('../../assets/icons/sample-chum-profile2.png')} style={styles.profileImage}/>) : id == 1 ? (<Image source={require('../../assets/icons/sample-chum-profile.png')} style={styles.profileImage}/>) : (<Image source={require('../../assets/profile/profile_sample_me.jpeg')} style={styles.profileImage}/>)}
-                    </View>
-                    <TouchableOpacity style={styles.close}>
-                        <Image source={require('../../assets/icons/ic_close_black.png')} style={styles.closeImage}/>
-                    </TouchableOpacity>
+            <View style={styles.container}>
+                <View style={styles.profileImage}>
+                    {profilePic ?
+                        <Image source={{ uri: profilePic }} style={styles.profileImage} />
+                        :
+                        <FontAwesome name="user-circle-o" size={35} color={'gray'} />
+                    }
                 </View>
-        )        
+                <TouchableOpacity
+                    onPress={() => alert()}
+                    style={styles.close}>
+                    <Image source={require('../../assets/icons/ic_close_black.png')} style={styles.closeImage} />
+                </TouchableOpacity>
+            </View>
+        )
     }
 }
 
@@ -48,6 +58,6 @@ const styles = StyleSheet.create({
         width: 8,
         height: 8
     }
-    
+
 
 })

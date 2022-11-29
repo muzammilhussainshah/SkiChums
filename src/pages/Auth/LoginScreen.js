@@ -1,43 +1,145 @@
-import React, { Component, useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, Touchable } from 'react-native';
+import React, { Component } from "react";
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Alert
+} from 'react-native';
+
+import auth from '@react-native-firebase/auth'
+import firestore from '@react-native-firebase/firestore';
+import messaging from '@react-native-firebase/messaging';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import { appleAuth } from "@invertase/react-native-apple-authentication";
+
 import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
-import auth from '@react-native-firebase/auth'
-// import appleAuth from "@invertase/react-native-apple-authentication";
 
+GoogleSignin.configure({ webClientId: '1018017946183-jn3phjtqbtg4cularvofhf6k9337mk7g.apps.googleusercontent.com', });
+// META LOGIN
+export async function handleMetaLogin() {
+    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+    if (result.isCancelled) throw 'User cancelled the login process';
+    // Once signed in, get the users AccesToken
+    const data = await AccessToken.getCurrentAccessToken();
+    if (!data) throw 'Something went wrong obtaining access token';
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+    // Sign-in the user with the credential
+    let logInUser = await auth().signInWithCredential(facebookCredential);
+    if (Object.keys(logInUser).length > 0) {
+        const { additionalUserInfo } = logInUser
+        let fcmToken = await messaging().getToken()
+        if (additionalUserInfo.isNewUser === true) {
+            let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
+            firestore()
+                .collection('chums')
+                .doc(userDatClone.uid)
+                .set(userDatClone)
+                .then(() => {
+                    firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+                });
+        } else {
+            firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+        }
+    }
+}
+
+// GOOGLE LOGIN
+export async function handleGoogleLogin() {
+    const { idToken } = await GoogleSignin.signIn()
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken)
+    try {
+        let logInUser = await auth().signInWithCredential(googleCredential)
+        if (Object.keys(logInUser).length > 0) {
+            const { additionalUserInfo } = logInUser
+            let fcmToken = await messaging().getToken()
+            if (additionalUserInfo.isNewUser === true) {
+                let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
+                firestore()
+                    .collection('chums')
+                    .doc(userDatClone.uid)
+                    .set(userDatClone)
+                    .then(() => {
+                        firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+                    });
+            } else {
+                firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+            }
+        }
+    } catch (error) {
+        Alert.alert(error.message);
+
+    }
+}
+
+// APPLE LOGIN
+export async function handleAppleLogin() {
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
+
+    const { identityToken, nonce } = appleAuthRequestResponse;
+    const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce,);
+
+    // Sign the user in with the credential
+    const logInUser = await auth().signInWithCredential(appleCredential);
+    if (Object.keys(logInUser).length > 0) {
+        const { additionalUserInfo } = logInUser
+        let fcmToken = await messaging().getToken()
+        if (additionalUserInfo.isNewUser === true) {
+            let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
+            firestore()
+                .collection('chums')
+                .doc(userDatClone.uid)
+                .set(userDatClone)
+                .then(() => {
+                    firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+                });
+        } else {
+            firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+        }
+    }
+}
 export default class LoginScreen extends Component {
-   
+
     constructor(props) {
         super(props);
-    
-        this.state = {
-          email: '',
-          password: '',
-          passwordSecure: true,
-          isLoading: false,
-          errorMessage: ''
-        }
-      }
 
+        this.state = {
+            email: '',
+            password: '',
+            passwordSecure: true,
+            isLoading: false,
+            errorMessage: ''
+        }
+    }
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.backgroundContainer}>
-                    <Image source={require("../../assets/Auth/auth-bg.png")} style={styles.backgroundImage}/>
+                    <Image source={require("../../assets/Auth/auth-bg.png")} style={styles.backgroundImage} />
                 </View>
-                
+
                 <View style={styles.logo}>
-                <Image source={require("../../assets/icons/white-logo.png")}/>
+                    <Image source={require("../../assets/icons/white-logo.png")} />
                 </View>
-                
+
                 <Text style={styles.registerTxt}>
                     Login
                 </Text>
 
-                <SocialLoginBox style={styles.socialBox} handleAppleLogin={this.handleAppleLogin}/>
-                <OrLineView style={styles.orline}/>
+                <SocialLoginBox style={styles.socialBox}
+                    handleGoogleLogin={handleGoogleLogin}
+                    handleAppleLogin={handleAppleLogin}
+                    handleMetaLogin={handleMetaLogin}
+                />
+                <OrLineView style={styles.orline} />
 
                 <View style={styles.floatingTxt}>
                     <AuthFloatingInput
@@ -49,21 +151,21 @@ export default class LoginScreen extends Component {
                         onBlur={this.onBlur}
                     />
                 </View>
-                
+
                 <View style={styles.floatingTxt}>
                     <AuthFloatingInput
                         placeholder={"Password"}
                         placeholderTextColor={'#ffffff88'}
-                        secureTextEntry={this.state.passwordSecure} 
+                        secureTextEntry={this.state.passwordSecure}
                         defaultValue={this.state.password}
                         onChangeText={this.handlePasswordChange}
                         onFocus={this.onFocus}
                         onBlur={this.onBlur}
                     />
                     <TouchableOpacity style={styles.eye}>
-                        <Image source={require("../../assets/Auth/ic_eye_slashed.png")}/>
+                        <Image source={require("../../assets/Auth/ic_eye_slashed.png")} />
                     </TouchableOpacity>
-                    
+
                 </View>
 
                 <View style={styles.button}>
@@ -90,11 +192,11 @@ export default class LoginScreen extends Component {
                         </Text>
                     </TouchableOpacity>
                 </View>
-                
-         </View>
-          );  
+
+            </View>
+        );
     }
-    
+
     handleEmailChange = (text) => {
         console.log('email change: ', text)
         this.state.email = text
@@ -119,7 +221,7 @@ export default class LoginScreen extends Component {
     onRegister = () => {
         console.log('onclose')
         this.props.navigation.pop()
-        
+
     }
 
     onLogin = () => { // email login
@@ -131,62 +233,75 @@ export default class LoginScreen extends Component {
         } else if (this.state.email === '') {
             Alert.alert('Please enter your email.')
         } else {
-            this.setState({
-                isLoading: true,
-            })
+            this.setState({ isLoading: true, })
 
             auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then(() => {
-                console.log('User sign in successfully!')
-                this.setState({
-                    isLoading: false,
-                    email: '', 
-                    password: '',
-                    confirmPassword: ''
+                .then(async (logInUser) => {
+                    if (Object.keys(logInUser).length > 0) {
+                        const { additionalUserInfo } = logInUser
+
+                        let fcmToken = await messaging().getToken()
+                        let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
+                        if (additionalUserInfo.isNewUser === true) {
+                            firestore()
+                                .collection('chums')
+                                .doc(userDatClone.uid)
+                                .set(userDatClone)
+                                .then(() => {
+                                    firestore()
+                                        .collection('chums')
+                                        .doc(logInUser.user._user.uid)
+                                        .update({
+                                            fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                        });
+                                });
+                        } else {
+                            firestore()
+                                .collection('chums')
+                                .doc(userDatClone.uid)
+                                .update({
+                                    fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                });
+                        }
+                    }
+                    this.setState({
+                        isLoading: false,
+                        email: '',
+                        password: '',
+                        confirmPassword: ''
+                    })
+                    console.log('User sign in successfully!',)
                 })
-            })
-            .catch(error => {
-                Alert.alert(error.message);
-            });
+                .catch(error => {
+                    Alert.alert(error.message);
+                });
         }
     }
-
-    // apple
-    handleAppleLogin = async() => {
-        console.log('apple login')
-        // const appleAuthRequestResponse = await appleAuth.performRequest({
-        //     requestedOperation: appleAuth.Operationn.LOGIN,
-        //     requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-        // });
-
-        // if (!appleAuthRequestResponse.identityToken) {
-        //     throw new Error('Apple Sign-In failed - no identify token returned');
-        // }
-
-        // const { identityToken, nonce } = appleAuthRequestResponse;
-        // const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
-
-        // return auth().signInWithCredential(appleCredential);
+    checkToken = async () => {
+        const fcmToken = await messaging().getToken();
+        if (fcmToken) {
+            console.log(fcmToken);
+        }
     }
 }
 
+
+
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      flexDirection: 'column',
+        flex: 1,
+        flexDirection: 'column',
     },
     logo: {
         width: 59,
         height: 59,
-        // position: 'absolute',
         left: 28,
         top: 44
-    }, 
+    },
     terms: {
         marginTop: 15,
         marginHorizontal: 42,
         alignItems: 'center',
-        // justifyContent: 'center',
         flexDirection: 'row'
     },
     buttonText: {
@@ -202,7 +317,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
-    },  
+    },
     already: {
         color: '#B9B9B9',
         fontSize: 13
@@ -215,38 +330,32 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#D9D9D9',
-        // flex: 1,
         marginTop: 20,
         height: 36,
         borderRadius: 18,
         marginHorizontal: 42,
         justifyContent: 'center'
-    },  
+    },
     forgot: {
         color: 'white',
         fontSize: 13,
         marginTop: 17,
         textAlign: 'center'
-    },   
+    },
     eye: {
         position: 'absolute',
         right: 44,
         width: 18,
         height: 18,
         bottom: 7,
-    },  
-    floatingTxt: {
-        // height: 73,
-        justifyContent: 'center'
-        // flex: 1,
-        // flexDirection: 'row'
     },
+    floatingTxt: { justifyContent: 'center' },
     registerTxt: {
         color: 'white',
         fontSize: 24,
         textAlign: 'center',
         marginTop: 123
-    }, 
+    },
     socialBox: {
         width: '100%',
         height: 40,
@@ -264,7 +373,7 @@ const styles = StyleSheet.create({
         top: 0,
         flexDirection: "row",
         alignItems: "stretch"
-    },  
+    },
     backgroundImage: {
         flex: 1,
         width: null,
@@ -285,3 +394,5 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     }
 });
+
+

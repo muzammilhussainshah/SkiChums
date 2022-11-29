@@ -46,13 +46,11 @@ export function sendMessageToDb(docId, msgObj, messageType) {
 }
 export function getMessagesFromDb(docId,) {
     return dispatch => {
-        console.log(docId, 'docIddocIddocIddocId')
         firestore().collection(`message/${docId}/messages`)
             .orderBy('sendAt', 'desc')
             .limit(15).onSnapshot((querySnapshot) => {
                 let messages = []
                 querySnapshot.forEach(documentSnapshot => {
-                    console.log(documentSnapshot.data(), 'documentSnapshot')
                     messages.push(documentSnapshot.data())
                 });
 

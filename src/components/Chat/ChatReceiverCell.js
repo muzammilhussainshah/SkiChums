@@ -49,9 +49,11 @@ const styles = StyleSheet.create({
     },
     name: {
         width: '100%',
-        paddingLeft: 8,
-        paddingTop: 5,
-        textAlign: 'left',
+        margin:5,
+        textAlign:'center',
+        // paddingLeft: 8,
+        // paddingTop: 5,
+        // textAlign: 'left',
         fontWeight: "bold",
         fontSize: 10,
         color: 'black'

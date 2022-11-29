@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1018017946183-jc33fkjj71tsa5f94vqbu61kbq5ml4e3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.skichums",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "1018017946183-jn3phjtqbtg4cularvofhf6k9337mk7g.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -31,10 +39,11 @@
               "client_type": 3
             },
             {
-              "client_id": "1018017946183-2427j2vjprc6m7kgo40b22s72l1vvogi.apps.googleusercontent.com",
+              "client_id": "1018017946183-09kadh5ievfa59490d0eftnosv3e9qus.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.tukan.skichums"
+                "bundle_id": "org.tukan.skichums",
+                "app_store_id": "123456789"
               }
             }
           ]

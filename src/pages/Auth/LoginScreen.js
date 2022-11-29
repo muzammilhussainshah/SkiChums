@@ -19,8 +19,7 @@ import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
 
-GoogleSignin.configure({ webClientId: '1018017946183-2427j2vjprc6m7kgo40b22s72l1vvogi.apps.googleusercontent.com', });
-
+GoogleSignin.configure({ webClientId: '1018017946183-jn3phjtqbtg4cularvofhf6k9337mk7g.apps.googleusercontent.com', });
 // META LOGIN
 export async function handleMetaLogin() {
     const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);

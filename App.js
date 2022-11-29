@@ -9,6 +9,8 @@
  import React, { useState, useEffect } from 'react';
  import { SafeAreaProvider } from 'react-native-safe-area-context';
  import auth from '@react-native-firebase/auth'
+ import messaging from '@react-native-firebase/messaging';
+
 //  import auth from '@react-native-firebase/auth'
  import { GoogleSignin } from '@react-native-google-signin/google-signin';
 

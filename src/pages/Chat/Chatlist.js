@@ -32,14 +32,19 @@ class Chatlist extends Component {
     this.props.getChatroom(this.props.mychums)
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
+    let sortedData = nextProps?.myChatRoom.concat(nextProps?.myGroupChatRoom)
 
-    this.setState({ chatroom: nextProps.myChatRoom, flag: !this.state.flag })
+    // sortedData.sort((date1, date2) => date1.sendAt - date2.sendAt);
+    sortedData.sort(({ sendAt: a }, { sendAt: b }) => a < b ? 1 : a > b ? -1 : 0)
+
+    console.log(sortedData, '[...th11111tRoom]', nextProps?.myChatRoom.concat(nextProps?.myGroupChatRoom))
+    this.setState({ chatroom: sortedData, flag: !this.state.flag })
     // if (nextProps.myChatRoom !== this.props.myChatRoom) {
     // }
   }
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.container} >
         <View style={styles.headerContainer}>
           <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logo} />
           <SCSearchBar />
@@ -61,14 +66,15 @@ class Chatlist extends Component {
             data={this.state.chatroom}
             navigation={this?.props?.navigation}
             style={styles.list} onClick={this.onClickChatCell}></ChatFlatList>) :
-          (<MyChumFlatList style={styles.list}></MyChumFlatList>)}
+          (<MyChumFlatList style={styles.list}></MyChumFlatList>)
+        }
 
-        <View style={styles.messageButton}>
+        < View style={styles.messageButton} >
           <TouchableOpacity onPress={this.onSetupChat}>
             <Image source={require("../../assets/icons/ic_chat.png")} resizeMode="cover" style={styles.logo} />
           </TouchableOpacity>
 
-        </View>
+        </View >
 
         <InviteChumButton style={styles.inviteButton} />
 
@@ -78,7 +84,7 @@ class Chatlist extends Component {
             onNewGroup={this.onNewGroup}
             onClose={this.onClose} />
         </Modal>
-      </View>
+      </View >
     );
   }
 
@@ -112,7 +118,8 @@ class Chatlist extends Component {
 function mapStateToProps(states) {
   return ({
     mychums: states.root.mychums,
-    myChatRoom: states.root.myChatRoom
+    myChatRoom: states.root.myChatRoom,
+    myGroupChatRoom: states.root.myGroupChatRoom
 
   })
 }

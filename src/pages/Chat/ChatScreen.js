@@ -213,7 +213,9 @@ class ChatScreen extends Component {
         let msgObj = {
           messageText: this.state.message,
           sendBy: user.uid,
-          sendAt: new Date().valueOf()
+          sendAt: new Date().valueOf(),
+          // recieveAt: recipientData.uid
+
         }
         let docId;
         if (recipientData.type === 1) {
@@ -221,6 +223,8 @@ class ChatScreen extends Component {
           docId = recipientData.id
         } else {
           messageType = 'single'
+          msgObj.recieveAt = recipientData?.uid
+
           if (user.uid > recipientData.uid) docId = recipientData.uid + user.uid
           else docId = user.uid + recipientData.uid
         }
@@ -260,7 +264,8 @@ class ChatScreen extends Component {
   }
 
   onBack = () => {
-    this.props.navigation.pop(2)
+    this.props.navigation.pop( )
+
   }
 
   onSettings = () => {

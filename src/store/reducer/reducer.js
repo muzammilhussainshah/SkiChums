@@ -4,6 +4,7 @@ const INITIAL_STATE = {
     chums: [],
     mychums: [],
     myChatRoom: [],
+    myGroupChatRoom: [],
     messages: [],
 }
 
@@ -25,6 +26,11 @@ export default (state = INITIAL_STATE, action) => {
             return ({
                 ...state,
                 myChatRoom: action.payload
+            })
+        case ActionTypes.MYGROUPCHATROOM:
+            return ({
+                ...state,
+                myGroupChatRoom: action.payload
             })
         case ActionTypes.MESSAGES:
             return ({

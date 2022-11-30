@@ -221,6 +221,7 @@ export default class RegisterScreen extends Component {
                                         .doc(logInUser.user._user.uid)
                                         .update({
                                             fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                            isOnline: true,
                                         });
                                 });
                         } else {
@@ -229,6 +230,7 @@ export default class RegisterScreen extends Component {
                                 .doc(userDatClone.uid)
                                 .update({
                                     fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                    isOnline: true,
                                 });
 
                         }

@@ -83,8 +83,6 @@ export function getChatroom(mychums) {
                         if (result?.length > 0) chatroomArray.push({ ...documentSnapshot.data(), ...result[0] })
                         else chatroomArray.push({ ...documentSnapshot.data() })
                     });
-                    // console.log(chatroomArray, 'chatroomArraychatroomArraychatroomArray')
-                    // chatroomArray?.sort((a, b) => b?.sendAt - a?.sendAt)
                     dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
 
                 }
@@ -102,8 +100,6 @@ export function getChatroom(mychums) {
                 querySnapshot.forEach(documentSnapshot => {
                     groupchatroomArray.push(documentSnapshot.data())
                 });
-                // console.log(groupchatroomArray, 'chatroomArraychatroomArraychatroomArray')
-                // groupchatroomArray?.sort((a, b) => b?.sendAt - a?.sendAt)
                 dispatch({ type: ActionTypes.MYGROUPCHATROOM, payload: groupchatroomArray })
             });
     }

@@ -38,6 +38,9 @@ class Chatlist extends Component {
     if (nextProps.myChatRoom !== this.props.myChatRoom) {
     }
   }
+  componentWillUnmount() {
+    this.setState({ chatroom: [], })
+  }
   render() {
     return (
       <View style={styles.container} >

@@ -18,14 +18,12 @@ function App() {
   const [appState, setappState] = useState('');
 
   function onAuthStateChanged(user) {
-    console.log(user, 'userrruserrruserrruserrr')
     if (user?._user) {
       firestore()
         .collection('chums')
         .doc(user._user.uid)
         .update({ isOnline: true });
     }
-    // setappState('active')
     setUser(user);
     if (initializing) setInitializing(false);
   }

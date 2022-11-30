@@ -52,7 +52,7 @@ class ChatFlatList extends Component {
 
       let name;
       if (item?.type == 1 && !item.displayName) {
-      name='Group Chat'
+        name = 'Group Chat'
       }
       else if (item.displayName) name = item.displayName
       else name = item?.email?.split('@')[0]
@@ -68,7 +68,7 @@ class ChatFlatList extends Component {
             name={name}
             type={item?.type}
             last_msg={item?.messageText ? item?.messageText : ''}
-            time={item?.sendAt ? new Date(item?.sendAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) :item?.creatAt?  new Date(item?.creatAt?.toDate()).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }):''}
+            time={item?.sendAt ? new Date(item?.sendAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : item?.creatAt ? new Date(item?.creatAt?.toDate()).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : ''}
             id={item.uid} />
 
         </TouchableWithoutFeedback >

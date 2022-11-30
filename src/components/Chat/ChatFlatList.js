@@ -52,22 +52,7 @@ class ChatFlatList extends Component {
 
       let name;
       if (item?.type == 1 && !item.displayName) {
-        item?.members?.map((item, index) => {
-          if (index < 3) {
-            let userData = this.props.mychums.filter((val) => val.uid == item)
-            if (userData?.length > 0) {
-              if (typeof name !== 'undefined') {
-                name += userData[0].displayName ? userData[0].displayName + ', ' : userData[0].email.split("@")[0] + ', '
-              }
-              else {
-                name = userData[0].displayName ? userData[0].displayName + ', ' : userData[0].email.split("@")[0] + ', '
-              }
-            }
-          } else if (index === 3) {
-            name += '...'
-
-          }
-        })
+      name='Group Chat'
       }
       else if (item.displayName) name = item.displayName
       else name = item?.email?.split('@')[0]

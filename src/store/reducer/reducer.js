@@ -11,7 +11,13 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case ActionTypes.RESETREDUCER:
-            return INITIAL_STATE
+            return ({
+                chums: [],
+                mychums: [],
+                myChatRoom: [],
+                myGroupChatRoom: [],
+                messages: [],
+            })
         case ActionTypes.CHUMS:
             return ({
                 ...state,

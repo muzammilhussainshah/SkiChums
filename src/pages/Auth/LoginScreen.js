@@ -33,7 +33,7 @@ export async function handleMetaLogin() {
     let logInUser = await auth().signInWithCredential(facebookCredential);
     if (Object.keys(logInUser).length > 0) {
         const { additionalUserInfo } = logInUser
-        let fcmToken = await messaging().getToken()
+        // let fcmToken = await messaging().getToken()
         if (additionalUserInfo.isNewUser === true) {
             let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
             firestore()
@@ -41,10 +41,10 @@ export async function handleMetaLogin() {
                 .doc(userDatClone.uid)
                 .set(userDatClone)
                 .then(() => {
-                    firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+                    // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
                 });
         } else {
-            firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+            // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
         }
     }
 }
@@ -57,7 +57,7 @@ export async function handleGoogleLogin() {
         let logInUser = await auth().signInWithCredential(googleCredential)
         if (Object.keys(logInUser).length > 0) {
             const { additionalUserInfo } = logInUser
-            let fcmToken = await messaging().getToken()
+            // let fcmToken = await messaging().getToken()
             if (additionalUserInfo.isNewUser === true) {
                 let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
                 firestore()
@@ -65,10 +65,10 @@ export async function handleGoogleLogin() {
                     .doc(userDatClone.uid)
                     .set(userDatClone)
                     .then(() => {
-                        firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+                        // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
                     });
             } else {
-                firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+                // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
             }
         }
     } catch (error) {
@@ -91,7 +91,7 @@ export async function handleAppleLogin() {
     const logInUser = await auth().signInWithCredential(appleCredential);
     if (Object.keys(logInUser).length > 0) {
         const { additionalUserInfo } = logInUser
-        let fcmToken = await messaging().getToken()
+        // let fcmToken = await messaging().getToken()
         if (additionalUserInfo.isNewUser === true) {
             let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
             firestore()
@@ -99,10 +99,10 @@ export async function handleAppleLogin() {
                 .doc(userDatClone.uid)
                 .set(userDatClone)
                 .then(() => {
-                    firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+                    // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
                 });
         } else {
-            firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+            // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
         }
     }
 }
@@ -240,7 +240,7 @@ export default class LoginScreen extends Component {
                     if (Object.keys(logInUser).length > 0) {
                         const { additionalUserInfo } = logInUser
 
-                        let fcmToken = await messaging().getToken()
+                        // let fcmToken = await messaging().getToken()
                         let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
                         if (additionalUserInfo.isNewUser === true) {
                             firestore()
@@ -248,20 +248,20 @@ export default class LoginScreen extends Component {
                                 .doc(userDatClone.uid)
                                 .set(userDatClone)
                                 .then(() => {
-                                    firestore()
-                                        .collection('chums')
-                                        .doc(logInUser.user._user.uid)
-                                        .update({
-                                            fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                                        });
+                                    // firestore()
+                                    //     .collection('chums')
+                                    //     .doc(logInUser.user._user.uid)
+                                    //     .update({
+                                    //         fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                    //     });
                                 });
                         } else {
-                            firestore()
-                                .collection('chums')
-                                .doc(userDatClone.uid)
-                                .update({
-                                    fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                                });
+                            // firestore()
+                            //     .collection('chums')
+                            //     .doc(userDatClone.uid)
+                            //     .update({
+                            //         fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                            //     });
                         }
                     }
                     this.setState({
@@ -278,10 +278,10 @@ export default class LoginScreen extends Component {
         }
     }
     checkToken = async () => {
-        const fcmToken = await messaging().getToken();
-        if (fcmToken) {
-            console.log(fcmToken);
-        }
+        // const fcmToken = await messaging().getToken();
+        // if (fcmToken) {
+        //     console.log(fcmToken);
+        // }
     }
 }
 

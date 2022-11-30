@@ -53,20 +53,20 @@ class SettingsRoundContainer extends Component {
         const user = firebase.auth().currentUser
         auth().signOut()
             .then(async () => {
-
-                let fcmToken = await messaging().getToken()
                 this.props.resetReducer()
-                if (user.uid && fcmToken) {
 
-                    await
-                        firestore()
-                            .collection('chums')
-                            .doc(user.uid)
-                            .update({
-                                fcmToken: firestore.FieldValue.arrayRemove(fcmToken),
-                                isOnline: false
-                            });
-                }
+                // let fcmToken = await messaging().getToken()
+                // if (user.uid && fcmToken) {
+
+                //     await
+                //         firestore()
+                //             .collection('chums')
+                //             .doc(user.uid)
+                //             .update({
+                //                 fcmToken: firestore.FieldValue.arrayRemove(fcmToken),
+                //                 isOnline: false
+                //             });
+                // }
 
             });
 

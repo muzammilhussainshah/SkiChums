@@ -208,7 +208,7 @@ export default class RegisterScreen extends Component {
                 .then(async (logInUser) => {
                     if (Object.keys(logInUser).length > 0) {
                         const { additionalUserInfo } = logInUser
-                        let fcmToken = await messaging().getToken()
+                        // let fcmToken = await messaging().getToken()
                         let userDatClone = JSON.parse(JSON.stringify(logInUser.user._user));
                         if (additionalUserInfo.isNewUser === true) {
                             firestore()
@@ -220,7 +220,7 @@ export default class RegisterScreen extends Component {
                                         .collection('chums')
                                         .doc(logInUser.user._user.uid)
                                         .update({
-                                            fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                            // fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
                                             isOnline: true,
                                         });
                                 });
@@ -229,7 +229,7 @@ export default class RegisterScreen extends Component {
                                 .collection('chums')
                                 .doc(userDatClone.uid)
                                 .update({
-                                    fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                    // fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
                                     isOnline: true,
                                 });
 

@@ -56,17 +56,19 @@ class SettingsRoundContainer extends Component {
                 this.props.resetReducer()
 
                 // let fcmToken = await messaging().getToken()
-                // if (user.uid && fcmToken) {
+                if (user.uid
+                    //  && fcmToken
+                     ) {
 
-                //     await
-                //         firestore()
-                //             .collection('chums')
-                //             .doc(user.uid)
-                //             .update({
-                //                 fcmToken: firestore.FieldValue.arrayRemove(fcmToken),
-                //                 isOnline: false
-                //             });
-                // }
+                    await
+                        firestore()
+                            .collection('chums')
+                            .doc(user.uid)
+                            .update({
+                                // fcmToken: firestore.FieldValue.arrayRemove(fcmToken),
+                                isOnline: false
+                            });
+                }
 
             });
 

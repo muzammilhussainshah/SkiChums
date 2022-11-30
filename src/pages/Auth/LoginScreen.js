@@ -65,10 +65,17 @@ export async function handleGoogleLogin() {
                     .doc(userDatClone.uid)
                     .set(userDatClone)
                     .then(() => {
-                        // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+                        firestore().collection('chums').doc(logInUser.user._user.uid).update({
+                            //  fcmToken: firestore.FieldValue.arrayUnion(fcmToken), 
+                            isOnline: true
+
+                        });
                     });
             } else {
-                // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+                firestore().collection('chums').doc(logInUser.user._user.uid).update({
+                    // fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                    isOnline: true
+                });
             }
         }
     } catch (error) {
@@ -99,10 +106,17 @@ export async function handleAppleLogin() {
                 .doc(userDatClone.uid)
                 .set(userDatClone)
                 .then(() => {
-                    // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+                    firestore().collection('chums').doc(logInUser.user._user.uid).update({
+                        isOnline: true
+                        // fcmToken: firestore.FieldValue.arrayUnion(fcmToken), 
+                    });
                 });
         } else {
-            // firestore().collection('chums').doc(logInUser.user._user.uid).update({ fcmToken: firestore.FieldValue.arrayUnion(fcmToken), });
+            firestore().collection('chums').doc(logInUser.user._user.uid).update({
+                //  fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                isOnline: true
+
+            });
         }
     }
 }
@@ -248,20 +262,22 @@ export default class LoginScreen extends Component {
                                 .doc(userDatClone.uid)
                                 .set(userDatClone)
                                 .then(() => {
-                                    // firestore()
-                                    //     .collection('chums')
-                                    //     .doc(logInUser.user._user.uid)
-                                    //     .update({
-                                    //         fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                                    //     });
+                                    firestore()
+                                        .collection('chums')
+                                        .doc(logInUser.user._user.uid)
+                                        .update({
+                                            isOnline: true
+                                            // fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                        });
                                 });
                         } else {
-                            // firestore()
-                            //     .collection('chums')
-                            //     .doc(userDatClone.uid)
-                            //     .update({
-                            //         fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
-                            //     });
+                            firestore()
+                                .collection('chums')
+                                .doc(userDatClone.uid)
+                                .update({
+                                    isOnline: true
+                                    // fcmToken: firestore.FieldValue.arrayUnion(fcmToken),
+                                });
                         }
                     }
                     this.setState({

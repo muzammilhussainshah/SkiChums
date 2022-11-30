@@ -133,10 +133,9 @@ class NewChatGroup extends React.Component {
       }
       if (invalidObj == true) {
       } else {
-        // console.log(groupObj, groupId,'groupObj, groupIdgroupObj, groupId')
         await this.props.createGroup(groupObj, groupId)
         this.props.navigation.navigate('ChatScreen', {
-          isPrivate: false, members: this.state.members,
+          isPrivate: false, members: [...this.state.members, user._user],
           recipientData: groupObj
         })
       }

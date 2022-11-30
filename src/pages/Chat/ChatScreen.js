@@ -104,7 +104,7 @@ class ChatScreen extends Component {
     this.setState({ messages: nextProps.messages })
     if (this.state.messages !== nextProps.messages) {
     }
-  } 
+  }
   componentWillUnmount() {
     if (subscriber) subscriber()
   }
@@ -113,6 +113,11 @@ class ChatScreen extends Component {
     let recipientData = this.state.recipientData
     let member = this.props.route?.params?.members ?? {}
     const user = firebase.auth().currentUser
+    let myIndex = member.findIndex((val) => val.uid == user.uid)
+    // let newArr = member
+    let memberExceptMe = JSON.parse(JSON.stringify(member));
+    // memberExceptMe.splice(myIndex, 1)
+    // member.splice(myIndex, 1)
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -130,7 +135,7 @@ class ChatScreen extends Component {
                 <GroupChatTopBar
                   name={recipientData?.displayName ? recipientData?.displayName : recipientData?.email?.split('@')[0]}
 
-                  member={member}
+                  member={memberExceptMe}
                   onSettings={this.onSettings} />
               )}
             </View>
@@ -238,7 +243,7 @@ class ChatScreen extends Component {
   }
 
   onBack = () => {
-    this.props.navigation.pop( )
+    this.props.navigation.pop()
 
   }
 

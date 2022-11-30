@@ -1,3 +1,4 @@
+import { firebase } from "@react-native-firebase/auth";
 import React, { Component } from "react";
 import {
     View,
@@ -10,6 +11,7 @@ import {
 
 export default class GroupChatTopBar extends Component {
     render() {
+        const user = firebase.auth().currentUser
         return (
             <View style={[this.props.style ?? {}, styles.container]}>
                 <View style={styles.groupNameContainer}>
@@ -19,7 +21,14 @@ export default class GroupChatTopBar extends Component {
                     <FlatList
                         data={this.props.member}
                         horizontal
-                        renderItem={({ item, index }) => <Text style={styles.groupMemberTxt}>{item.displayName ? item.displayName : item.email.split('@')[0]}{index + 1 !== this.props.member.length && ','}</Text>}
+                        renderItem={({ item, index }) => {
+                            let name = item.displayName ? item.displayName : item.email.split('@')[0]
+                            if (item.uid == user.uid) name = 'You'
+                            return (
+                                <Text style={styles.groupMemberTxt}>{name}{index + 1 !== this.props.member.length && ','}</Text>
+                            )
+                        }
+                        }
                         keyExtractor={item => item.uid}
                     />
                 </View>

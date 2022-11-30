@@ -25,7 +25,7 @@ class NewChatGroup extends React.Component {
               </TouchableOpacity>
               <View style={styles.groupNameContainer}>
                 <Text style={styles.groupNameTxt}>
-                  Val d'lsere
+                  {!params?.singleMsg ? 'Group Chat' : 'Chat'}
                 </Text>
                 <Text style={styles.groupMemberTxt}>
                   Add participants

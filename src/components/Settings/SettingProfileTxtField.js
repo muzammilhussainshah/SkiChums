@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import  GooglePlaceInput  from '../../components/Settings/GooglePlaceInput';
 
 export default class SettingProfileTxtField extends Component {
     render() {
@@ -14,7 +15,7 @@ export default class SettingProfileTxtField extends Component {
                         </Text>
                         {
                             type === 'location' ?
-                                null 
+                            <GooglePlaceInput/> 
                                 :
                                 <View style={styles.inputContainer}>
                                     <TextInput style={styles.input} placeholder={type == 'first' ? 'First name' : type == 'last' ? 'Last name' : type == 'dob' ? 'Date of birth' : type == 'location' ? 'Location' : type == 'tos' ? 'Type of sport' : type == 'los' ? 'Level of sport' : type == 'lang' ? 'Languages' : type == 'bio' ? 'Bio' : ''} />

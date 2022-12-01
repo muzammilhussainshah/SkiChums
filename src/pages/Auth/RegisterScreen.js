@@ -58,20 +58,26 @@ export default class RegisterScreen extends Component {
 
                 <SocialLoginBox style={styles.socialBox}
                     handleGoogleLogin={
-                        async () => {
-                            this.setState({ isLoading: true })
-                            handleGoogleLogin()
-                            this.setState({ isLoading: false })
+                        () => {
+                            // this.setState({ isLoading: true })
+                            // await handleGoogleLogin()
+                            handleGoogleLogin(() => this.setState({ isLoading: true }), () => this.setState({ isLoading: false }))
+
+                            // this.setState({ isLoading: false })
                         }}
-                    handleAppleLogin={async () => {
-                        this.setState({ isLoading: true })
-                        handleAppleLogin()
-                        this.setState({ isLoading: false })
+                    handleAppleLogin={() => {
+                        // this.setState({ isLoading: true })
+                        // await handleAppleLogin()
+                        handleAppleLogin(() => this.setState({ isLoading: true }), () => this.setState({ isLoading: false }))
+
+                        // this.setState({ isLoading: false })
                     }}
-                    handleMetaLogin={async () => {
-                        this.setState({ isLoading: true })
-                        handleMetaLogin()
-                        this.setState({ isLoading: false })
+                    handleMetaLogin={() => {
+                        // this.setState({ isLoading: true })
+                        // await handleMetaLogin()
+                        handleAppleLogin(() => this.setState({ isLoading: true }), () => this.setState({ isLoading: false }))
+
+                        // this.setState({ isLoading: false })
                     }}
                 // handleGoogleLogin={handleGoogleLogin}
                 // handleMetaLogin={handleMetaLogin}

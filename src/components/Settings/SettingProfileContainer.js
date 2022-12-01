@@ -32,6 +32,8 @@ export default class SettingProfileContainer extends Component {
                     <SettingProfileTxtField type={'first'}/>
                     <SettingProfileTxtField type={'last'}/>
                     <SettingProfileTxtField type={'dob'}/>
+
+                    
                     <SettingProfileTxtField type={'location'}/>
                     <SettingProfileTxtField type={'tos'}/>
                     <SettingProfileTxtField type={'los'}/>

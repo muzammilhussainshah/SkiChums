@@ -7,20 +7,25 @@ export default class SettingProfileTxtField extends Component {
         let type = this.props.type;
         return (
             <>
-            {
-                <View style={styles.container}>
-                    <Text style={styles.title}>
-                        {type=='first' ? 'First name' : type == 'last' ? 'Last name' : type == 'dob' ? 'Date of birth' : type == 'location' ? 'Location' : type == 'tos' ? 'Type of sport' : type == 'los' ? 'Level of sport' : type == 'lang' ? 'Languages' : type == 'bio' ? 'Bio' : ''}
-                    </Text>
-                    <View style={styles.inputContainer}>
-                        <TextInput style = {styles.input} placeholder={type=='first' ? 'First name' : type == 'last' ? 'Last name' : type == 'dob' ? 'Date of birth' : type == 'location' ? 'Location' : type == 'tos' ? 'Type of sport' : type == 'los' ? 'Level of sport' : type == 'lang' ? 'Languages' : type == 'bio' ? 'Bio' : ''}/>
-                        <View style={styles.bottomLine}/>
+                {
+                    <View style={styles.container}>
+                        <Text style={styles.title}>
+                            {type == 'first' ? 'First name' : type == 'last' ? 'Last name' : type == 'dob' ? 'Date of birth' : type == 'location' ? 'Location' : type == 'tos' ? 'Type of sport' : type == 'los' ? 'Level of sport' : type == 'lang' ? 'Languages' : type == 'bio' ? 'Bio' : ''}
+                        </Text>
+                        {
+                            type === 'location' ?
+                                null 
+                                :
+                                <View style={styles.inputContainer}>
+                                    <TextInput style={styles.input} placeholder={type == 'first' ? 'First name' : type == 'last' ? 'Last name' : type == 'dob' ? 'Date of birth' : type == 'location' ? 'Location' : type == 'tos' ? 'Type of sport' : type == 'los' ? 'Level of sport' : type == 'lang' ? 'Languages' : type == 'bio' ? 'Bio' : ''} />
+                                    <View style={styles.bottomLine} />
+                                </View>
+                        }
+
                     </View>
-                    
-                </View>                
-            }
+                }
             </>
-        )        
+        )
     }
 }
 
@@ -51,5 +56,5 @@ const styles = StyleSheet.create({
     input: {
         flex: 1
     }
-    
+
 })

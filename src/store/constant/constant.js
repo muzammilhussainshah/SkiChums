@@ -5,6 +5,7 @@ const ActionTypes = {
     MYGROUPCHATROOM: 'MYGROUPCHATROOM',
     MESSAGES: 'MESSAGES',
     RESETREDUCER: 'RESETREDUCER',
+    LOADER: 'LOADER',
 }
 
 export default ActionTypes;

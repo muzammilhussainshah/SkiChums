@@ -6,6 +6,7 @@ const INITIAL_STATE = {
     myChatRoom: [],
     myGroupChatRoom: [],
     messages: [],
+    loader: [],
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -42,6 +43,11 @@ export default (state = INITIAL_STATE, action) => {
             return ({
                 ...state,
                 messages: action.payload
+            })
+        case ActionTypes.LOADER:
+            return ({
+                ...state,
+                loader: action.payload
             })
         default:
             return state;

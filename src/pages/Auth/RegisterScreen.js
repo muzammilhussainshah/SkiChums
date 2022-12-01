@@ -5,7 +5,8 @@ import {
     View,
     Image,
     Alert,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native';
 
 import auth from '@react-native-firebase/auth'
@@ -38,6 +39,11 @@ export default class RegisterScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
+                {this.state.isLoading &&
+                    <View style={{ position: "absolute", zIndex: 2, height: '100%', width: '100%', backgroundColor: 'rgba(10,10,10,0.5)', justifyContent: "center", alignItems: 'center' }}>
+                        <ActivityIndicator size="large" />
+                    </View>
+                }
                 <View style={styles.backgroundContainer}>
                     <Image source={require("../../assets/Auth/auth-bg.png")} style={styles.backgroundImage} />
                 </View>
@@ -51,9 +57,25 @@ export default class RegisterScreen extends Component {
                 </Text>
 
                 <SocialLoginBox style={styles.socialBox}
-                    handleGoogleLogin={handleGoogleLogin}
-                    handleMetaLogin={handleMetaLogin}
-                    handleAppleLogin={handleAppleLogin}
+                    handleGoogleLogin={
+                        async () => {
+                            this.setState({ isLoading: true })
+                            handleGoogleLogin()
+                            this.setState({ isLoading: false })
+                        }}
+                    handleAppleLogin={async () => {
+                        this.setState({ isLoading: true })
+                        handleAppleLogin()
+                        this.setState({ isLoading: false })
+                    }}
+                    handleMetaLogin={async () => {
+                        this.setState({ isLoading: true })
+                        handleMetaLogin()
+                        this.setState({ isLoading: false })
+                    }}
+                // handleGoogleLogin={handleGoogleLogin}
+                // handleMetaLogin={handleMetaLogin}
+                // handleAppleLogin={handleAppleLogin}
                 />
                 <OrLineView style={styles.orline} />
 
@@ -243,6 +265,7 @@ export default class RegisterScreen extends Component {
                     })
                 })
                 .catch(error => {
+                    this.setState({ isLoading: false, })
                     if (error.code === 'auth/email-already-in-use') {
                         Alert.alert('That email address is already in use!');
                     } else if (error.code === 'auth/invalid-email') {

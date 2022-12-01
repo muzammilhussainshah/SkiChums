@@ -11,7 +11,7 @@ export default class GooglePlaceInput extends Component {
             <View style={{ width: "92%",left:'13%',top:"-20%", position: "absolute", zIndex: 1  }}>
             <View style={{ width: "95%",}}>
               <GooglePlacesAutocomplete
-                placeholder='Enter Location'
+                placeholder='Location'
                 minLength={2}
                 onPress={(data, details = null) => {
                   // 'details' is provided when fetchDetails = true
@@ -38,6 +38,7 @@ export default class GooglePlaceInput extends Component {
                     // backgroundColor: '#F2F2F2',
                     marginLeft: 0,
                     marginRight: 0,
+                    paddingBottom: 15,
                     color: '#5d5d5d',
                     fontSize: 16,
                     borderBottomColor:'#0A63EB',

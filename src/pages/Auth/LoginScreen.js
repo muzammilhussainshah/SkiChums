@@ -18,6 +18,7 @@ import { appleAuth } from "@invertase/react-native-apple-authentication";
 import AuthFloatingInput from "../../components/Auth/AuthFloatingInput";
 import OrLineView from "../../components/Auth/OrLineView";
 import SocialLoginBox from "../../components/Auth/SocialLoginBox";
+import { ActivityIndicator } from "react-native";
 
 GoogleSignin.configure({ webClientId: '1018017946183-jn3phjtqbtg4cularvofhf6k9337mk7g.apps.googleusercontent.com', });
 // META LOGIN
@@ -136,6 +137,11 @@ export default class LoginScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
+                {this.state.isLoading &&
+                    <View style={{ position: "absolute", zIndex: 2, height: '100%', width: '100%', backgroundColor: 'rgba(10,10,10,0.5)', justifyContent: "center", alignItems: 'center' }}>
+                        <ActivityIndicator size="large" />
+                    </View>
+                }
                 <View style={styles.backgroundContainer}>
                     <Image source={require("../../assets/Auth/auth-bg.png")} style={styles.backgroundImage} />
                 </View>
@@ -149,9 +155,22 @@ export default class LoginScreen extends Component {
                 </Text>
 
                 <SocialLoginBox style={styles.socialBox}
-                    handleGoogleLogin={handleGoogleLogin}
-                    handleAppleLogin={handleAppleLogin}
-                    handleMetaLogin={handleMetaLogin}
+                    handleGoogleLogin={
+                        async () => {
+                            this.setState({ isLoading: true })
+                              handleGoogleLogin()
+                            this.setState({ isLoading: false })
+                        }}
+                    handleAppleLogin={async () => {
+                        this.setState({ isLoading: true })
+                          handleAppleLogin()
+                        this.setState({ isLoading: false })
+                    }}
+                    handleMetaLogin={async () => {
+                        this.setState({ isLoading: true })
+                          handleMetaLogin()
+                        this.setState({ isLoading: false })
+                    }}
                 />
                 <OrLineView style={styles.orline} />
 
@@ -248,7 +267,6 @@ export default class LoginScreen extends Component {
             Alert.alert('Please enter your email.')
         } else {
             this.setState({ isLoading: true, })
-
             auth().signInWithEmailAndPassword(this.state.email, this.state.password)
                 .then(async (logInUser) => {
                     if (Object.keys(logInUser).length > 0) {

@@ -22,10 +22,10 @@ export default class GroupChatTopBar extends Component {
                         data={this.props.member}
                         horizontal
                         renderItem={({ item, index }) => {
-                            let name = item.displayName ? item.displayName : item.email.split('@')[0]
-                            if (item.uid == user.uid) name = 'You'
+                            let name = item?.displayName ? item?.displayName : item?.email?.split('@')[0]
+                            if (item?.uid == user?.uid) name = 'You'
                             return (
-                                <Text style={styles.groupMemberTxt}>{name}{index + 1 !== this.props.member.length && ','}</Text>
+                                <Text style={styles.groupMemberTxt}>{name}{index + 1 !== this?.props?.member?.length && ','}</Text>
                             )
                         }
                         }

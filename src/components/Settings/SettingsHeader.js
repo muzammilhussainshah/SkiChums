@@ -1,23 +1,23 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+// import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default class SettingsHeader extends Component {
     render() {
         return (
             <>
-            {
-                <View style={styles.container}>
-                    <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logger}/>                    
-                    <Text style={styles.title}> Settings </Text>
-                    <View style={styles.space}/>
-                    <TouchableOpacity style={styles.close} onPress={this.props.onClose}>
-                        <Image source={require("../../assets/Settings/blue-close.png")}/>
-                    </TouchableOpacity>
-                </View>
-            }
+                {
+                    <View style={styles.container}>
+                        <Image source={require("../../assets/icons/blue-logo.png")} resizeMode="cover" style={styles.logger} />
+                        <Text style={styles.title}> Settings </Text>
+                        <View style={styles.space} />
+                        <TouchableOpacity style={styles.close} onPress={this.props.onClose}>
+                            <Image source={require("../../assets/Settings/blue-close.png")} />
+                        </TouchableOpacity>
+                    </View>
+                }
             </>
-        )        
+        )
     }
 }
 
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
     space: {
         flex: 1,
-    }, 
+    },
     title: {
         position: 'absolute',
         width: '100%',

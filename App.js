@@ -19,6 +19,7 @@ function App() {
 
   function onAuthStateChanged(user) {
     if (user?._user) {
+      
       firestore()
         .collection('chums')
         .doc(user._user.uid)

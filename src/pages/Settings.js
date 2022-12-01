@@ -9,26 +9,26 @@ export default class Settings extends Component {
     render() {
         return (
             <View style={styles.container}>
-            
-              <SettingsHeader onClose = {this.onClose}/>
-              <SettingsRoundContainer style={styles.roundContainer}/>
-         </View>
-          );  
+
+                <SettingsHeader onClose={this.onClose} />
+                <SettingsRoundContainer style={styles.roundContainer} />
+            </View>
+        );
     }
-    
+
     onClose = () => {
-        console.log('onclose')
+        console.log('onclose', this.props)
         this.props.navigation.pop()
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'white',
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
     },
     roundContainer: {
         flex: 1,

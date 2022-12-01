@@ -10,41 +10,46 @@ export default class SCProfileInfoView extends Component {
     render() {
         return (
             <>
-            {
-                <View style={[this.props.style ?? {}, styles.container]}>
-                    <ScrollView style={styles.scrollView}>
-                        <SCProfileCompletenessView></SCProfileCompletenessView>
-                        <View style={styles.separator}/>
-                        <SCProfileAboutView style={styles.about}></SCProfileAboutView>
-                        <View style={styles.experience}>
-                            <SCProfileLocationView type={'Location'}></SCProfileLocationView>
-                            <SCProfileLocationView type={'Level'}></SCProfileLocationView>
-                            <SCProfileLocationView type={'Speaks'}></SCProfileLocationView>
-                        </View>
-                        <View style={styles.social}>
-                            <TouchableOpacity style={styles.socialIcon}>
-                                <Image source={require('../assets/icons/ic_facebook.png')}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.socialIcon}>
-                                <Image source={require('../assets/icons/ic_instagram.png')}/>
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={styles.mychums}>
-                            My Chums
-                        </Text>
-                        <SCProfileChumList></SCProfileChumList>
-                        <TouchableOpacity style={styles.moreButton}>
-                            <Text style={styles.moreTxt}>
-                                see more
+                {
+                    <View style={[this.props.style ?? {}, styles.container]}>
+                        <ScrollView style={styles.scrollView}>
+                            <SCProfileCompletenessView></SCProfileCompletenessView>
+                            <View style={styles.separator} />
+                            <SCProfileAboutView style={styles.about}></SCProfileAboutView>
+                            <View style={styles.experience}>
+                                <SCProfileLocationView type={'Location'}></SCProfileLocationView>
+                                <SCProfileLocationView type={'Level'}></SCProfileLocationView>
+                                <SCProfileLocationView type={'Speaks'}></SCProfileLocationView>
+                            </View>
+                            <View style={styles.social}>
+                                <TouchableOpacity style={styles.socialIcon}>
+                                    <Image source={require('../assets/icons/ic_facebook.png')} />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.socialIcon}>
+                                    <Image source={require('../assets/icons/ic_instagram.png')} />
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={styles.mychums}>
+                                My Chums
                             </Text>
-                        </TouchableOpacity>
-                    </ScrollView>
+                            <SCProfileChumList></SCProfileChumList>
+                            <TouchableOpacity style={styles.moreButton}
+                                onPress={() => {
+                                    // Chums
+                                    this.props.navigate.navigate('Chums')
+                                }}
+                            >
+                                <Text style={styles.moreTxt}>
+                                    see more
+                                </Text>
+                            </TouchableOpacity>
+                        </ScrollView>
 
-                </View>
-                
-            }
+                    </View>
+
+                }
             </>
-        )        
+        )
     }
 }
 
@@ -54,7 +59,7 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         flex: 1,
-        
+
     },
     separator: {
         marginTop: 13,
@@ -71,7 +76,7 @@ const styles = StyleSheet.create({
     },
     about: {
         marginTop: 12
-    }, 
+    },
     social: {
         marginTop: 15,
         flex: 1,
@@ -89,7 +94,7 @@ const styles = StyleSheet.create({
         color: '#0A63EB',
         fontWeight: 'bold',
         fontSize: 12,
-        textAlign: 'center'        
+        textAlign: 'center'
     },
     moreButton: {
         flex: 1,

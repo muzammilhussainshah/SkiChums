@@ -7,6 +7,7 @@ const INITIAL_STATE = {
     myGroupChatRoom: [],
     messages: [],
     loader: [],
+    currentUser: [],
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -43,6 +44,11 @@ export default (state = INITIAL_STATE, action) => {
             return ({
                 ...state,
                 messages: action.payload
+            })
+        case ActionTypes.CURRENTUSER:
+            return ({
+                ...state,
+                currentUser: action.payload
             })
         case ActionTypes.LOADER:
             return ({

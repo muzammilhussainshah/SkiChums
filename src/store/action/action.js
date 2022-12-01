@@ -5,6 +5,48 @@ import ActionTypes from '../constant/constant';
 
 function onError(error) { Alert.alert(error) }
 
+export function setCurrentUser(bolean) {
+    return dispatch => {
+        const user = firebase.auth().currentUser
+        console.log(user.uid, 'currentUserscurrentUsers')
+
+        firestore().collection('chums').doc(user.uid).get()
+            .then((data) => {
+                dispatch({ type: ActionTypes.CURRENTUSER, payload: data?.data() })
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            });
+
+    }
+
+}
+export function getMyChums(bolean) {
+    return dispatch => {
+        const user = firebase.auth().currentUser
+        firestore().collection('chums').get()
+            .then((data) => {
+                let chums = []
+                data.forEach(documentSnapshot => {
+                    chums.push(documentSnapshot.data())
+                });
+                let myChumsIdsAndStatus = chums?.filter((val) => val?.uid == user?.uid)[0]?.myChams
+                let myChumsArr = []
+                if (myChumsIdsAndStatus?.length > 0) {
+                    myChumsIdsAndStatus.map((item) => {
+                        let myChums = chums.filter((val) => val.uid == item.id)
+                        if (myChums.length > 0) { myChumsArr.push(myChums[0]) }
+                    })
+                    dispatch({ type: ActionTypes.MYCHUMS, payload: myChumsArr })
+                }
+            })
+            .catch((error) => {
+                console.log(error, 'error')
+            });
+
+    }
+
+}
 export function getAllChums(bolean) {
     return dispatch => {
         const user = firebase.auth().currentUser
@@ -25,6 +67,8 @@ export function getAllChums(bolean) {
                 dispatch({ type: ActionTypes.MYCHUMS, payload: myChumsArr })
             }
             dispatch({ type: ActionTypes.CHUMS, payload: chums })
+
+
         }
             , onError);
 

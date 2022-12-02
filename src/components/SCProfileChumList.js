@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, Image, View, StyleSheet } from 'react-native';
+import { FlatList, Image, View, StyleSheet,Text } from 'react-native';
 import { connect } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 export class SCProfileChumList extends Component {
@@ -9,6 +9,7 @@ export class SCProfileChumList extends Component {
       <>
         {
           <View style={this.props.style ?? styles.container}>
+            {false?
             <FlatList
               horizontal={true}
               data={this.props.mychums}
@@ -23,7 +24,9 @@ export class SCProfileChumList extends Component {
 
                 )
               }}
-              keyExtractor={item => item.id}></FlatList>
+              keyExtractor={item => item.id}></FlatList>:
+              <Text style={{opacity:0.5}}>No chums yet</Text>
+              }
           </View>
 
         }

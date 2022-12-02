@@ -3,9 +3,19 @@ import { TouchableOpacity, View, StyleSheet, Platform, Image, Text, ScrollView }
 import SCGradientButton from "../SCGradientButton";
 import SettingItem from "./SettingItem";
 import SettingProfileSocialConnectionVIew from "./SettingProfileSocialConnectionVIew";
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import SettingProfileTxtField from "./SettingProfileTxtField";
+import { launchImageLibrary } from 'react-native-image-picker';
+import SCColors from "../../styles/SCColors";
 
 export default class SettingProfileContainer extends Component {
+    // const[imageUriLocal, setimageUriLocal] = useState('');
+    constructor(props) {
+        super(props);
+        this.state = {
+            imageUriLocal: ''
+        }
+    }
     render() {
         return (
             <>
@@ -14,9 +24,15 @@ export default class SettingProfileContainer extends Component {
 
                     <View style={styles.header}>
                         <View style={styles.photoView}>
-                            <Image source={require("../../assets/icons/sample-chum-profile.png")} style={styles.photo} />
-                            <TouchableOpacity>
-                                <Text style={styles.changeButton} change profile picture>
+                            {this.state.imageUriLocal ?
+                                <Image source={{ uri: this.state.imageUriLocal }} style={styles.photo} />
+                                :
+                                <FontAwesome name="user-circle-o" color={SCColors.main} size={70} />
+                            }
+
+                            {/* <Image source={require("../../assets/icons/sample-chum-profile.png")} style={styles.photo} /> */}
+                            <TouchableOpacity onPress={this.getImg}>
+                                <Text style={styles.changeButton}>
                                     change profile picture
                                 </Text>
                             </TouchableOpacity>
@@ -51,6 +67,47 @@ export default class SettingProfileContainer extends Component {
             </>
         )
     }
+    getImg = async () => {
+        try {
+            let options = {
+                title: 'Select Image',
+                includeBase64: true,
+                customButtons: [
+                    {
+                        name: 'customOptionKey',
+                        title: 'Choose Photo from Custom Option'
+                    }
+                ],
+                storageOptions: {
+                    skipBackup: true,
+                    path: 'images'
+                }
+            };
+            launchImageLibrary(options, async (res) => {
+                if (res.didCancel) {
+                } else if (res.error) {
+                } else {
+                    this.setState({ imageUriLocal: res.assets[0].uri })
+                    // this.saveImage(res.assets[0].uri);
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    saveImage = (src) => {
+        // ImgToBase64.getBase64String(src)
+        //     .then((base64String) =>
+        //         dispatch(
+        //             saveData(
+        //                 'profilePic',
+        //                 `data:image/gif;base64,${base64String}`,
+        //                 currentUserProfile
+        //             )
+        //         )
+        //     )
+        //     .catch((err) => console.log(err, 'base64String'));
+    };
 }
 
 const styles = StyleSheet.create({

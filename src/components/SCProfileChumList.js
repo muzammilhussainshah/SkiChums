@@ -9,7 +9,7 @@ export class SCProfileChumList extends Component {
       <>
         {
           <View style={this.props.style ?? styles.container}>
-            {false?
+            {this.props.mychums.length?
             <FlatList
               horizontal={true}
               data={this.props.mychums}

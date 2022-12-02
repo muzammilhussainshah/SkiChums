@@ -76,9 +76,9 @@ export class MyProfile extends Component {
 
             <View style={styles.profileHeaderSeparator}></View>
             <View style={styles.profileExperienceContainer}>
-              <ProfileInfoHourView type='session' value={2000} />
-              <ProfileInfoHourView type='kilos' value={13000} />
-              <ProfileInfoHourView type='hours' value={120} />
+              <ProfileInfoHourView type='session' value={0} />
+              <ProfileInfoHourView type='kilos' value={0} />
+              <ProfileInfoHourView type='hours' value={0} />
             </View>
 
           </View>

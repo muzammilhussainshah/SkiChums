@@ -20,7 +20,7 @@ export default class SettingProfileTxtField extends Component {
                                 <GooglePlaceInput />
                                 :
 
-                                (type === 'dob' || type === 'tos') ?
+                                (type === 'dob' || type === 'tos' || type === 'los') ?
 
                                     <View
                                         style={{
@@ -28,12 +28,12 @@ export default class SettingProfileTxtField extends Component {
                                             left: 20
                                         }}
                                     >
-                                        <TouchableOpacity onPress={this.props.callBack} style={{ flexDirection: type === 'tos' ? 'row' : "column", justifyContent: type === 'tos' ? 'space-between' : 'flex-start' }}>
+                                        <TouchableOpacity onPress={this.props.callBack} style={{ flexDirection: (type === 'tos' || type === 'los') ? 'row' : "column", justifyContent: (type === 'los' || type === 'tos') ? 'space-between' : 'flex-start' }}>
                                             <Text style={
                                                 { color: this?.props?.value ? 'black' : '#a9a9a9' }
                                             }>
                                                 {
-                                                    type === 'tos' ?
+                                                    (type === 'tos' || type === 'los') ?
                                                         this?.props?.value ? this?.props?.value : 'Type of sport'
                                                         :
                                                         this?.props?.value ?
@@ -41,8 +41,11 @@ export default class SettingProfileTxtField extends Component {
                                                             `Date of birth`
                                                 }
                                             </Text>
-                                            {type === 'tos' &&
-                                                <AntDesign name='down' size={10} color={SCColors.gradientRight} />}
+                                            {(type === 'tos' || type === 'los') &&
+                                                <AntDesign
+                                                    name='down'
+                                                    size={10}
+                                                    color={SCColors.gradientRight} />}
                                         </TouchableOpacity>
                                         <View style={styles.bottomLine}
                                         />

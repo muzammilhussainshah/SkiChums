@@ -22,6 +22,8 @@ export default class SettingProfileContainer extends Component {
             TOSenabled: false,
             TOSvalue: '',
             TOSoptions: [{ name: 'Snowboard' }, { name: 'Sky' }, { name: 'Other' }],
+            LOSenabled: false,
+            LOSvalue: '',
             LOSoptions: [{ name: 'Professional' }, { name: 'Expert' }, { name: 'Intermediate' }, { name: 'Beginner' }],
             // DOBenabled: false,
             //   const [date, setDate] = useState(new Date())
@@ -49,6 +51,14 @@ export default class SettingProfileContainer extends Component {
                             {this.state.TOSoptions.map(this.renderItem)}
                         </View>
                     </TouchableOpacity>}
+                {this.state.LOSenabled == true &&
+                    <TouchableOpacity
+                        onPress={this.closeDropDownLOS}
+                        style={styles.dropDownContainer} >
+                        <View style={styles.dropDownContainerWrapperLOS}>
+                            {this.state.LOSoptions.map(this.renderItemLOS)}
+                        </View>
+                    </TouchableOpacity>}
                 {/* <ScrollView style={[this.props.style ?? {}, styles.container]}> */}
                 <View style={styles.header}>
                     <View style={styles.photoView}>
@@ -74,10 +84,9 @@ export default class SettingProfileContainer extends Component {
 
 
                 <SettingProfileTxtField type={'location'} />
-                <SettingProfileTxtField
-                    value={this.state.TOSvalue} callBack={() => this.setState({ TOSenabled: true })} type={'tos'} />
-                {/* <SettingProfileTxtField type={'tos'} /> */}
-                <SettingProfileTxtField type={'los'} />
+                <SettingProfileTxtField value={this.state.TOSvalue} callBack={() => this.setState({ TOSenabled: true })} type={'tos'} />
+                <SettingProfileTxtField value={this.state.LOSenabled} callBack={() => this.setState({ LOSenabled: true })} type={'los'} />
+                {/* <SettingProfileTxtField type={'los'} /> */}
                 <SettingProfileTxtField type={'lang'} />
                 <SettingProfileTxtField type={'bio'} />
                 <SettingProfileSocialConnectionVIew />
@@ -103,9 +112,21 @@ export default class SettingProfileContainer extends Component {
 
         )
     }
-    closeDropDown() {
-        this.setState({ TOSenabled: false, })
+    renderItemLOS = (item) => {
+        return (
+            <TouchableOpacity
+                onPress={() => {
+                    this.closeDropDownLOS()
+                    this.setState({ LOSenabled: item.name })
+                }}
+                style={styles.dropValue}>
+                <Text style={{}}>{item.name}</Text>
+            </TouchableOpacity>
+
+        )
     }
+    closeDropDown() { this.setState({ TOSenabled: false, }) }
+    closeDropDownLOS() { this.setState({ LOSenabled: false, }) }
     getImg = async () => {
         try {
             let options = {
@@ -189,6 +210,24 @@ const styles = StyleSheet.create({
         width: '67%',
         right: 20,
         top: '54.5%', backgroundColor: 'white',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
+        borderColor: 'black',
+        borderWidth: .3,
+        borderTopWidth: .6
+
+    },
+    dropDownContainerWrapperLOS: {
+        width: '67%',
+        right: 20,
+        top: '60.5%', backgroundColor: 'white',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

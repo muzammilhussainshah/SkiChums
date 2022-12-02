@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, TextInput } from "react-native";
+import { View, StyleSheet, Text, TextInput, FlatList } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import GooglePlaceInput from '../../components/Settings/GooglePlaceInput';
+import CountryFlag from "react-native-country-flag";
+
+import Entypo from 'react-native-vector-icons/Entypo'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import SCColors from "../../styles/SCColors";
 export default class SettingProfileTxtField extends Component {
@@ -17,30 +20,79 @@ export default class SettingProfileTxtField extends Component {
                         </Text>
                         {
                             type === 'location' ?
-                                <GooglePlaceInput />
+                                // <GooglePlaceInput />
+                                <></>
                                 :
-
-                                (type === 'dob' || type === 'tos' || type === 'los') ?
+                                (type === 'dob' || type === 'tos' || type === 'los' || type === 'lang') ?
 
                                     <View
                                         style={{
                                             width: '75%',
-                                            left: 20
+                                            left: type === 'dob' ? 20 : type === 'lang' ? 30 : 15
                                         }}
                                     >
-                                        <TouchableOpacity onPress={this.props.callBack} style={{ flexDirection: (type === 'tos' || type === 'los') ? 'row' : "column", justifyContent: (type === 'los' || type === 'tos') ? 'space-between' : 'flex-start' }}>
-                                            <Text style={
-                                                { color: this?.props?.value ? 'black' : '#a9a9a9' }
-                                            }>
-                                                {
-                                                    (type === 'tos' || type === 'los') ?
-                                                        this?.props?.value ? this?.props?.value : 'Type of sport'
-                                                        :
-                                                        this?.props?.value ?
-                                                            this?.props?.value?.toLocaleDateString("en-US") :
-                                                            `Date of birth`
-                                                }
-                                            </Text>
+                                        <TouchableOpacity
+                                            onPress={this.props.callBack}
+                                            style={{ flexDirection: (type === 'tos' || type === 'los') ? 'row' : "column", justifyContent: (type === 'los' || type === 'tos') ? 'space-between' : 'flex-start' }}>
+
+                                            {type === 'lang' ?
+                                                this?.props?.value.length > 0 ?
+                                                    <FlatList
+                                                        data={this?.props?.value}
+                                                        horizontal
+                                                        renderItem={({ item, index }) => {
+                                                            console.log(item, 'codecodecodecode')
+                                                            return (
+                                                                // <></>
+                                                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                                    <TouchableOpacity
+                                                                        onPress={this.props.callBack}
+                                                                    >
+                                                                        <TouchableOpacity onPress={() => this.props.removeLanguage(item)}>
+                                                                            <AntDesign name='close' size={10} color='black' style={{ alignSelf: "flex-end" }} />
+                                                                        </TouchableOpacity>
+                                                                        <CountryFlag isoCode={item} style={{ borderRadius: 10, height: 20, marginHorizontal: 5, marginBottom: 5, width: 20 }} />
+                                                                    </TouchableOpacity>
+                                                                    {index + 1 == this?.props?.value?.length &&
+
+                                                                        <TouchableOpacity
+                                                                            onPress={this.props.callBack}
+                                                                        >
+                                                                            < Entypo name='plus' size={20} color={SCColors.gradientRight} />
+                                                                        </TouchableOpacity>
+                                                                    }
+                                                                </View>
+                                                            )
+                                                        }}
+                                                        keyExtractor={item => item.id}
+                                                    />
+                                                    :
+                                                    <Text style={
+                                                        { color: '#a9a9a9' }
+                                                    }>
+                                                        {`Languages`}
+                                                    </Text>
+                                                :
+                                                <Text style={
+                                                    { color: this?.props?.value ? 'black' : '#a9a9a9' }
+                                                }>
+                                                    {
+                                                        type === 'lang' ?
+                                                            `Languages`
+                                                            :
+                                                            (type === 'tos' || type === 'los') ?
+                                                                this?.props?.value ? this?.props?.value :
+                                                                    type === 'los' ?
+                                                                        'Level of sport'
+                                                                        :
+                                                                        'Type of sport'
+                                                                :
+                                                                this?.props?.value ?
+                                                                    this?.props?.value?.toLocaleDateString("en-US") :
+                                                                    `Date of birth`
+                                                    }
+                                                </Text>
+                                            }
                                             {(type === 'tos' || type === 'los') &&
                                                 <AntDesign
                                                     name='down'

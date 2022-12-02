@@ -3,6 +3,7 @@ import { TouchableOpacity, View, StyleSheet, Platform, Image, Text, ScrollView }
 import SCGradientButton from "../SCGradientButton";
 import SettingItem from "./SettingItem";
 import SettingProfileSocialConnectionVIew from "./SettingProfileSocialConnectionVIew";
+import CountryPicker from 'react-native-country-picker-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import SettingProfileTxtField from "./SettingProfileTxtField";
 import DatePicker from 'react-native-date-picker'
@@ -25,6 +26,8 @@ export default class SettingProfileContainer extends Component {
             LOSenabled: false,
             LOSvalue: '',
             LOSoptions: [{ name: 'Professional' }, { name: 'Expert' }, { name: 'Intermediate' }, { name: 'Beginner' }],
+            LANGenabled: false,
+            selectedLanguages: [],
             // DOBenabled: false,
             //   const [date, setDate] = useState(new Date())
             //   const [open, setOpen] = useState(false)
@@ -32,6 +35,7 @@ export default class SettingProfileContainer extends Component {
     }
 
     render() {
+        console.log(this.state.selectedLanguages, 'asddsadsadasads')
         return (
             <>
                 {this.state.DOBenabled == true &&
@@ -59,6 +63,33 @@ export default class SettingProfileContainer extends Component {
                             {this.state.LOSoptions.map(this.renderItemLOS)}
                         </View>
                     </TouchableOpacity>}
+                {/* {this.state.LANGenabled && */}
+                <CountryPicker
+                    countryCode={'HK'}
+                    // withCallingCode
+
+                    withFilter
+                    // withEmoji
+                    // withFlag
+                    withFlagButton={false}
+                    onClose={() => this.closePicker()}
+                    onSelect={(country) => {
+                        this.closePicker()
+                        let languageCLone = JSON.parse(JSON.stringify(this.state.selectedLanguages))
+                        let index = languageCLone.findIndex((val) => val == country.cca2)
+                        if (index == -1) languageCLone.push(country.cca2)
+
+                        // if (index !== -1) languageCLone.splice(index, 1)
+                        // else languageCLone.push(country.cca2)
+                        this.setState({ selectedLanguages: languageCLone })
+                    }}
+                    visible={this.state.LANGenabled}
+                />
+                {/* } */}
+
+
+
+
                 {/* <ScrollView style={[this.props.style ?? {}, styles.container]}> */}
                 <View style={styles.header}>
                     <View style={styles.photoView}>
@@ -87,7 +118,10 @@ export default class SettingProfileContainer extends Component {
                 <SettingProfileTxtField value={this.state.TOSvalue} callBack={() => this.setState({ TOSenabled: true })} type={'tos'} />
                 <SettingProfileTxtField value={this.state.LOSenabled} callBack={() => this.setState({ LOSenabled: true })} type={'los'} />
                 {/* <SettingProfileTxtField type={'los'} /> */}
-                <SettingProfileTxtField type={'lang'} />
+                <SettingProfileTxtField
+
+                    removeLanguage={(lang) => this.removeLanguage(lang)}
+                    value={this.state.selectedLanguages} type={'lang'} callBack={() => this.setState({ LANGenabled: true })} />
                 <SettingProfileTxtField type={'bio'} />
                 <SettingProfileSocialConnectionVIew />
                 <SCGradientButton
@@ -98,7 +132,16 @@ export default class SettingProfileContainer extends Component {
             </>
         )
     }
-
+    closePicker() {
+        this.setState({ LANGenabled: false })
+    }
+    removeLanguage(item) {
+        let languageCLone = JSON.parse(JSON.stringify(this.state.selectedLanguages))
+        let index = languageCLone.findIndex((val) => val == item)
+        if (index !== -1) languageCLone.splice(index, 1)
+        // else languageCLone.push(country.cca2)
+        this.setState({ selectedLanguages: languageCLone })
+    }
     renderItem = (item) => {
         return (
             <TouchableOpacity

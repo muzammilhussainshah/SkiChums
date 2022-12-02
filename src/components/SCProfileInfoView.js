@@ -15,7 +15,9 @@ export default class SCProfileInfoView extends Component {
                         <ScrollView style={styles.scrollView}>
                             <SCProfileCompletenessView></SCProfileCompletenessView>
                             <View style={styles.separator} />
-                            <SCProfileAboutView style={styles.about}></SCProfileAboutView>
+                            <SCProfileAboutView
+                                currentUser={this.props.currentUser}
+                                style={styles.about}></SCProfileAboutView>
                             <View style={styles.experience}>
                                 <SCProfileLocationView currentUser={this.props.currentUser} type={'Location'}></SCProfileLocationView>
                                 <SCProfileLocationView currentUser={this.props.currentUser} type={'Level'}></SCProfileLocationView>

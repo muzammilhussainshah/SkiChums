@@ -16,6 +16,11 @@ target 'SkiChums' do
   pod 'GoogleUtilities', :modular_headers => true
   pod 'FirebaseCoreInternal', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
+  # pod 'GTMSessionFetcher', :modular_headers => true
+  # pod 'FirebaseCoreExtension', :modular_headers => true
+  # pod 'FirebaseAuthInterop', :modular_headers => true
+  # pod 'FirebaseAppCheckInterop', :modular_headers => true
+  # pod 'FirebaseStorage', :modular_headers => true
 
   config = use_native_modules!
 
@@ -23,6 +28,7 @@ target 'SkiChums' do
     :path => config[:reactNativePath],
     :hermes_enabled => false
   )
+  pod 'RNFBStorage', :path => '../node_modules/@react-native-firebase/storage'
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   

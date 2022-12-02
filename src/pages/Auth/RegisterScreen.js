@@ -75,7 +75,7 @@ export default class RegisterScreen extends Component {
                     handleMetaLogin={() => {
                         // this.setState({ isLoading: true })
                         // await handleMetaLogin()
-                        handleAppleLogin(() => this.setState({ isLoading: true }), () => this.setState({ isLoading: false }))
+                        handleMetaLogin(() => this.setState({ isLoading: true }), () => this.setState({ isLoading: false }))
 
                         // this.setState({ isLoading: false })
                     }}

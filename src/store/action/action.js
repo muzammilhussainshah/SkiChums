@@ -2,7 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import { Alert } from 'react-native';
 import { firebase } from '@react-native-firebase/auth';
 import ActionTypes from '../constant/constant';
-// import storage from '@react-native-firebase/storage';
+import storage from '@react-native-firebase/storage';
 
 function onError(error) { Alert.alert(error) }
 
@@ -216,53 +216,106 @@ export function sendMessageGroup() {
     }
 }
 
-// const uploadImageToStorage = (path, name) => {
-//     let reference = storage().ref(name);
-//     let task = reference.putFile(path);
-//     task.then((res) => {
-//         reference.getDownloadURL().then((downloadUrl) => {
-//             console.log(downloadUrl, 'download')
-//         })
-//         console.log('Image uploaded to the bucket!');
-//     }).catch((e) => {
-//         status = 'Something went wrong';
-//         console.log('uploading image error => ', e);
-//     });
-// }
+const uploadImageToStorage = async (path, name) => {
+    let reference = storage().ref(name);
+    let task = await reference.putFile(path);
+
+    if (task) {
+        return await reference.getDownloadURL()
+    }
+}
 
 export function updateProfile(profileData, currentUser) {
     return dispatch => {
+        dispatch({ type: ActionTypes.LOADER, payload: true })
+
         console.log(profileData, 'update profile dat')
         const user = firebase.auth().currentUser
 
         const path = profileData?.photoUrlData?.uri
         const filename = profileData?.photoUrlData?.fileName
-
-        // uploadImageToStorage(path, filename)
-
         let profileObj = {}
-        if (profileData?.firstName?.length > 0) profileObj.firstName = profileData?.firstName
-        if (profileData?.lastName?.length > 0) profileObj.lastName = profileData?.lastName
-        if (profileData?.date) profileObj.dob = new Date(profileData?.date).valueOf()
-        if (profileData?.TOSvalue?.length > 0) profileObj.TOSvalue = profileData?.TOSvalue
 
-        if (profileData?.LOSvalue?.length > 0) profileObj.LOSvalue = profileData.LOSvalue
-        if (profileData?.selectedLanguages?.length > 0) profileObj.languages = profileData.selectedLanguages
-        if (profileData?.bio?.length > 0) profileObj.about = profileData.bio
-        if (profileData?.location?.length > 0) profileObj.location = profileData.location
-        if (profileData?.firstName.length > 0 && profileData?.lastName?.length > 0) profileObj.displayName = profileData?.firstName + ' ' + profileData?.lastName
+        if (profileData?.photoUrlData) {
+            uploadImageToStorage(path, filename).then((downloadUrl) => {
+                if (downloadUrl) profileObj.photoURL = downloadUrl
+                if (profileData?.firstName?.length > 0) profileObj.firstName = profileData?.firstName
+                if (profileData?.lastName?.length > 0) profileObj.lastName = profileData?.lastName
+                if (profileData?.date) profileObj.dob = new Date(profileData?.date).valueOf()
+                if (profileData?.TOSvalue?.length > 0) profileObj.TOSvalue = profileData?.TOSvalue
+                if (profileData?.LOSvalue?.length > 0) profileObj.LOSvalue = profileData.LOSvalue
+                if (profileData?.selectedLanguages?.length > 0) profileObj.languages = profileData.selectedLanguages
+                if (profileData?.bio?.length > 0) profileObj.about = profileData.bio
+                if (profileData?.location?.length > 0) profileObj.location = profileData.location
+                if (profileData?.firstName.length > 0 && profileData?.lastName?.length > 0) profileObj.displayName = profileData?.firstName + ' ' + profileData?.lastName
 
-        dispatch({ type: ActionTypes.CURRENTUSER, payload: { ...currentUser, ...profileObj } })
+                dispatch({ type: ActionTypes.CURRENTUSER, payload: { ...currentUser, ...profileObj } })
+                console.log(profileObj, 'profileObj')
+                if (user?.uid) {
+                    console.log(user?.uid, 'adsdasdas')
+                    firestore()
+                        .collection('chums')
+                        .doc(user?.uid)
+                        .update(profileObj)
+                        .then(() => console.log('updated'))
 
-        if (user?.uid) {
-            console.log(user?.uid, 'adsdasdas')
-            firestore()
-                .collection('chums')
-                .doc(user?.uid)
-                .update(profileObj)
-                .then(() => console.log('updated'))
+                }
+                dispatch({ type: ActionTypes.LOADER, payload: false })
+
+            }).catch((error) => {
+                dispatch({ type: ActionTypes.LOADER, payload: false })
+
+            })
+        } else {
+            if (profileData?.firstName?.length > 0) profileObj.firstName = profileData?.firstName
+            if (profileData?.lastName?.length > 0) profileObj.lastName = profileData?.lastName
+            if (profileData?.date) profileObj.dob = new Date(profileData?.date).valueOf()
+            if (profileData?.TOSvalue?.length > 0) profileObj.TOSvalue = profileData?.TOSvalue
+
+            if (profileData?.LOSvalue?.length > 0) profileObj.LOSvalue = profileData.LOSvalue
+            if (profileData?.selectedLanguages?.length > 0) profileObj.languages = profileData.selectedLanguages
+            if (profileData?.bio?.length > 0) profileObj.about = profileData.bio
+            if (profileData?.location?.length > 0) profileObj.location = profileData.location
+            if (profileData?.firstName.length > 0 && profileData?.lastName?.length > 0) profileObj.displayName = profileData?.firstName + ' ' + profileData?.lastName
+
+            dispatch({ type: ActionTypes.CURRENTUSER, payload: { ...currentUser, ...profileObj } })
+            console.log(profileObj, 'profileObj')
+            if (user?.uid) {
+                console.log(user?.uid, 'adsdasdas')
+                firestore()
+                    .collection('chums')
+                    .doc(user?.uid)
+                    .update(profileObj)
+                    .then(() => console.log('updated'))
+
+            }
+            dispatch({ type: ActionTypes.LOADER, payload: false })
 
         }
+
+        // let profileObj = {}
+        // if (profileData?.firstName?.length > 0) profileObj.firstName = profileData?.firstName
+        // if (profileData?.lastName?.length > 0) profileObj.lastName = profileData?.lastName
+        // if (profileData?.date) profileObj.dob = new Date(profileData?.date).valueOf()
+        // if (profileData?.TOSvalue?.length > 0) profileObj.TOSvalue = profileData?.TOSvalue
+
+        // if (profileData?.LOSvalue?.length > 0) profileObj.LOSvalue = profileData.LOSvalue
+        // if (profileData?.selectedLanguages?.length > 0) profileObj.languages = profileData.selectedLanguages
+        // if (profileData?.bio?.length > 0) profileObj.about = profileData.bio
+        // if (profileData?.location?.length > 0) profileObj.location = profileData.location
+        // if (profileData?.firstName.length > 0 && profileData?.lastName?.length > 0) profileObj.displayName = profileData?.firstName + ' ' + profileData?.lastName
+
+        // dispatch({ type: ActionTypes.CURRENTUSER, payload: { ...currentUser, ...profileObj } })
+        // console.log(profileObj, 'profileObj')
+        // if (user?.uid) {
+        //     console.log(user?.uid, 'adsdasdas')
+        //     firestore()
+        //         .collection('chums')
+        //         .doc(user?.uid)
+        //         .update(profileObj)
+        //         .then(() => console.log('updated'))
+
+        // }
 
     }
 }

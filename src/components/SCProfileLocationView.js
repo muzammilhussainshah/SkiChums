@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, FlatList, TouchableOpacity } from "react-native";
+import CountryFlag from "react-native-country-flag";
 
 export default class SCProfileLocationView extends Component {
     render() {
         const type = this.props.type;
-        let currentUser = this.props.currentUser
+        let currentUser = this?.props?.currentUser
 
         console.log(currentUser, 'this.propsthis.propsthis.props')
         return (
@@ -19,10 +20,33 @@ export default class SCProfileLocationView extends Component {
                                 <Image source={require('../assets/icons/sample-switzerland-flag.png')} />
                             </View>
                             <Text style={styles.addressTxt}>
-                                {type == 'Location' ?  currentUser.location : type == 'Level' ? currentUser?.TOSvalue :
-                                    currentUser?.languages?.map((item, index) => { return (item + ', ') }
-                                    )
+                                {type == 'Location' ? currentUser?.location : type == 'Level' ? currentUser?.TOSvalue :
+                                    <FlatList
+                                        data={currentUser?.languages}
+                                        style={{ width: 90 }}
+                                        scrollEnabled={false}
+                                        horizontal
+                                        renderItem={({ item, index }) => {
+                                            return (
+                                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                    <TouchableOpacity
+                                                        onPress={this.props.callBack}
+                                                    >
+                                                        <TouchableOpacity onPress={() => this.props.removeLanguage(item)}>
+                                                        </TouchableOpacity>
+                                                        <CountryFlag isoCode={item} style={{ borderRadius: 10, height: 20, marginHorizontal: 5, marginBottom: 5, width: 20 }} />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            )
+                                        }}
+                                        keyExtractor={item => item.id}
+                                    />
                                 }
+
+                                {/* //         item + ', '
+                                //     ) }
+                                //     )
+                                // } */}
                                 {/* addressa */}
                             </Text>
                         </View>

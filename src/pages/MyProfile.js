@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, Button, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { Image, Button, ImageBackground, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import ProfileInfoHourView from '../components/ProfileInfoHourView';
 import LogoAndSettingsBar from '../components/LogoAndSettingsBar';
 import TabButton from '../components/TabButton';
@@ -19,7 +19,8 @@ export class MyProfile extends Component {
 
     this.state = {
       profileType: 'mine', //mine or chum
-      profileView: 'profile' // profile, session, reviews
+      profileView: 'profile', // profile, session, reviews
+      isLoading: false // profile, session, reviews
     }
   }
   componentDidMount() {
@@ -30,7 +31,7 @@ export class MyProfile extends Component {
   getAge(birthday) { // birthday is a date
     var ageDifMs = Date.now() - birthday.getTime();
     var ageDate = new Date(ageDifMs); // miliseconds from epoch
-    console.log(Math.abs(ageDate.getUTCFullYear() - 1970),'Math.abs(ageDate.getUTCFullYear() - 1970)',birthday)
+    console.log(Math.abs(ageDate.getUTCFullYear() - 1970), 'Math.abs(ageDate.getUTCFullYear() - 1970)', birthday)
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   }
   render() {
@@ -41,12 +42,16 @@ export class MyProfile extends Component {
       );
     };
     const currentUser = this.props.currentUser
-    console.log(currentUser, 'asdadsdsaads')
     const name = currentUser?.displayName ? currentUser?.displayName : currentUser?.email?.split('@')[0]
 
     let userAge = currentUser?.dob && this.getAge(new Date(currentUser?.dob))
     return (
       <View style={styles.container}>
+        {this.props.loader &&
+          <View style={{ position: "absolute", zIndex: 2, height: '100%', width: '100%', backgroundColor: 'rgba(10,10,10,0.5)', justifyContent: "center", alignItems: 'center' }}>
+            <ActivityIndicator size="large" color={'white'} />
+          </View>
+        }
         <View style={styles.headerContainer}>
           <ImageBackground source={require("../assets/icons/profile-header.png")} resizeMode="cover" style={styles.headerImage} />
 
@@ -118,7 +123,8 @@ export class MyProfile extends Component {
 
 function mapStateToProps(states) {
   return ({
-    currentUser: states.root.currentUser
+    currentUser: states.root.currentUser,
+    loader: states.root.loader
   })
 }
 

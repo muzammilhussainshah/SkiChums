@@ -6,7 +6,7 @@ const INITIAL_STATE = {
     myChatRoom: [],
     myGroupChatRoom: [],
     messages: [],
-    loader: [],
+    loader: false,
     currentUser: [],
 }
 

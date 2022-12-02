@@ -42,13 +42,9 @@ export class SettingProfileContainer extends Component {
     }
     componentDidMount() {
         let currentUser = this.props.currentUser
-        console.log(currentUser, 'currentUser')
-        if (currentUser?.firstName && currentUser?.lastName) {
-
-        }
         if (currentUser.firstName) this.setState({ firstName: currentUser?.firstName, })
         if (currentUser.lastName) this.setState({ lastName: currentUser?.lastName })
-        if (currentUser?.photoURL) this.setState({ firstName: currentUser?.photoURL, })
+        if (currentUser?.photoURL) this.setState({ photoUrl: currentUser?.photoURL, })
         if (currentUser.about) this.setState({ bio: currentUser?.about, })
         if (currentUser.TOSvalue) this.setState({ TOSvalue: currentUser?.TOSvalue, })
         if (currentUser.LOSvalue) this.setState({ LOSvalue: currentUser?.LOSvalue, })

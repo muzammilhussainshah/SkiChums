@@ -10,9 +10,9 @@ export default class SCProfileCompletenessView extends Component {
             {
                 <View style={[this.props.style ?? {}, styles.container]}>
                     <Text style={styles.title}>
-                        Profile 70% complete
+                        Profile 100% complete
                     </Text>
-                    <Progress.Bar progress={0.7} width={300} style={styles.proressBar}></Progress.Bar>
+                    <Progress.Bar progress={1} width={300} style={styles.proressBar}></Progress.Bar>
                 </View>
                 
             }

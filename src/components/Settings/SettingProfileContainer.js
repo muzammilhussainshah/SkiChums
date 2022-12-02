@@ -7,15 +7,18 @@ import CountryPicker from 'react-native-country-picker-modal';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import SettingProfileTxtField from "./SettingProfileTxtField";
 import DatePicker from 'react-native-date-picker'
+import ImgToBase64 from 'react-native-image-base64';
 import { launchImageLibrary } from 'react-native-image-picker';
 import SCColors from "../../styles/SCColors";
 
 export default class SettingProfileContainer extends Component {
-    // const[imageUriLocal, setimageUriLocal] = useState('');
     constructor(props) {
         super(props);
         this.state = {
 
+            firstName: '',
+            lastName: '',
+            bio: '',
             imageUriLocal: '',
             DOBenabled: false,
             date: '',
@@ -28,14 +31,10 @@ export default class SettingProfileContainer extends Component {
             LOSoptions: [{ name: 'Professional' }, { name: 'Expert' }, { name: 'Intermediate' }, { name: 'Beginner' }],
             LANGenabled: false,
             selectedLanguages: [],
-            // DOBenabled: false,
-            //   const [date, setDate] = useState(new Date())
-            //   const [open, setOpen] = useState(false)
         }
     }
 
     render() {
-        console.log(this.state.selectedLanguages, 'asddsadsadasads')
         return (
             <>
                 {this.state.DOBenabled == true &&
@@ -63,32 +62,14 @@ export default class SettingProfileContainer extends Component {
                             {this.state.LOSoptions.map(this.renderItemLOS)}
                         </View>
                     </TouchableOpacity>}
-                {/* {this.state.LANGenabled && */}
                 <CountryPicker
                     countryCode={'HK'}
-                    // withCallingCode
-
                     withFilter
-                    // withEmoji
-                    // withFlag
                     withFlagButton={false}
                     onClose={() => this.closePicker()}
-                    onSelect={(country) => {
-                        this.closePicker()
-                        let languageCLone = JSON.parse(JSON.stringify(this.state.selectedLanguages))
-                        let index = languageCLone.findIndex((val) => val == country.cca2)
-                        if (index == -1) languageCLone.push(country.cca2)
-
-                        // if (index !== -1) languageCLone.splice(index, 1)
-                        // else languageCLone.push(country.cca2)
-                        this.setState({ selectedLanguages: languageCLone })
-                    }}
+                    onSelect={this.selectLanguag}
                     visible={this.state.LANGenabled}
                 />
-                {/* } */}
-
-
-
 
                 {/* <ScrollView style={[this.props.style ?? {}, styles.container]}> */}
                 <View style={styles.header}>
@@ -109,8 +90,8 @@ export default class SettingProfileContainer extends Component {
 
 
 
-                <SettingProfileTxtField type={'first'} />
-                <SettingProfileTxtField type={'last'} />
+                <SettingProfileTxtField type={'first'} callBack={(val) => this.setState({ firstName: val })} />
+                <SettingProfileTxtField type={'last'} callBack={(val) => this.setState({ lastName: val })} />
                 <SettingProfileTxtField value={this.state.date} callBack={() => this.setState({ DOBenabled: true })} type={'dob'} />
 
 
@@ -119,19 +100,31 @@ export default class SettingProfileContainer extends Component {
                 <SettingProfileTxtField value={this.state.LOSenabled} callBack={() => this.setState({ LOSenabled: true })} type={'los'} />
                 {/* <SettingProfileTxtField type={'los'} /> */}
                 <SettingProfileTxtField
-
                     removeLanguage={(lang) => this.removeLanguage(lang)}
-                    value={this.state.selectedLanguages} type={'lang'} callBack={() => this.setState({ LANGenabled: true })} />
-                <SettingProfileTxtField type={'bio'} />
+                    value={this.state.selectedLanguages}
+                    type={'lang'}
+                    callBack={() => this.setState({ LANGenabled: true })} />
+                <SettingProfileTxtField
+                    type={'bio'}
+                    callBack={(val) => this.setState({ bio: val })}
+                />
                 <SettingProfileSocialConnectionVIew />
                 <SCGradientButton
                     buttonTitle={`Save Changes`}
-                    onClick={() => alert()}
+                    onClick={() => console.log(this.state,'adsasddasdasdas')}
                     style={styles.saveChangesStyle} />
                 {/* </ScrollView> */}
             </>
         )
     }
+    selectLanguag = (country) => {
+        this.closePicker()
+        let languageCLone = JSON.parse(JSON.stringify(this.state.selectedLanguages))
+        let index = languageCLone.findIndex((val) => val == country.cca2)
+        if (index == -1) languageCLone.push(country.cca2)
+        this.setState({ selectedLanguages: languageCLone })
+    }
+
     closePicker() {
         this.setState({ LANGenabled: false })
     }

@@ -41,9 +41,7 @@ export default class SettingProfileTxtField extends Component {
                                                         data={this?.props?.value}
                                                         horizontal
                                                         renderItem={({ item, index }) => {
-                                                            console.log(item, 'codecodecodecode')
                                                             return (
-                                                                // <></>
                                                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                                     <TouchableOpacity
                                                                         onPress={this.props.callBack}
@@ -105,6 +103,8 @@ export default class SettingProfileTxtField extends Component {
                                     :
                                     <View style={styles.inputContainer}>
                                         <TextInput
+
+                                            onChangeText={(text) => this?.props?.callBack(text)}
                                             style={styles.input} placeholder={type == 'first' ? 'First name' : type == 'last' ? 'Last name' : type == 'dob' ? 'Date of birth' : type == 'location' ? 'Location' : type == 'tos' ? 'Type of sport' : type == 'los' ? 'Level of sport' : type == 'lang' ? 'Languages' : type == 'bio' ? 'Bio' : ''} />
                                         <View style={styles.bottomLine} />
                                     </View>

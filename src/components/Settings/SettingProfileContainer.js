@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { TouchableOpacity, View, StyleSheet, Platform, Image, Text, ScrollView} from "react-native";
+import { TouchableOpacity, View, StyleSheet, Platform, Image, Text, ScrollView } from "react-native";
+import SCGradientButton from "../SCGradientButton";
 import SettingItem from "./SettingItem";
 import SettingProfileSocialConnectionVIew from "./SettingProfileSocialConnectionVIew";
 import SettingProfileTxtField from "./SettingProfileTxtField";
@@ -7,50 +8,54 @@ import SettingProfileTxtField from "./SettingProfileTxtField";
 export default class SettingProfileContainer extends Component {
     render() {
         return (
+            <>
+
                 <ScrollView style={[this.props.style ?? {}, styles.container]}>
-                    
-                    <View style={styles.header}>                        
+
+                    <View style={styles.header}>
                         <View style={styles.photoView}>
-                            <Image source={require("../../assets/icons/sample-chum-profile.png")} style={styles.photo}/>
+                            <Image source={require("../../assets/icons/sample-chum-profile.png")} style={styles.photo} />
                             <TouchableOpacity>
                                 <Text style={styles.changeButton} change profile picture>
                                     change profile picture
                                 </Text>
                             </TouchableOpacity>
 
-                                                   
-                        </View>                     
-                        
-                        
+
+                        </View>
+
+
                         <TouchableOpacity style={styles.back} onPress={this.props.onBackClicked}>
-                            <Image source={require("../../assets/Settings/blue-chevron-left.png")}/>   
-                        </TouchableOpacity> 
+                            <Image source={require("../../assets/Settings/blue-chevron-left.png")} />
+                        </TouchableOpacity>
                     </View>
 
-                        
-                    
-                    <SettingProfileTxtField type={'first'}/>
-                    <SettingProfileTxtField type={'last'}/>
-                    <SettingProfileTxtField type={'dob'}/>
 
-                    
-                    <SettingProfileTxtField type={'location'}/>
-                    <SettingProfileTxtField type={'tos'}/>
-                    <SettingProfileTxtField type={'los'}/>
-                    <SettingProfileTxtField type={'lang'}/>
-                    <SettingProfileTxtField type={'bio'}/>      
-                    <SettingProfileSocialConnectionVIew/>    
 
-                      
-                           
-                </ScrollView>                
-        )        
+                    <SettingProfileTxtField type={'first'} />
+                    <SettingProfileTxtField type={'last'} />
+                    <SettingProfileTxtField type={'dob'} />
+
+
+                    <SettingProfileTxtField type={'location'} />
+                    <SettingProfileTxtField type={'tos'} />
+                    <SettingProfileTxtField type={'los'} />
+                    <SettingProfileTxtField type={'lang'} />
+                    <SettingProfileTxtField type={'bio'} />
+                    <SettingProfileSocialConnectionVIew />
+                    <SCGradientButton
+                        buttonTitle={`Save Changes`}
+                        onClick={() => alert()}
+                        style={styles.saveChangesStyle} />
+                </ScrollView>
+            </>
+        )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'column',        
+        flexDirection: 'column',
     },
     back: {
         position: 'absolute',
@@ -62,14 +67,14 @@ const styles = StyleSheet.create({
     header: {
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',     
-    }, 
+        justifyContent: 'center',
+    },
     changeButton: {
         color: 'black',
         fontSize: 12,
         textDecorationLine: 'underline',
         marginTop: 12,
-    }, 
+    },
     photoView: {
         flexDirection: 'column',
         alignItems: 'center',
@@ -80,6 +85,7 @@ const styles = StyleSheet.create({
         borderRadius: 35,
         alignItems: 'center',
         justifyContent: 'center',
-    }
+    },
+    saveChangesStyle: { position: "absolute", zIndex: 2, width: "80%", alignSelf: 'center', bottom: '-25%', }
 
 })

@@ -10,16 +10,16 @@ export default class SCGradientButton extends Component {
             <View style={[this.props.style ?? {}, styles.container]}>
                 <View style={styles.gradientContainer}>
                     <TouchableOpacity style={styles.buttonView} onPress={this.props.onClick}>
-                        <LinearGradient start={{x: 1.0, y: 0.5}} end={{x: 0.0, y: 0.5}} colors={[SCColors.gradientRight, SCColors.gradientLeft]} style={styles.linearGradient}>
+                        <LinearGradient start={{ x: 1.0, y: 0.5 }} end={{ x: 0.0, y: 0.5 }} colors={[SCColors.gradientRight, SCColors.gradientLeft]} style={styles.linearGradient}>
                             <Text style={styles.buttonTitle}>
                                 {buttonTitle}
                             </Text>
                         </LinearGradient>
-                    </TouchableOpacity>             
+                    </TouchableOpacity>
                 </View>
 
             </View>
-        )        
+        )
     }
 }
 
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         shadowColor: 'black',
-        shadowOffset: {width: 1, height: 5},
+        shadowOffset: { width: 1, height: 5 },
         shadowOpacity: 0.4,
         shadowRadius: 3,
         elevation: 5,

@@ -31,6 +31,7 @@ class SettingsRoundContainer extends Component {
                     onLogout={this.onLogout}
                     onSessionClicked={this.onSessionClicked} />) :
                     (<SettingProfileContainer onBackClicked={this.onProfileBackClicked} />)}
+                {/* <View style={{ height: 100, position: 'absolute', zIndex: 1, bottom: 0, width: '80%', alignSelf: 'center', backgroundColor: 'red' }}></View> */}
 
             </View>
         )
@@ -58,7 +59,7 @@ class SettingsRoundContainer extends Component {
                 // let fcmToken = await messaging().getToken()
                 if (user.uid
                     //  && fcmToken
-                     ) {
+                ) {
 
                     await
                         firestore()

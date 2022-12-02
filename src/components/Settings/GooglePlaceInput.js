@@ -8,9 +8,10 @@ export default class GooglePlaceInput extends Component {
         return (
           <View style={{flex:1}}>
 
-            <View style={{ width: "92%",left:'13%',top:"-20%", position: "absolute", zIndex: 1  }}>
+            <View style={{ width: "92%",left:'13%',top:"-20%", position: "absolute", zIndex: 1,backgroundColor:'#ebf2ff'  }}>
             <View style={{ width: "95%",}}>
               <GooglePlacesAutocomplete
+               listViewDisplayed={ true }
                 placeholder='Location'
                 minLength={2}
                 onPress={(data, details = null) => {
@@ -29,16 +30,17 @@ export default class GooglePlaceInput extends Component {
                 fetchDetails={true}
                 styles={{
                   textInputContainer: {
-                    backgroundColor: 'white',
+                    backgroundColor: '#ebf2ff',
                     borderTopWidth: 0,
                     borderBottomWidth: 0,
                   },
                   listView: { backgroundColor: "white", height: 100 },
                   textInput: {
-                    // backgroundColor: '#F2F2F2',
+                    backgroundColor: '#ebf2ff',
                     marginLeft: 0,
                     marginRight: 0,
                     paddingBottom: 15,
+                    paddingLeft: 0,
                     color: '#5d5d5d',
                     fontSize: 16,
                     borderBottomColor:'#0A63EB',

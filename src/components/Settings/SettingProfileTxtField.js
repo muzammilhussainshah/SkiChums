@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import  GooglePlaceInput  from '../../components/Settings/GooglePlaceInput';
+import GooglePlaceInput from '../../components/Settings/GooglePlaceInput';
 
 export default class SettingProfileTxtField extends Component {
     render() {
+        // console.log(this?.props?.value.toLocaleDateString("en-US"), 'valuevaluevaluevalue')
         let type = this.props.type;
         return (
             <>
@@ -15,12 +16,36 @@ export default class SettingProfileTxtField extends Component {
                         </Text>
                         {
                             type === 'location' ?
-                            <GooglePlaceInput/> 
+                                <GooglePlaceInput />
                                 :
-                                <View style={styles.inputContainer}>
-                                    <TextInput style={styles.input} placeholder={type == 'first' ? 'First name' : type == 'last' ? 'Last name' : type == 'dob' ? 'Date of birth' : type == 'location' ? 'Location' : type == 'tos' ? 'Type of sport' : type == 'los' ? 'Level of sport' : type == 'lang' ? 'Languages' : type == 'bio' ? 'Bio' : ''} />
-                                    <View style={styles.bottomLine} />
-                                </View>
+
+                                type === 'dob' ?
+
+                                    <View
+                                        style={{
+                                            width: '75%',
+                                            left: 20
+                                        }}
+                                    >
+                                        <TouchableOpacity onPress={this.props.callBack}>
+                                            <Text style={
+                                                // styles.input
+                                                { color: this?.props?.value ? 'black' : '#a9a9a9' }
+                                            }>
+                                                {this?.props?.value ?
+                                                    this?.props?.value?.toLocaleDateString("en-US") :
+                                                    `Date of birth`
+                                                }
+                                            </Text>
+                                        </TouchableOpacity>
+                                        <View style={styles.bottomLine} />
+                                    </View>
+                                    :
+                                   <View style={styles.inputContainer}>
+                                        <TextInput
+                                            style={styles.input} placeholder={type == 'first' ? 'First name' : type == 'last' ? 'Last name' : type == 'dob' ? 'Date of birth' : type == 'location' ? 'Location' : type == 'tos' ? 'Type of sport' : type == 'los' ? 'Level of sport' : type == 'lang' ? 'Languages' : type == 'bio' ? 'Bio' : ''} />
+                                        <View style={styles.bottomLine} />
+                                    </View>
                         }
 
                     </View>

@@ -5,6 +5,7 @@ import SettingItem from "./SettingItem";
 import SettingProfileSocialConnectionVIew from "./SettingProfileSocialConnectionVIew";
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import SettingProfileTxtField from "./SettingProfileTxtField";
+import DatePicker from 'react-native-date-picker'
 import { launchImageLibrary } from 'react-native-image-picker';
 import SCColors from "../../styles/SCColors";
 
@@ -13,15 +14,29 @@ export default class SettingProfileContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageUriLocal: ''
+
+            imageUriLocal: '',
+            DOBenabled: false,
+            date: '',
+            open: false,
+            // DOBenabled: false,
+            //   const [date, setDate] = useState(new Date())
+            //   const [open, setOpen] = useState(false)
         }
     }
     render() {
         return (
             <>
-
+                {this.state.DOBenabled == true &&
+                    <DatePicker
+                        modal
+                        open={this.state.DOBenabled}
+                        date={this.state.date ? this.state.date : new Date()}
+                        mode='date'
+                        onConfirm={(date) => this.setState({ DOBenabled: false, date: date })}
+                        onCancel={() => this.setState({ DOBenabled: false, })}
+                    />}
                 <ScrollView style={[this.props.style ?? {}, styles.container]}>
-
                     <View style={styles.header}>
                         <View style={styles.photoView}>
                             {this.state.imageUriLocal ?
@@ -29,18 +44,10 @@ export default class SettingProfileContainer extends Component {
                                 :
                                 <FontAwesome name="user-circle-o" color={SCColors.main} size={70} />
                             }
-
-                            {/* <Image source={require("../../assets/icons/sample-chum-profile.png")} style={styles.photo} /> */}
                             <TouchableOpacity onPress={this.getImg}>
-                                <Text style={styles.changeButton}>
-                                    change profile picture
-                                </Text>
+                                <Text style={styles.changeButton}>change profile picture</Text>
                             </TouchableOpacity>
-
-
                         </View>
-
-
                         <TouchableOpacity style={styles.back} onPress={this.props.onBackClicked}>
                             <Image source={require("../../assets/Settings/blue-chevron-left.png")} />
                         </TouchableOpacity>
@@ -50,7 +57,12 @@ export default class SettingProfileContainer extends Component {
 
                     <SettingProfileTxtField type={'first'} />
                     <SettingProfileTxtField type={'last'} />
-                    <SettingProfileTxtField type={'dob'} />
+                    <SettingProfileTxtField
+                        value={this.state.date}
+                        callBack={() => {
+                            this.setState({ DOBenabled: true })
+                        }}
+                        type={'dob'} />
 
 
                     <SettingProfileTxtField type={'location'} />

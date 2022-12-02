@@ -66,17 +66,29 @@ import LiveSession from '../../pages/LiveSession';
             <View
               style={
                 {height: 107,
-                  paddingLeft: 0,
-                  paddingRight: 0,
-                  borderTopLeftRadius: 40,
-                borderTopRightRadius: 40,
-              backgroundColor: 'white'}
+              
+              backgroundColor: 'white'
+            }
               }                            
             >              
                <BottomTabBar
                 {...props}
 
-                style={{ backgroundColor: 'transparent' }}
+                style={{ backgroundColor: '#ecf0f7',
+                paddingLeft: 0,
+                height: 107,
+                paddingRight: 0,
+                borderTopLeftRadius: 40,
+                borderTopRightRadius: 40,
+                // backgroundColor:'#d9d9d9',
+                shadowColor: "#000000",
+                shadowOpacity: 0.4,
+                shadowRadius: 5,
+                shadowOffset: {
+                  height: 1,
+                  width: 1
+                }
+              }}
               />
             </View>
           ) : (

@@ -19,11 +19,16 @@ export default class SettingProfileContainer extends Component {
             DOBenabled: false,
             date: '',
             open: false,
+            TOSenabled: false,
+            TOSvalue: '',
+            TOSoptions: [{ name: 'Snowboard' }, { name: 'Sky' }, { name: 'Other' }],
+            LOSoptions: [{ name: 'Professional' }, { name: 'Expert' }, { name: 'Intermediate' }, { name: 'Beginner' }],
             // DOBenabled: false,
             //   const [date, setDate] = useState(new Date())
             //   const [open, setOpen] = useState(false)
         }
     }
+
     render() {
         return (
             <>
@@ -36,48 +41,70 @@ export default class SettingProfileContainer extends Component {
                         onConfirm={(date) => this.setState({ DOBenabled: false, date: date })}
                         onCancel={() => this.setState({ DOBenabled: false, })}
                     />}
-                <ScrollView style={[this.props.style ?? {}, styles.container]}>
-                    <View style={styles.header}>
-                        <View style={styles.photoView}>
-                            {this.state.imageUriLocal ?
-                                <Image source={{ uri: this.state.imageUriLocal }} style={styles.photo} />
-                                :
-                                <FontAwesome name="user-circle-o" color={SCColors.main} size={70} />
-                            }
-                            <TouchableOpacity onPress={this.getImg}>
-                                <Text style={styles.changeButton}>change profile picture</Text>
-                            </TouchableOpacity>
+                {this.state.TOSenabled == true &&
+                    <TouchableOpacity
+                        onPress={this.closeDropDown}
+                        style={styles.dropDownContainer} >
+                        <View style={styles.dropDownContainerWrapper}>
+                            {this.state.TOSoptions.map(this.renderItem)}
                         </View>
-                        <TouchableOpacity style={styles.back} onPress={this.props.onBackClicked}>
-                            <Image source={require("../../assets/Settings/blue-chevron-left.png")} />
+                    </TouchableOpacity>}
+                {/* <ScrollView style={[this.props.style ?? {}, styles.container]}> */}
+                <View style={styles.header}>
+                    <View style={styles.photoView}>
+                        {this.state.imageUriLocal ?
+                            <Image source={{ uri: this.state.imageUriLocal }} style={styles.photo} />
+                            :
+                            <FontAwesome name="user-circle-o" color={SCColors.main} size={70} />
+                        }
+                        <TouchableOpacity onPress={this.getImg}>
+                            <Text style={styles.changeButton}>change profile picture</Text>
                         </TouchableOpacity>
                     </View>
+                    <TouchableOpacity style={styles.back} onPress={this.props.onBackClicked}>
+                        <Image source={require("../../assets/Settings/blue-chevron-left.png")} />
+                    </TouchableOpacity>
+                </View>
 
 
 
-                    <SettingProfileTxtField type={'first'} />
-                    <SettingProfileTxtField type={'last'} />
-                    <SettingProfileTxtField
-                        value={this.state.date}
-                        callBack={() => {
-                            this.setState({ DOBenabled: true })
-                        }}
-                        type={'dob'} />
+                <SettingProfileTxtField type={'first'} />
+                <SettingProfileTxtField type={'last'} />
+                <SettingProfileTxtField value={this.state.date} callBack={() => this.setState({ DOBenabled: true })} type={'dob'} />
 
 
-                    <SettingProfileTxtField type={'location'} />
-                    <SettingProfileTxtField type={'tos'} />
-                    <SettingProfileTxtField type={'los'} />
-                    <SettingProfileTxtField type={'lang'} />
-                    <SettingProfileTxtField type={'bio'} />
-                    <SettingProfileSocialConnectionVIew />
-                    <SCGradientButton
-                        buttonTitle={`Save Changes`}
-                        onClick={() => alert()}
-                        style={styles.saveChangesStyle} />
-                </ScrollView>
+                <SettingProfileTxtField type={'location'} />
+                <SettingProfileTxtField
+                    value={this.state.TOSvalue} callBack={() => this.setState({ TOSenabled: true })} type={'tos'} />
+                {/* <SettingProfileTxtField type={'tos'} /> */}
+                <SettingProfileTxtField type={'los'} />
+                <SettingProfileTxtField type={'lang'} />
+                <SettingProfileTxtField type={'bio'} />
+                <SettingProfileSocialConnectionVIew />
+                <SCGradientButton
+                    buttonTitle={`Save Changes`}
+                    onClick={() => alert()}
+                    style={styles.saveChangesStyle} />
+                {/* </ScrollView> */}
             </>
         )
+    }
+
+    renderItem = (item) => {
+        return (
+            <TouchableOpacity
+                onPress={() => {
+                    this.closeDropDown()
+                    this.setState({ TOSvalue: item.name })
+                }}
+                style={styles.dropValue}>
+                <Text style={{}}>{item.name}</Text>
+            </TouchableOpacity>
+
+        )
+    }
+    closeDropDown() {
+        this.setState({ TOSenabled: false, })
     }
     getImg = async () => {
         try {
@@ -155,6 +182,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    saveChangesStyle: { position: "absolute", zIndex: 2, width: "80%", alignSelf: 'center', bottom: '-25%', }
+    saveChangesStyle: { position: "absolute", zIndex: 2, width: "80%", alignSelf: 'center', bottom: '10%', },
+    dropDownContainer: { position: "absolute", zIndex: 2, height: '100%', width: '100%', alignItems: "flex-end" },
+    dropValue: { padding: 5, borderBottomColor: 'black' },
+    dropDownContainerWrapper: {
+        width: '67%',
+        right: 20,
+        top: '54.5%', backgroundColor: 'white',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
+        borderColor: 'black',
+        borderWidth: .3,
+        borderTopWidth: .6
+
+    }
 
 })

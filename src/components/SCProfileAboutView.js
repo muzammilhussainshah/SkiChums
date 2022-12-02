@@ -11,7 +11,7 @@ export default class SCProfileAboutView extends Component {
                             About
                         </Text>
                         <Text style={styles.description}>
-                            {this?.props?.currentUser?.about}
+                            {this?.props?.currentUser?.about?this?.props?.currentUser?.about:'Please set your bio in settings screen'}
                             {/* Hey, I am an expert skater. Hey, I am an expert skater. Hey, I am an expert skater. Hey, I am an expert skater. */}
                         </Text>
                     </View>

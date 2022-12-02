@@ -10,8 +10,10 @@ import DatePicker from 'react-native-date-picker'
 import ImgToBase64 from 'react-native-image-base64';
 import { launchImageLibrary } from 'react-native-image-picker';
 import SCColors from "../../styles/SCColors";
+import { updateProfile } from "../../store/action/action";
+import { connect } from "react-redux";
 
-export default class SettingProfileContainer extends Component {
+export class SettingProfileContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,7 +21,8 @@ export default class SettingProfileContainer extends Component {
             firstName: '',
             lastName: '',
             bio: '',
-            imageUriLocal: '',
+            photoUrl: '',
+            photoUrlData: '',
             DOBenabled: false,
             date: '',
             open: false,
@@ -46,9 +49,9 @@ export default class SettingProfileContainer extends Component {
                         onConfirm={(date) => this.setState({ DOBenabled: false, date: date })}
                         onCancel={() => this.setState({ DOBenabled: false, })}
                     />}
-                {this.state.TOSenabled == true &&
+                {this.state.TOSenabled &&
                     <TouchableOpacity
-                        onPress={this.closeDropDown}
+                        onPress={() => this.closeDropDown()}
                         style={styles.dropDownContainer} >
                         <View style={styles.dropDownContainerWrapper}>
                             {this.state.TOSoptions.map(this.renderItem)}
@@ -56,7 +59,7 @@ export default class SettingProfileContainer extends Component {
                     </TouchableOpacity>}
                 {this.state.LOSenabled == true &&
                     <TouchableOpacity
-                        onPress={this.closeDropDownLOS}
+                        onPress={() => this.closeDropDownLOS()}
                         style={styles.dropDownContainer} >
                         <View style={styles.dropDownContainerWrapperLOS}>
                             {this.state.LOSoptions.map(this.renderItemLOS)}
@@ -74,8 +77,8 @@ export default class SettingProfileContainer extends Component {
                 {/* <ScrollView style={[this.props.style ?? {}, styles.container]}> */}
                 <View style={styles.header}>
                     <View style={styles.photoView}>
-                        {this.state.imageUriLocal ?
-                            <Image source={{ uri: this.state.imageUriLocal }} style={styles.photo} />
+                        {this.state.photoUrl ?
+                            <Image source={{ uri: this.state.photoUrl }} style={styles.photo} />
                             :
                             <FontAwesome name="user-circle-o" color={SCColors.main} size={70} />
                         }
@@ -97,7 +100,7 @@ export default class SettingProfileContainer extends Component {
 
                 <SettingProfileTxtField type={'location'} />
                 <SettingProfileTxtField value={this.state.TOSvalue} callBack={() => this.setState({ TOSenabled: true })} type={'tos'} />
-                <SettingProfileTxtField value={this.state.LOSenabled} callBack={() => this.setState({ LOSenabled: true })} type={'los'} />
+                <SettingProfileTxtField value={this.state.LOSvalue} callBack={() => this.setState({ LOSenabled: true })} type={'los'} />
                 {/* <SettingProfileTxtField type={'los'} /> */}
                 <SettingProfileTxtField
                     removeLanguage={(lang) => this.removeLanguage(lang)}
@@ -111,7 +114,10 @@ export default class SettingProfileContainer extends Component {
                 <SettingProfileSocialConnectionVIew />
                 <SCGradientButton
                     buttonTitle={`Save Changes`}
-                    onClick={() => console.log(this.state,'adsasddasdasdas')}
+                    onClick={async () => {
+                        await this.props.updateProfile(this.state, this.props.currentUser)
+                        this.props.onClose()
+                    }}
                     style={styles.saveChangesStyle} />
                 {/* </ScrollView> */}
             </>
@@ -132,7 +138,6 @@ export default class SettingProfileContainer extends Component {
         let languageCLone = JSON.parse(JSON.stringify(this.state.selectedLanguages))
         let index = languageCLone.findIndex((val) => val == item)
         if (index !== -1) languageCLone.splice(index, 1)
-        // else languageCLone.push(country.cca2)
         this.setState({ selectedLanguages: languageCLone })
     }
     renderItem = (item) => {
@@ -153,7 +158,7 @@ export default class SettingProfileContainer extends Component {
             <TouchableOpacity
                 onPress={() => {
                     this.closeDropDownLOS()
-                    this.setState({ LOSenabled: item.name })
+                    this.setState({ LOSvalue: item.name })
                 }}
                 style={styles.dropValue}>
                 <Text style={{}}>{item.name}</Text>
@@ -183,7 +188,7 @@ export default class SettingProfileContainer extends Component {
                 if (res.didCancel) {
                 } else if (res.error) {
                 } else {
-                    this.setState({ imageUriLocal: res.assets[0].uri })
+                    this.setState({ photoUrlData: res.assets[0], photoUrl: res.assets[0].uri })
                     // this.saveImage(res.assets[0].uri);
                 }
             });
@@ -192,19 +197,33 @@ export default class SettingProfileContainer extends Component {
         }
     };
     saveImage = (src) => {
-        // ImgToBase64.getBase64String(src)
-        //     .then((base64String) =>
-        //         dispatch(
-        //             saveData(
-        //                 'profilePic',
-        //                 `data:image/gif;base64,${base64String}`,
-        //                 currentUserProfile
-        //             )
-        //         )
-        //     )
-        //     .catch((err) => console.log(err, 'base64String'));
+        ImgToBase64.getBase64String(src)
+            .then((base64String) => this.setState({ photoUrl: `data:image/png;base64,${base64String}` }))
+            .catch((err) => console.log(err, 'base64String'));
     };
 }
+
+
+
+
+
+
+function mapStateToProps(states) {
+    return ({
+        currentUser: states.root.currentUser
+
+    })
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        updateProfile: (profileData, currentUser) => {
+            dispatch(updateProfile(profileData, currentUser));
+        },
+
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SettingProfileContainer);
 
 const styles = StyleSheet.create({
     container: {

@@ -20,8 +20,8 @@ export default class SettingProfileTxtField extends Component {
                         </Text>
                         {
                             type === 'location' ?
-                                // <GooglePlaceInput />
-                                <></>
+                                <GooglePlaceInput />
+                                // <View style={{backgroundColor:'red',height:'90%',marginBottom:'5%',left:40,width:'76%'}}></View>
                                 :
                                 (type === 'dob' || type === 'tos' || type === 'los' || type === 'lang') ?
 

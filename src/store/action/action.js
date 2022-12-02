@@ -2,6 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import { Alert } from 'react-native';
 import { firebase } from '@react-native-firebase/auth';
 import ActionTypes from '../constant/constant';
+// import storage from '@react-native-firebase/storage';
 
 function onError(error) { Alert.alert(error) }
 
@@ -212,5 +213,58 @@ export function addGroupMember(recipientData, updatedname, myChatRoom) {
 }
 export function sendMessageGroup() {
     return dispatch => {
+    }
+}
+
+// const uploadImageToStorage = (path, name) => {
+//     let reference = storage().ref(name);
+//     let task = reference.putFile(path);
+//     task.then((res) => {
+//         reference.getDownloadURL().then((downloadUrl) => {
+//             console.log(downloadUrl, 'download')
+//         })
+//         console.log('Image uploaded to the bucket!');
+//     }).catch((e) => {
+//         status = 'Something went wrong';
+//         console.log('uploading image error => ', e);
+//     });
+// }
+
+export function updateProfile(profileData, currentUser) {
+    return dispatch => {
+        console.log(profileData, 'update profile dat')
+        const user = firebase.auth().currentUser
+
+        const path = profileData?.photoUrlData?.uri
+        const filename = profileData?.photoUrlData?.fileName
+
+        // uploadImageToStorage(path, filename)
+
+        let profileObj = {}
+        if (profileData?.firstName?.length > 0) profileObj.firstName = profileData?.firstName
+        if (profileData?.lastName?.length > 0) profileObj.lastName = profileData?.lastName
+        if (profileData?.date) profileObj.dob = new Date(profileData?.date).valueOf()
+        if (profileData?.TOSvalue?.length > 0) profileObj.TOSvalue = profileData?.TOSvalue
+
+        if (profileData?.LOSvalue?.length > 0) profileObj.LOSvalue = profileData.LOSvalue
+        if (profileData?.selectedLanguages?.length > 0) profileObj.languages = profileData.selectedLanguages
+        if (profileData?.bio?.length > 0) profileObj.about = profileData.bio
+        // if (profileData?.photoUrl?.length > 0) profileObj.about = profileData.bio
+        // if (profileData?.photoUrl?.length > 0) profileObj.photoURL = profileData.photoUrl
+        // console.log(profileData?.photoUrl, 'profileData?.photoUrl')
+        if (profileData?.firstName.length > 0 && profileData?.lastName?.length > 0) profileObj.displayName = profileData?.firstName + profileData?.lastName
+
+        dispatch({ type: ActionTypes.CURRENTUSER, payload: { ...currentUser, ...profileObj } })
+
+        if (user?.uid) {
+            console.log(user?.uid, 'adsdasdas')
+            firestore()
+                .collection('chums')
+                .doc(user?.uid)
+                .update(profileObj)
+                .then(() => console.log('updated'))
+
+        }
+
     }
 }

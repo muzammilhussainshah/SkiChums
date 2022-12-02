@@ -17,9 +17,9 @@ export default class SCProfileInfoView extends Component {
                             <View style={styles.separator} />
                             <SCProfileAboutView style={styles.about}></SCProfileAboutView>
                             <View style={styles.experience}>
-                                <SCProfileLocationView type={'Location'}></SCProfileLocationView>
-                                <SCProfileLocationView type={'Level'}></SCProfileLocationView>
-                                <SCProfileLocationView type={'Speaks'}></SCProfileLocationView>
+                                <SCProfileLocationView currentUser={this.props.currentUser} type={'Location'}></SCProfileLocationView>
+                                <SCProfileLocationView currentUser={this.props.currentUser} type={'Level'}></SCProfileLocationView>
+                                <SCProfileLocationView currentUser={this.props.currentUser} type={'Speaks'}></SCProfileLocationView>
                             </View>
                             <View style={styles.social}>
                                 <TouchableOpacity style={styles.socialIcon}>

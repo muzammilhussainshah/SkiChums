@@ -11,7 +11,7 @@ export default class Settings extends Component {
             <View style={styles.container}>
 
                 <SettingsHeader onClose={this.onClose} />
-                <SettingsRoundContainer style={styles.roundContainer} />
+                <SettingsRoundContainer onClose={this.onClose} style={styles.roundContainer} />
             </View>
         );
     }

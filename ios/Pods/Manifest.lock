@@ -1079,6 +1079,8 @@ PODS:
     - Google-Maps-iOS-Utils (= 4.1.0)
     - GoogleMaps (= 7.0.0)
     - React-Core
+  - react-native-image-base64 (0.1.4):
+    - React
   - react-native-image-picker (4.10.2):
     - React-Core
   - react-native-maps (1.3.2):
@@ -1173,7 +1175,7 @@ PODS:
   - RNGoogleSignin (8.2.1):
     - GoogleSignIn (~> 6.2)
     - React-Core
-  - RNScreens (3.18.0):
+  - RNScreens (3.18.2):
     - React-Core
     - React-RCTImage
   - RNSVG (12.3.0):
@@ -1209,6 +1211,7 @@ DEPENDENCIES:
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-fbsdk-next (from `../node_modules/react-native-fbsdk-next`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
+  - react-native-image-base64 (from `../node_modules/react-native-image-base64`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -1312,6 +1315,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fbsdk-next"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-image-base64:
+    :path: "../node_modules/react-native-image-base64"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-maps:
@@ -1419,6 +1424,7 @@ SPEC CHECKSUMS:
   react-native-date-picker: 93e43b3084cea595b4d68b1405d6d99849663bd6
   react-native-fbsdk-next: c78dede90e3c50ab6936a7d56c43e1a9eb37e25a
   react-native-google-maps: 035ad2f9b4974f22af3d4d4c6993960a181b0aaf
+  react-native-image-base64: 2ff9ac788639c87a91361ab6652cc95e871b1e54
   react-native-image-picker: bf34f3f516d139ed3e24c5f5a381a91819e349ea
   react-native-maps: 085f614cf14d3637b2048bb9752da5b1c27c2886
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
@@ -1441,11 +1447,11 @@ SPEC CHECKSUMS:
   RNFBMessaging: 4a184e1af5bff970cbf70eab2263c85f612683eb
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: 3db2d849581299f425f5b61b90cb482a9e68c7af
-  RNScreens: f3230dd008a7d0ce5c0a8bc78ff12cf2315bda24
+  RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: 1561f557b0c2b6047a91f7619f666134e2288916
 
-PODFILE CHECKSUM: 50b13d2df02e07d43c0edde0e124059f857f2e1a
+PODFILE CHECKSUM: b2b0282d957dbf4d2755ae0695148e8c03dc9ad3
 
 COCOAPODS: 1.11.3

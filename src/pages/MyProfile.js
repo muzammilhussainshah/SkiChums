@@ -27,6 +27,12 @@ export class MyProfile extends Component {
     this.props.getMyChums()
 
   }
+  getAge(birthday) { // birthday is a date
+    var ageDifMs = Date.now() - birthday.getTime();
+    var ageDate = new Date(ageDifMs); // miliseconds from epoch
+    console.log(Math.abs(ageDate.getUTCFullYear() - 1970),'Math.abs(ageDate.getUTCFullYear() - 1970)',birthday)
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  }
   render() {
     console.log(this.props.currentUser, 'currentUsercurrentUsercurrentUser')
     const settingsScreen = () => {
@@ -35,7 +41,10 @@ export class MyProfile extends Component {
       );
     };
     const currentUser = this.props.currentUser
+    console.log(currentUser, 'asdadsdsaads')
     const name = currentUser?.displayName ? currentUser?.displayName : currentUser?.email?.split('@')[0]
+
+    let userAge = currentUser?.dob && this.getAge(new Date(currentUser?.dob))
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
@@ -57,7 +66,7 @@ export class MyProfile extends Component {
             </Text>
 
             <Text style={styles.profileExpTxt}>
-              30 y.o  |  Expert
+              {userAge} y.o  |  {currentUser?.LOSvalue}
             </Text>
 
             <View style={styles.profileHeaderSeparator}></View>
@@ -81,6 +90,8 @@ export class MyProfile extends Component {
 
           <SCProfileInfoView
             navigate={this.props.navigation}
+
+            currentUser={currentUser}
             style={styles.profileTabInfoContainer}></SCProfileInfoView>)
           : this.state.profileView == 'session' ?
             (<SCNoSessionView

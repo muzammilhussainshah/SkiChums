@@ -32,6 +32,7 @@
     "react-native-fbsdk-next": "11.1.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-google-places-autocomplete": "^2.5.1",
+    "react-native-image-base64": "^0.1.4",
     "react-native-image-picker": "^4.10.2",
     "react-native-ionicons": "^4.x",
     "react-native-linear-gradient": "^2.6.2",

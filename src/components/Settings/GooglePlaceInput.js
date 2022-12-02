@@ -16,6 +16,7 @@ export default class GooglePlaceInput extends Component {
               minLength={2}
               onPress={(data, details = null) => {
                 console.log(data, details, 'data, details')
+                
                 // 'details' is provided when fetchDetails = true
                 // console.log(data, details, "Console");
                 // let location = details.geometry.location

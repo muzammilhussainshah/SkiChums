@@ -249,10 +249,8 @@ export function updateProfile(profileData, currentUser) {
         if (profileData?.LOSvalue?.length > 0) profileObj.LOSvalue = profileData.LOSvalue
         if (profileData?.selectedLanguages?.length > 0) profileObj.languages = profileData.selectedLanguages
         if (profileData?.bio?.length > 0) profileObj.about = profileData.bio
-        // if (profileData?.photoUrl?.length > 0) profileObj.about = profileData.bio
-        // if (profileData?.photoUrl?.length > 0) profileObj.photoURL = profileData.photoUrl
-        // console.log(profileData?.photoUrl, 'profileData?.photoUrl')
-        if (profileData?.firstName.length > 0 && profileData?.lastName?.length > 0) profileObj.displayName = profileData?.firstName + profileData?.lastName
+        if (profileData?.location?.length > 0) profileObj.location = profileData.location
+        if (profileData?.firstName.length > 0 && profileData?.lastName?.length > 0) profileObj.displayName = profileData?.firstName + ' ' + profileData?.lastName
 
         dispatch({ type: ActionTypes.CURRENTUSER, payload: { ...currentUser, ...profileObj } })
 

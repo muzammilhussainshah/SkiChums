@@ -12,6 +12,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import SCColors from "../../styles/SCColors";
 import { updateProfile } from "../../store/action/action";
 import { connect } from "react-redux";
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export class SettingProfileContainer extends Component {
     constructor(props) {
@@ -34,10 +35,37 @@ export class SettingProfileContainer extends Component {
             LOSoptions: [{ name: 'Professional' }, { name: 'Expert' }, { name: 'Intermediate' }, { name: 'Beginner' }],
             LANGenabled: false,
             selectedLanguages: [],
+            GooglePlaceInputEnabled: false,
+            location: '',
+            zin: -2,
         }
     }
+    componentDidMount() {
+        let currentUser = this.props.currentUser
+        console.log(currentUser, 'currentUser')
+        if (currentUser?.firstName && currentUser?.lastName) {
 
+        }
+        if (currentUser.firstName) this.setState({ firstName: currentUser?.firstName, })
+        if (currentUser.lastName) this.setState({ lastName: currentUser?.lastName })
+        if (currentUser?.photoURL) this.setState({ firstName: currentUser?.photoURL, })
+        if (currentUser.about) this.setState({ bio: currentUser?.about, })
+        if (currentUser.TOSvalue) this.setState({ TOSvalue: currentUser?.TOSvalue, })
+        if (currentUser.LOSvalue) this.setState({ LOSvalue: currentUser?.LOSvalue, })
+        if (currentUser.dob) this.setState({ date: new Date(currentUser?.dob), })
+        if (currentUser.location) this.setState({ location: currentUser?.location })
+        if (currentUser.languages) this.setState({ selectedLanguages: currentUser?.languages })
+        // lastName: currentUser?.lastName,
+        // // photoUrl: currentUser?.photoURL,
+        // // date: currentUser?.dob,
+        // // bio: currentUser?.about,
+        // // TOSvalue: currentUser?.TOSvalue,
+        // // LOSvalue: currentUser?.LOSvalue,
+        // // selectedLanguages: currentUser?.languages,
+        // // location: currentUser?.location,
+    }
     render() {
+        let currentUser = this.props.currentUser
         return (
             <>
                 {this.state.DOBenabled == true &&
@@ -73,6 +101,48 @@ export class SettingProfileContainer extends Component {
                     onSelect={this.selectLanguag}
                     visible={this.state.LANGenabled}
                 />
+                {/* {this.state.GooglePlaceInputEnabled && */}
+                <View style={{ position: 'absolute', zIndex: 2, top: '40.5%', backgroundColor: 'red', width: '68%', right: 20 }}>
+
+                    <GooglePlacesAutocomplete
+                        placeholder={this?.state?.location ? this?.state?.location : "Location"}
+
+                        textInputProps={{ placeholderTextColor: this?.state?.location ? 'black' : null }}
+
+                        onPress={(data, details = null) => {
+                            this.setState({ location: data.description })
+                        }}
+                        query={{ key: 'AIzaSyBQHKZTwhPJX_9IevM5jKC8kmz0NzqAaBk' }}
+                        fetchDetails={true}
+                        onFail={error => console.log(error)}
+                        onNotFound={() => console.log('no results')}
+                        styles={{
+                            textInputContainer: {
+                                backgroundColor: '#ebf2ff',
+                                borderTopWidth: 0,
+                                borderBottomWidth: 0,
+                            },
+                            textInput: {
+                                backgroundColor: '#ebf2ff',
+                                marginLeft: 0,
+                                marginRight: 0,
+                                paddingTop: 20,
+                                paddingLeft: 0,
+                                color: '#5d5d5d',
+                                fontSize: 16,
+                                borderBottomColor: '#0A63EB',
+                                borderBottomWidth: 0.3,
+                            },
+                            predefinedPlacesDescription: {
+                                color: '#1faadb',
+                            },
+                        }}
+                        currentLocation={true}
+                        currentLocationLabel="Your location!" // add a simple label
+                    />
+                </View>
+                {/* } */}
+
 
                 {/* <ScrollView style={[this.props.style ?? {}, styles.container]}> */}
                 <View style={styles.header}>
@@ -93,12 +163,19 @@ export class SettingProfileContainer extends Component {
 
 
 
-                <SettingProfileTxtField type={'first'} callBack={(val) => this.setState({ firstName: val })} />
-                <SettingProfileTxtField type={'last'} callBack={(val) => this.setState({ lastName: val })} />
+                <SettingProfileTxtField type={'first'}
+                    value={this.state.firstName}
+                    callBack={(val) => this.setState({ firstName: val })} />
+                <SettingProfileTxtField
+                    value={this.state.lastName}
+
+                    type={'last'} callBack={(val) => this.setState({ lastName: val })} />
                 <SettingProfileTxtField value={this.state.date} callBack={() => this.setState({ DOBenabled: true })} type={'dob'} />
 
 
-                <SettingProfileTxtField type={'location'} />
+                {/* GooglePlaceInputEnabled<SettingProfileTxtField type={'location'} /> */}
+                <SettingProfileTxtField
+                    callBack={() => this.setState({ GooglePlaceInputEnabled: true })} type={'location'} />
                 <SettingProfileTxtField value={this.state.TOSvalue} callBack={() => this.setState({ TOSenabled: true })} type={'tos'} />
                 <SettingProfileTxtField value={this.state.LOSvalue} callBack={() => this.setState({ LOSenabled: true })} type={'los'} />
                 {/* <SettingProfileTxtField type={'los'} /> */}
@@ -109,6 +186,8 @@ export class SettingProfileContainer extends Component {
                     callBack={() => this.setState({ LANGenabled: true })} />
                 <SettingProfileTxtField
                     type={'bio'}
+                    value={this.state.bio}
+
                     callBack={(val) => this.setState({ bio: val })}
                 />
                 <SettingProfileSocialConnectionVIew />

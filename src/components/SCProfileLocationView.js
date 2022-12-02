@@ -19,7 +19,7 @@ export default class SCProfileLocationView extends Component {
                                 <Image source={require('../assets/icons/sample-switzerland-flag.png')} />
                             </View>
                             <Text style={styles.addressTxt}>
-                                {type == 'Location' ? 'Location' : type == 'Level' ? currentUser?.TOSvalue :
+                                {type == 'Location' ?  currentUser.location : type == 'Level' ? currentUser?.TOSvalue :
                                     currentUser?.languages?.map((item, index) => { return (item + ', ') }
                                     )
                                 }

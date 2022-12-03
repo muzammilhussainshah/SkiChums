@@ -29,13 +29,11 @@ export default class SCProfileLocationView extends Component {
                                         renderItem={({ item, index }) => {
                                             return (
                                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                    <TouchableOpacity
-                                                        onPress={this.props.callBack}
-                                                    >
-                                                        <TouchableOpacity onPress={() => this.props.removeLanguage(item)}>
-                                                        </TouchableOpacity>
+                                                    <View                                                    >
+                                                        <View  >
+                                                        </View>
                                                         <CountryFlag isoCode={item} style={{ borderRadius: 10, height: 20, marginHorizontal: 5, marginBottom: 5, width: 20 }} />
-                                                    </TouchableOpacity>
+                                                    </View>
                                                 </View>
                                             )
                                         }}
@@ -60,7 +58,7 @@ export default class SCProfileLocationView extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1
+        flex: 1
     },
     location: {
         textAlign: 'center',
@@ -69,13 +67,18 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     address: {
-        marginTop: 4,
+        // marginVertical: 10,
         flex: 1,
-        flexDirection: 'row'
+        // alignSelf:'center',
+        // backgroundColor:'red',justifyContent:'center',
+        alignItems:'center'
+        // flexDirection: 'row'
     },
     flag: {
         width: 15,
-        height: 15
+        height: 15,
+        marginVertical: 5,
+
     },
     addressTxt: {
         paddingLeft: 6,

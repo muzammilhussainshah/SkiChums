@@ -70,11 +70,10 @@ const styles = StyleSheet.create({
     },
     experience: {
         marginTop: 14,
-        marginHorizontal: 20,
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-evenly'
     },
     about: {
         marginTop: 12

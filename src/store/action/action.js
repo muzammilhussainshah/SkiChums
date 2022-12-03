@@ -142,8 +142,8 @@ export function getChatroom(mychums) {
             )
             .onSnapshot(querySnapshot => {
                 let groupchatroomArray = []
-                querySnapshot.forEach(documentSnapshot => {
-                    groupchatroomArray.push(documentSnapshot.data())
+                querySnapshot?.forEach(documentSnapshot => {
+                    groupchatroomArray.push(documentSnapshot?.data())
                 });
                 dispatch({ type: ActionTypes.MYGROUPCHATROOM, payload: groupchatroomArray })
             });

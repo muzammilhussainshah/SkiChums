@@ -42,8 +42,10 @@ export class SettingProfileContainer extends Component {
     }
     componentDidMount() {
         let currentUser = this.props.currentUser
-        if (currentUser.firstName) this.setState({ firstName: currentUser?.firstName, })
-        if (currentUser.lastName) this.setState({ lastName: currentUser?.lastName })
+        // let name = currentUser?.firstName ? currentUser?.firstName : currentUser?.displayName ? currentUser?.displayName : currentUser?.email?.split('@')[0]
+        if (currentUser.firstName || currentUser.displayName || email) this.setState({ firstName: currentUser?.firstName ? currentUser?.firstName : currentUser?.displayName ? currentUser?.displayName.split(' ')[0] : currentUser?.email?.split('@')[0], })
+        if (currentUser.lastName || currentUser.displayName) this.setState({ lastName: currentUser?.lastName ? currentUser?.lastName : currentUser?.displayName && currentUser?.displayName.split(' ')[1] })
+        // if (currentUser.lastName) this.setState({ lastName: currentUser?.lastName })
         if (currentUser?.photoURL) this.setState({ photoUrl: currentUser?.photoURL, })
         if (currentUser.about) this.setState({ bio: currentUser?.about, })
         if (currentUser.TOSvalue) this.setState({ TOSvalue: currentUser?.TOSvalue, })
@@ -187,16 +189,16 @@ export class SettingProfileContainer extends Component {
                     callBack={(val) => this.setState({ bio: val })}
                 />
                 <SettingProfileSocialConnectionVIew />
-                <View style={{flex:1}}>
+                <View style={{ flex: 1 }}>
 
-                <SCGradientButton
-                    buttonTitle={`Save Changes`}
-                    onClick={async () => {
-                        await this.props.updateProfile(this.state, this.props.currentUser)
-                        this.props.onClose()
-                    }}
-                    style={styles.saveChangesStyle} />
-                    </View>
+                    <SCGradientButton
+                        buttonTitle={`Save Changes`}
+                        onClick={async () => {
+                            await this.props.updateProfile(this.state, this.props.currentUser)
+                            this.props.onClose()
+                        }}
+                        style={styles.saveChangesStyle} />
+                </View>
                 {/* </ScrollView> */}
             </>
         )

@@ -9,7 +9,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import SCColors from "../../styles/SCColors";
 export default class SettingProfileTxtField extends Component {
     render() {
-        // console.log(this?.props?.value.toLocaleDateString("en-US"), 'valuevaluevaluevalue')
+        console.log(this?.props?.value , 'valuevaluevaluevalue')
         let type = this.props.type;
         return (
             <>

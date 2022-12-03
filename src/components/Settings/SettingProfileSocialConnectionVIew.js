@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import SCGradientButton from "../SCGradientButton";
 import SettingSocialConnectButton from "./SettingSocialConnectButton";
 
 export default class SettingProfileSocialConnectionVIew extends Component {
@@ -11,31 +12,41 @@ export default class SettingProfileSocialConnectionVIew extends Component {
                     Social Media
                 </Text>
                 <View style={styles.rightContainer}>
-                <View style={styles.socialContainer}>
-                    <Image source={require("../../assets/icons/ic_facebook.png")} style={styles.socialIcon}/>
-                    <Text style={styles.socialTxt}>
-                        Facebook
-                    </Text>
-                    <SettingSocialConnectButton/>
-                </View>
-                <View style={styles.socialContainer}>
-                    <Image source={require("../../assets/icons/ic_instagram.png")} style={styles.socialIcon}/>
+                    <View style={styles.socialContainer}>
+                        <Image source={require("../../assets/icons/ic_facebook.png")} style={styles.socialIcon} />
+                        <Text style={styles.socialTxt}>
+                            Facebook
+                        </Text>
+                        <SettingSocialConnectButton />
+                    </View>
+                    <View style={styles.socialContainer}>
+                        <Image source={require("../../assets/icons/ic_instagram.png")} style={styles.socialIcon} />
                         <Text style={styles.socialTxt}>
                             Instagram
                         </Text>
-                    <SettingSocialConnectButton/>
+                        <SettingSocialConnectButton />
                     </View>
                 </View>
-                    
-            </View>       
-        )        
+                {/* <View style={{ flex: 1 }}> */}
+
+                {/* </View> */}
+                <SCGradientButton
+                    buttonTitle={`Save Changes`}
+                    onClick={async () => {
+                        await this.props.updateProfile()
+                        this.props.onClose()
+                    }}
+                    style={styles.saveChangesStyle} />
+            </View>
+        )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        flex: 1,
+        // flexDirection: 'row',
+        // alignItems: 'center',
         marginLeft: 26,
         marginRight: 21,
 
@@ -69,6 +80,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginVertical: 4
-    }
-    
+    },
+    saveChangesStyle: {
+        //  position: "absolute", zIndex: 2,
+        width: "90%",
+        marginTop: '20%',
+        alignSelf: 'center',
+        // bottom: '10%', 
+    },
+
 })

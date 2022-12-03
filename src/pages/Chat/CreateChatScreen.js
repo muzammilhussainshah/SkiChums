@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     height: 178,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    backgroundColor: 'white'
+    backgroundColor: '#ecf0f7'
   },
   messageButtonContainer: {
     flexDirection: 'row',

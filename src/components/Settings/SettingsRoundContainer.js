@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.4,
         shadowRadius: 3,
         elevation: 2,
-        backgroundColor: Platform.OS == 'android' ? '#0000' : '#EBF2FF',
+        backgroundColor: Platform.OS == 'android' ? '#0000' : '#f7f7f7',
         paddingTop: 20
 
     },

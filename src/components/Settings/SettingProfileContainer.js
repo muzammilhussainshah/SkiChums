@@ -43,8 +43,8 @@ export class SettingProfileContainer extends Component {
     componentDidMount() {
         let currentUser = this.props.currentUser
         // let name = currentUser?.firstName ? currentUser?.firstName : currentUser?.displayName ? currentUser?.displayName : currentUser?.email?.split('@')[0]
-        if (currentUser.firstName || currentUser.displayName || email) this.setState({ firstName: currentUser?.firstName ? currentUser?.firstName : currentUser?.displayName ? currentUser?.displayName.split(' ')[0] : currentUser?.email?.split('@')[0], })
-        if (currentUser.lastName || currentUser.displayName) this.setState({ lastName: currentUser?.lastName ? currentUser?.lastName : currentUser?.displayName && currentUser?.displayName.split(' ')[1] })
+        if (currentUser?.firstName || currentUser?.displayName || currentUser?.email) this.setState({ firstName: currentUser?.firstName ? currentUser?.firstName : currentUser?.displayName ? currentUser?.displayName.split(' ')[0] : currentUser?.email?.split('@')[0], })
+        if (currentUser?.lastName || currentUser?.displayName) this.setState({ lastName: currentUser?.lastName ? currentUser?.lastName : currentUser?.displayName && currentUser?.displayName.split(' ')[1] })
         // if (currentUser.lastName) this.setState({ lastName: currentUser?.lastName })
         if (currentUser?.photoURL) this.setState({ photoUrl: currentUser?.photoURL, })
         if (currentUser.about) this.setState({ bio: currentUser?.about, })
@@ -100,7 +100,7 @@ export class SettingProfileContainer extends Component {
                     visible={this.state.LANGenabled}
                 />
                 {/* {this.state.GooglePlaceInputEnabled && */}
-                <View style={{ position: 'absolute', zIndex: 2, top: '40.5%' ,backgroundColor: 'red', width: '68%', right: 20 }}>
+                <View style={{ position: 'absolute', zIndex: 2, top: '40.5%', backgroundColor: 'red', width: '68%', right: 20 }}>
 
                     <GooglePlacesAutocomplete
                         placeholder={this?.state?.location ? this?.state?.location : "Location"}
@@ -114,14 +114,17 @@ export class SettingProfileContainer extends Component {
                         fetchDetails={true}
                         onFail={error => console.log(error)}
                         onNotFound={() => console.log('no results')}
+                        // listUnderlayColor={'red'}
                         styles={{
                             textInputContainer: {
-                                backgroundColor: '#ebf2ff',
+                                backgroundColor: '#f7f7f7',
+                                // backgroundColor: '#ebf2ff',
                                 borderTopWidth: 0,
                                 borderBottomWidth: 0,
                             },
                             textInput: {
-                                backgroundColor: '#ebf2ff',
+                                backgroundColor: '#f7f7f7',
+                                // backgroundColor: '#ebf2ff',
                                 marginLeft: 0,
                                 marginRight: 0,
                                 paddingTop: 20,
@@ -188,17 +191,10 @@ export class SettingProfileContainer extends Component {
 
                     callBack={(val) => this.setState({ bio: val })}
                 />
-                <SettingProfileSocialConnectionVIew />
-                <View style={{ flex: 1 }}>
-
-                    <SCGradientButton
-                        buttonTitle={`Save Changes`}
-                        onClick={async () => {
-                            await this.props.updateProfile(this.state, this.props.currentUser)
-                            this.props.onClose()
-                        }}
-                        style={styles.saveChangesStyle} />
-                </View>
+                <SettingProfileSocialConnectionVIew
+                    onClose={() => this.props.onClose()}
+                    updateProfile={() => this.props.updateProfile(this.state, this.props.currentUser)}
+                />
                 {/* </ScrollView> */}
             </>
         )
@@ -338,7 +334,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    saveChangesStyle: { position: "absolute", zIndex: 2, width: "80%", alignSelf: 'center', bottom: '10%', },
+    // saveChangesStyle: { position: "absolute", zIndex: 2, width: "80%", alignSelf: 'center', bottom: '10%', },
     dropDownContainer: { position: "absolute", zIndex: 2, height: '100%', width: '100%', alignItems: "flex-end" },
     dropValue: { padding: 5, borderBottomColor: 'black' },
     dropDownContainerWrapper: {

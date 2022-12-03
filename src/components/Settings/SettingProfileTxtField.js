@@ -9,7 +9,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import SCColors from "../../styles/SCColors";
 export default class SettingProfileTxtField extends Component {
     render() {
-        console.log(this?.props?.value , 'valuevaluevaluevalue')
+        console.log(this?.props?.value, 'valuevaluevaluevalue')
         let type = this.props.type;
         return (
             <>
@@ -19,11 +19,12 @@ export default class SettingProfileTxtField extends Component {
                             {type == 'first' ? 'First name' : type == 'last' ? 'Last name' : type == 'dob' ? 'Date of birth' : type == 'location' ? 'Location' : type == 'tos' ? 'Type of sport' : type == 'los' ? 'Level of sport' : type == 'lang' ? 'Languages' : type == 'bio' ? 'Bio' : ''}
                         </Text>
                         {
+                            // type=='lang'&&
                             // type === 'location' ?
                             //     <GooglePlaceInput />
                             //     // <View style={{backgroundColor:'red',position:"absolute",height:'100%',width:'100%'}}></View>
                             //     :
-                            (type === 'dob' || type === 'tos' || type === 'los' || type === 'lang') ?
+                            (type === 'dob' || type === 'tos' || type === 'los'||type === 'lang') ?
 
                                 <View
                                     style={{
@@ -101,6 +102,7 @@ export default class SettingProfileTxtField extends Component {
                                     />
                                 </View>
                                 :
+                                type !== 'location' &&
                                 <View style={styles.inputContainer}>
                                     <TextInput
                                         value={this.props.value}

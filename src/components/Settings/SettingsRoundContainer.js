@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import {
     View,
     StyleSheet,
-    Platform
+    Platform,
+    Dimensions
 } from "react-native";
 
 import firestore from '@react-native-firebase/firestore';
@@ -14,6 +15,8 @@ import SettingContainer from "./SettingContainer";
 import SettingProfileContainer from "./SettingProfileContainer";
 import { resetReducer } from '../../store/action/action'
 
+const windowHeight = Dimensions.get('window').height;
+const flex1 = windowHeight / 10
 class SettingsRoundContainer extends Component {
     constructor(props) {
         super(props);
@@ -31,7 +34,7 @@ class SettingsRoundContainer extends Component {
                     onLogout={this.onLogout}
                     onSessionClicked={this.onSessionClicked} />) :
 
-                    
+
                     (<SettingProfileContainer onClose={this.props.onClose} onBackClicked={this.onProfileBackClicked} />)}
 
             </View>
@@ -97,6 +100,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(SettingsRoundContain
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        // height: flex1 * 7,
         width: '100%',
         flexDirection: 'column',
         borderTopLeftRadius: 46,
@@ -106,6 +110,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         elevation: 2,
         backgroundColor: Platform.OS == 'android' ? '#0000' : '#f7f7f7',
+        // backgroundColor:'red',
         paddingTop: 20
 
     },

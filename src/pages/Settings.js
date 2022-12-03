@@ -4,14 +4,19 @@ import MapView from 'react-native-maps';
 import SettingsHeader from "../components/Settings/SettingsHeader";
 import ResortSearchBox from '../components/ResortSearchBox';
 import SettingsRoundContainer from "../components/Settings/SettingsRoundContainer";
+import { Dimensions } from "react-native";
 
+const windowHeight = Dimensions.get('window').height;
+const flex1 = windowHeight / 10
 export default class Settings extends Component {
     render() {
         return (
             <View style={styles.container}>
 
                 <SettingsHeader onClose={this.onClose} />
-                <SettingsRoundContainer onClose={this.onClose} style={styles.roundContainer} />
+                <View style={{ height: 650, width: '100%'  }}>
+                    <SettingsRoundContainer onClose={this.onClose} style={styles.roundContainer} />
+                </View>
             </View>
         );
     }
@@ -27,7 +32,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         backgroundColor: 'white',
     },
     roundContainer: {

@@ -100,7 +100,7 @@ export class SettingProfileContainer extends Component {
                     visible={this.state.LANGenabled}
                 />
                 {/* {this.state.GooglePlaceInputEnabled && */}
-                <View style={{ position: 'absolute', zIndex: 2, top: '40.5%', backgroundColor: 'red', width: '68%', right: 20 }}>
+                <View style={{ position: 'absolute', zIndex: 2, top: '39.5%', backgroundColor: 'red', width: '68%', right: '4%' }}>
 
                     <GooglePlacesAutocomplete
                         placeholder={this?.state?.location ? this?.state?.location : "Location"}
@@ -124,11 +124,12 @@ export class SettingProfileContainer extends Component {
                             },
                             textInput: {
                                 backgroundColor: '#f7f7f7',
+                                
                                 // backgroundColor: '#ebf2ff',
                                 marginLeft: 0,
                                 marginRight: 0,
-                                paddingTop: 20,
-                                paddingLeft: 0,
+                                paddingTop: '10%',
+                                paddingLeft: "1%",
                                 color: '#5d5d5d',
                                 fontSize: 16,
                                 borderBottomColor: '#0A63EB',

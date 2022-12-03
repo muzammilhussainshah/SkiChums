@@ -29,7 +29,7 @@ export class SettingProfileContainer extends Component {
             open: false,
             TOSenabled: false,
             TOSvalue: '',
-            TOSoptions: [{ name: 'Snowboard' }, { name: 'Sky' }, { name: 'Other' }],
+            TOSoptions: [{ name: 'Snowboard' }, { name: 'Ski' }, { name: 'Other' }],
             LOSenabled: false,
             LOSvalue: '',
             LOSoptions: [{ name: 'Professional' }, { name: 'Expert' }, { name: 'Intermediate' }, { name: 'Beginner' }],

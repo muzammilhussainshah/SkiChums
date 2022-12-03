@@ -66,8 +66,8 @@ export function getAllChums(bolean) {
                 })
                 dispatch({ type: ActionTypes.MYCHUMS, payload: myChumsArr })
             }
-            let myIndex = chums.findIndex((val) => val.uid == user.uid)
-            if (myIndex !== -1) chums?.splice(myIndex, 1)
+            // let myIndex = chums.findIndex((val) => val.uid == user.uid)
+            // if (myIndex !== -1) chums?.splice(myIndex, 1)
             dispatch({ type: ActionTypes.CHUMS, payload: chums })
         }
             , onError);

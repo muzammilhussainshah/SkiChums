@@ -24,8 +24,12 @@ class Chums extends Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.chums !== this.state.allChums) {
-    this.setState({ allChums: nextProps.chums })
+
+      this.setState({ allChums: nextProps.chums })
     }
+  }
+  componentWillUnmount() {
+    this.setState({ allChums: nextProps.chums })
   }
   render() {
     return (

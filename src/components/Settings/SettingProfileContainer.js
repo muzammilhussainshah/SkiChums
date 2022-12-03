@@ -187,6 +187,8 @@ export class SettingProfileContainer extends Component {
                     callBack={(val) => this.setState({ bio: val })}
                 />
                 <SettingProfileSocialConnectionVIew />
+                <View style={{flex:1}}>
+
                 <SCGradientButton
                     buttonTitle={`Save Changes`}
                     onClick={async () => {
@@ -194,6 +196,7 @@ export class SettingProfileContainer extends Component {
                         this.props.onClose()
                     }}
                     style={styles.saveChangesStyle} />
+                    </View>
                 {/* </ScrollView> */}
             </>
         )

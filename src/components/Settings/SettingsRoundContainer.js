@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         elevation: 2,
         backgroundColor: Platform.OS == 'android' ? '#0000' : '#EBF2FF',
-        paddingTop: 44
+        paddingTop: 20
 
     },
     item: {

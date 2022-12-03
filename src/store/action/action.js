@@ -64,12 +64,11 @@ export function getAllChums(bolean) {
                     let myChums = chums.filter((val) => val.uid == item.id)
                     if (myChums.length > 0) { myChumsArr.push(myChums[0]) }
                 })
-                // console.log()
                 dispatch({ type: ActionTypes.MYCHUMS, payload: myChumsArr })
             }
+            let myIndex = chums.findIndex((val) => val.uid == user.uid)
+            if (myIndex !== -1) chums?.splice(myIndex, 1)
             dispatch({ type: ActionTypes.CHUMS, payload: chums })
-
-
         }
             , onError);
 
@@ -129,9 +128,8 @@ export function getChatroom(mychums) {
                         else chatroomArray.push({ ...documentSnapshot.data() })
                     });
                     dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
-
                 }
-                    , onError);
+                , onError);
         }
         firestore()
             .collection('group')
@@ -160,7 +158,6 @@ export function createGroup(groupObj, groupId) {
 export function resetReducer() {
     return dispatch => {
         dispatch({ type: ActionTypes.RESETREDUCER })
-
     }
 }
 export function deleteGroup(docId) {

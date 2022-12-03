@@ -30,6 +30,8 @@ class SettingsRoundContainer extends Component {
                     onProfileClicked={this.onProfileClicked}
                     onLogout={this.onLogout}
                     onSessionClicked={this.onSessionClicked} />) :
+
+                    
                     (<SettingProfileContainer onClose={this.props.onClose} onBackClicked={this.onProfileBackClicked} />)}
 
             </View>

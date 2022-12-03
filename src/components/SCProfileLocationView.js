@@ -6,8 +6,6 @@ export default class SCProfileLocationView extends Component {
     render() {
         const type = this.props.type;
         let currentUser = this?.props?.currentUser
-
-        console.log(currentUser, 'this.propsthis.propsthis.props')
         return (
             <>
                 {

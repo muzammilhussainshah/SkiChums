@@ -11,8 +11,9 @@ import Settings from "./Settings";
 import SCNoSessionView from "../components/Profile/Session/SCNoSessionView";
 import SCGradientButton from "../components/SCGradientButton";
 import { EventRegister } from 'react-native-event-listeners'
-import { setCurrentUser, getMyChums } from "../store/action/action";
+import { setCurrentUser, getMyChums, getAllChums } from "../store/action/action";
 import { connect } from "react-redux";
+let subscriber;
 export class MyProfile extends Component {
   constructor(props) {
     super(props);
@@ -23,10 +24,34 @@ export class MyProfile extends Component {
       isLoading: false // profile, session, reviews
     }
   }
+
+  // componentDidMount() {
+  // }
+
+  // UNSAFE_componentWillReceiveProps(nextProps) {
+  //   if (nextProps.chums !== this.state.allChums) {
+
+  //     this.setState({ allChums: nextProps.chums })
+  //   }
+  // }
   componentDidMount() {
     this.props.setCurrentUser()
-    this.props.getMyChums()
+    subscriber = this.props.getAllChums()
+    // this.props.getMyChums()
 
+  }
+
+
+  // UNSAFE_componentWillReceiveProps(nextProps) {
+  //   if (nextProps.chums !== this.state.allChums) {
+
+  //     // this.setState({ allChums: nextProps.chums })
+  //   }
+  // }
+  componentWillUnmount() {
+    if (subscriber) {
+      subscriber()
+    }
   }
   getAge(birthday) { // birthday is a date
     var ageDifMs = Date.now() - birthday.getTime();
@@ -135,6 +160,9 @@ function mapDispatchToProps(dispatch) {
     },
     getMyChums: () => {
       dispatch(getMyChums());
+    },
+    getAllChums: () => {
+      dispatch(getAllChums());
     },
 
   }

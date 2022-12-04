@@ -1,32 +1,36 @@
 import React, { Component } from 'react';
-import { FlatList, Image, View, StyleSheet,Text } from 'react-native';
+import { FlatList, Image, View, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 export class SCProfileChumList extends Component {
 
   render() {
+
     return (
       <>
         {
           <View style={this.props.style ?? styles.container}>
-            {this.props.mychums.length?
-            <FlatList
-              horizontal={true}
-              data={this.props.mychums}
+            {
+              console.log(this.props.mychums, 'aaaaaaaaaaaaaaaaaaaaaaaa')
+            }
+            {this.props.mychums.length ?
+              <FlatList
+                horizontal={true}
+                data={this.props.mychums}
 
-              contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', width: '100%', height: 50 }}
-              renderItem={({ item }) => {
-                return (
-                  item?.photoURL?.length > 0 ?
-                    <Image source={{ uri: item?.photoURL }} style={styles.myChumsList} />
-                    :
-                    <FontAwesome name="user-circle-o" color={'gray'} size={36} style={{ marginHorizontal: 5 }} />
+                contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', width: '100%', height: 50 }}
+                renderItem={({ item }) => {
+                  return (
+                    item?.photoURL?.length > 0 ?
+                      <Image source={{ uri: item?.photoURL }} style={styles.myChumsList} />
+                      :
+                      <FontAwesome name="user-circle-o" color={'gray'} size={36} style={{ marginHorizontal: 5 }} />
 
-                )
-              }}
-              keyExtractor={item => item.id}></FlatList>:
-              <Text style={{opacity:0.5}}>No chums yet</Text>
-              }
+                  )
+                }}
+                keyExtractor={item => item.id}></FlatList> :
+              <Text style={{ opacity: 0.5 }}>No chums yet</Text>
+            }
           </View>
 
         }

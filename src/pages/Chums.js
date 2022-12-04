@@ -29,7 +29,7 @@ class Chums extends Component {
     }
   }
   componentWillUnmount() {
-    this.setState({ allChums: nextProps.chums })
+    this.setState({ allChums: [] })
   }
   render() {
     return (

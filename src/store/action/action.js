@@ -11,11 +11,14 @@ export function setCurrentUser(bolean) {
         const user = firebase.auth().currentUser
         console.log(user.uid, 'currentUserscurrentUsers')
 
+        // dispatch({ type: ActionTypes.CURRENTUSER, payload: [] })
+
         firestore().collection('chums').doc(user.uid).get()
             .then((data) => {
                 dispatch({ type: ActionTypes.CURRENTUSER, payload: data?.data() })
             })
             .catch((error) => {
+                // dispatch({ type: ActionTypes.CURRENTUSER, payload: [] })
                 console.log(error, 'error')
             });
 
@@ -25,12 +28,17 @@ export function setCurrentUser(bolean) {
 export function getMyChums(bolean) {
     return dispatch => {
         const user = firebase.auth().currentUser
+        console.log(user.uid, 'currentUserscurrentUsers')
+// 
+        // dispatch({ type: ActionTypes.MYCHUMS, payload: [] })
+        dispatch({ type: ActionTypes.MYCHUMS, payload: [] })
         firestore().collection('chums').get()
             .then((data) => {
                 let chums = []
                 data.forEach(documentSnapshot => {
                     chums.push(documentSnapshot.data())
                 });
+                console.log(user.uid, 'currentUserscurrentUsers', chums)
                 let myChumsIdsAndStatus = chums?.filter((val) => val?.uid == user?.uid)[0]?.myChams
                 let myChumsArr = []
                 if (myChumsIdsAndStatus?.length > 0) {
@@ -64,7 +72,11 @@ export function getAllChums(bolean) {
                     let myChums = chums.filter((val) => val.uid == item.id)
                     if (myChums.length > 0) { myChumsArr.push(myChums[0]) }
                 })
+
                 dispatch({ type: ActionTypes.MYCHUMS, payload: myChumsArr })
+            }else{
+                dispatch({ type: ActionTypes.MYCHUMS, payload: [] })
+
             }
             // let myIndex = chums.findIndex((val) => val.uid == user.uid)
             // if (myIndex !== -1) chums?.splice(myIndex, 1)
@@ -90,6 +102,7 @@ export function sendMessageToDb(docId, msgObj, messageType) {
 }
 export function getMessagesFromDb(docId,) {
     return dispatch => {
+        dispatch({ type: ActionTypes.MESSAGES, payload: [] })
         firestore().collection(`message/${docId}/messages`)
             .orderBy('sendAt', 'desc')
             .limit(15).onSnapshot((querySnapshot) => {
@@ -129,7 +142,7 @@ export function getChatroom(mychums) {
                     });
                     dispatch({ type: ActionTypes.MYCHATROOM, payload: chatroomArray })
                 }
-                , onError);
+                    , onError);
         }
         firestore()
             .collection('group')
@@ -157,7 +170,42 @@ export function createGroup(groupObj, groupId) {
 }
 export function resetReducer() {
     return dispatch => {
-        dispatch({ type: ActionTypes.RESETREDUCER })
+        // dispatch({ type: ActionTypes.RESETREDUCER })
+        // {
+        //     chums: [],
+        //     mychums: [],
+        //     myChatRoom: [],
+        //     myGroupChatRoom: [],
+        //     messages: [],
+        //     loader: false,
+        //     currentUser: [],
+
+        // MYGROUPCHATROOM
+        // MYCHATROOM
+        // CHUMS: 'CHUMS',
+        // CURRENTUSER: 'CURRENTUSER',
+        // MYCHUMS: 'MYCHUMS',
+        // MYCHATROOM: 'MYCHATROOM',
+        // MYGROUPCHATROOM: 'MYGROUPCHATROOM',
+        // MESSAGES: 'MESSAGES',
+        // RESETREDUCER: 'RESETREDUCER',
+        // LOADER: 'LOADER',
+
+        // chums: [],
+        // mychums: [],
+        // myChatRoom: [],
+        // myGroupChatRoom: [],
+        // messages: [],
+        // loader: false,
+        // currentUser: [],
+        // }
+        dispatch({ type: ActionTypes.CHUMS, payload: [] })
+        dispatch({ type: ActionTypes.CURRENTUSER, payload: [] })
+        dispatch({ type: ActionTypes.MYCHUMS, payload: [] })
+        dispatch({ type: ActionTypes.MYCHATROOM, payload: [] })
+        dispatch({ type: ActionTypes.MYGROUPCHATROOM, payload: [] })
+        dispatch({ type: ActionTypes.MESSAGES, payload: [] })
+        dispatch({ type: ActionTypes.LOADER, payload: false })
     }
 }
 export function deleteGroup(docId) {

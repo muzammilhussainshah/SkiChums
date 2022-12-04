@@ -98,9 +98,9 @@ class ChatMessagesList extends Component {
         <TouchableWithoutFeedback onPress={this.props.onClick}>
           <Item
             name={name}
-            sender={user.uid == item.sendBy ? true : false}
-            message={item.messageText}
-            time={new Date(item.sendAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+            sender={user?.uid == item?.sendBy ? true : false}
+            message={item?.messageText}
+            time={new Date(item?.sendAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
             isPrivate={isPrivate}
             type={'text'}
           />
